@@ -1,0 +1,49 @@
+[07-Jun-2016 22:30:43 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:30:46 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:31:29 America/Chicago] PHP Parse error:  syntax error, unexpected '(', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 12
+[07-Jun-2016 22:31:31 America/Chicago] PHP Parse error:  syntax error, unexpected '(', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 12
+[07-Jun-2016 22:32:00 America/Chicago] PHP Parse error:  syntax error, unexpected '(', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 12
+[07-Jun-2016 22:32:21 America/Chicago] PHP Parse error:  syntax error, unexpected '(', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 12
+[07-Jun-2016 22:32:24 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:44:54 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:44:54 America/Chicago] PHP Fatal error:  Uncaught OAuthException: (#803) Some of the aliases you requested do not exist: {$user_profile["id"]}
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[07-Jun-2016 22:44:57 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:44:57 America/Chicago] PHP Fatal error:  Uncaught OAuthException: (#803) Some of the aliases you requested do not exist: {$user_profile["id"]}
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[07-Jun-2016 22:45:19 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:45:55 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:45:55 America/Chicago] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 13
+[07-Jun-2016 22:45:56 America/Chicago] PHP Fatal error:  Uncaught OAuthException: (#803) Some of the aliases you requested do not exist: {$user_profile["id"]}
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[07-Jun-2016 22:46:00 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:46:01 America/Chicago] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 13
+[07-Jun-2016 22:46:01 America/Chicago] PHP Fatal error:  Uncaught OAuthException: (#803) Some of the aliases you requested do not exist: {$user_profile["id"]}
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[07-Jun-2016 22:46:28 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:46:39 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:46:42 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:46:49 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:47:35 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:47:36 America/Chicago] PHP Fatal error:  Uncaught OAuthException: Unknown path components: /651754751644287/friends
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[07-Jun-2016 22:47:38 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:47:38 America/Chicago] PHP Fatal error:  Uncaught OAuthException: Unknown path components: /651754751644287/friends
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[07-Jun-2016 22:47:57 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:49:53 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:49:56 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:50:45 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:50:48 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:51:55 America/Chicago] CSRF state token does not match one provided.
+[07-Jun-2016 22:51:58 America/Chicago] CSRF state token does not match one provided.
+[08-Jun-2016 04:36:17 America/Chicago] PHP Parse error:  syntax error, unexpected ';' in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/index.php on line 19
+[08-Jun-2016 04:38:41 America/Chicago] PHP Fatal error:  Uncaught Exception: REST API is deprecated for versions v2.1 and higher (12)
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[08-Jun-2016 04:38:50 America/Chicago] PHP Fatal error:  Uncaught Exception: REST API is deprecated for versions v2.1 and higher (12)
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[08-Jun-2016 04:40:15 America/Chicago] PHP Fatal error:  Uncaught Exception: REST API is deprecated for versions v2.1 and higher (12)
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[08-Jun-2016 04:40:18 America/Chicago] PHP Fatal error:  Uncaught Exception: REST API is deprecated for versions v2.1 and higher (12)
+  thrown in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/facebook_api/src/base_facebook.php on line 1325
+[08-Jun-2016 23:15:52 America/Chicago] CSRF state token does not match one provided.
