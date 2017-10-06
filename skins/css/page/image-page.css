@@ -1,0 +1,157 @@
+#comment-input{
+    width: 260px;
+    margin-left: 10px;
+    font-size: 20px;
+    color: #212121;
+    height:32px;
+}
+.list-img-related ul {text-align: center;}
+.list-img-related ul li img{width: 60px; height: 49px;}
+.keywords{padding: 15px 10px 5px;font-size: 18px;float: left;width: 100%;}
+.img-description{padding: 0px;font-size: 18px;float: left;width: 100%;}
+.img-description .content-description{background-color: #fff; float: left; width: 100%; margin-top: 10px; padding: 10px; font-size: 18px;}
+.image-page #wrapper-impormant-image .impromation-project{min-height: 35px; z-index: 9;}
+.image-page .impromation-project, .image-page .commen-like{display: block; z-index: 9;}
+
+.image-page .commen-like#search-home-show{background:#FFF;}
+
+.image-page .keywords a{color: #545454;}
+.image-page .keywords a:hover{color: #37a7a7;}
+.image-page .impromation-project .impromation p, .image-page .impromation-project .impromation h5{font-size: 18px ;line-height: 1.3;}
+.image-page .impromation-project .logo-company img{max-width: 70px;}
+.image-page .impromation-project .logo-company img{width: 50px;height: 50px;}
+.image-page  .dropdown-impromation{z-index: 10;}
+.wrapper-image{
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+}
+.wrapper-image .item{
+    width: 100%;
+    vertical-align: middle;
+}
+.wrapper-image .item img{ 
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0 auto;
+    max-height: 100%;
+}
+.return-pins a ,.return-pins button{margin: 0 10px;}
+#redirect-href{cursor: pointer;}
+.image-page .commen-like h3 > span.glyphicon {
+    color: #fff;
+    font-size: 25px;
+    float: left;
+}
+.image-page .commen-like h3 > i.fa-microsite:before{font-size: 40px;line-height: 0;}
+.image-page .commen-like h3#share-image-email > i{margin-top: -1px;}
+.image-page .commen-like {background-color: rgba(0, 0, 0, 0.6);padding: 5px;}
+body .image-page .fa-microsite:before{background-image: url("../../images/i-white.png"); content: "i" !important;text-indent: 999999px; width: 13px !important;}
+.image-page .commen-like p{color: #fff;line-height: 1.5;}
+.image-page .commen-like#search-home-show p {color: #37a7a7}
+
+.image-page .photo-name{font-size: 18px; margin: 0;padding: 0;color: #fff;float: left;}
+.image-page .dropdown-impromation .dropdown-impromation-menu{min-width: 170px;}
+.image-page .impromation-project .impromation p{float: left;width: 81%}
+.image-page .glyphicon-comment:before{font-size: 27px;}
+.conment-show .comment-items {clear:both;padding-bottom:10px;}
+.conment-show .comment-items .left-box {width:auto;padding-right:10px;float:left;}
+.conment-show .comment-items .right-box {width:auto;padding-right:10px;float:left;}
+td.right-td .likes-header-box {float:left;width:45%;text-align:left;}
+td.right-td .comments-header-box {float:left;width:55%;text-align:center;}
+td.left-td {width: 60px;}
+.comment-items .more {cursor:pointer;}
+.comment-items .default-hide,.comment-items .comment-item-text {display:none;}
+.comment-items .default-hide.block {display:block;}
+.avatar table td {padding: 5px;}
+.uesr-box-impromation table {width:100%;}
+.list-album{position: fixed;left: -125px;top: 150px; width: 120px; z-index: 999; padding: 0 5px 10px 5px; background-color: #fff;height: 430px}
+.list-album ul{padding: 0;max-height: 385px;overflow-y: auto;}
+.list-album ul li{display: list-item;list-style: none; margin-bottom: 5px;}
+#wrapper-impormant-image ul.list-more-view li{display: inline-block; margin: 0;padding: 0;float: left;}
+#wrapper-impormant-image ul.list-more-view li#show-album{float: right; cursor: pointer;}
+.image-page .custom-columns a img{height: 24px;}
+.image-page .info-inmage{background-color: #fff;}
+.image-page .info-inmage h3{padding-top: 0; margin-top:0;}
+.image-page .colum-right{
+	width: 35%;
+	margin-left : 0;
+	padding-left: 0;
+	background-color: #fff;
+    z-index: 99;
+}
+.image-page .colum-right .info-inmage{
+	background-color: #fff;
+	padding: 10px 20px;
+    -webkit-box-shadow: 2px 6px 5px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 6px 5px 1px rgba(0,0,0,0.75);
+    box-shadow: 2px 6px 5px 1px rgba(0,0,0,0.75);
+    z-index: 99;
+}
+.image-page .colum-left{
+	width: 65%;
+	margin-right: 0;
+	padding: 0;
+	
+}
+body .image-page .custom-columns .fa:before{
+	height: 26px !important;
+	font-size: 25px;
+	float: left;
+	width: 100%;
+
+}
+body .image-page .custom-columns p {height: 15px;}
+body .image-page .custom-columns .fa{color: #fff;}
+body .image-page .custom-columns #share-image-email .fa-envelope:before{
+	height: 22px !important;
+	margin-top: 4px;
+}
+body .image-page #pins-to .fa.fa-thumb-tack:before{
+	width: 32px;
+    height: 24px !important;
+}
+#wrapper-impormant-image ul.list-more-view{
+    background-color: #fff;
+    width: 170px;
+    margin: 0;
+    text-align: left;
+    padding: 5px 10px 0px 6px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; 
+}
+body .image-page .breadcrumb {margin-bottom: 20px;}
+body .image-page .colum-right .breadcrumb p {color: #37a7a7; font-size: 16px;}
+body .image-page .colum-right p{font-size: 16px;}
+body .image-page .colum-right p a{font-size: 16px;}
+body .image-page .colum-right h4{
+	font-size: 16px;
+	font-weight: bold;
+}
+body .image-page .colum-right .value-text{color: #37a7a7;min-height: 19px;}
+body .image-page .colum-right .checkbox {
+    padding-left: 0;
+}
+body .image-page .impromation-project .logo-company{
+    z-index: 77;
+    position: relative;
+}
+body .image-page #wrapper-impormant-image .impromation{z-index:: 99;}
+body .image-page .colum-right hr{
+	border-top: 2px solid #7f7f7f;
+}
+@media (max-width: 1200px) {
+
+}
+@media screen and (max-width: 990px) {
+    .image-page .colum-left{width: 100%;}
+    .image-page .colum-right{width: 100%;}
+}
+@media (max-width: 768px) {
+    .image-page .commen-like{position: relative;}
+    .image-page #comment-input{width: 85%;}
+    .list-img-related ul {text-align: center;float: left;width: 100%;margin-top: 20px;}
+    .list-img-related ul li{margin-bottom: 10px;}
+    .image-page .colum-left{width: 100%;}
+    .image-page .colum-right{width: 100%;}
+}

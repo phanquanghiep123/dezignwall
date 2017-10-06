@@ -1,0 +1,87 @@
+/*  anything here is optional only being used for styling the cards */
+/*  anything here is optional only being used for styling the cards */
+.gird-img {
+    max-width: 100%;    
+    float: left;
+    width: 100%;
+    padding-bottom: 165px;
+}
+.card-image {
+    width: 100%;
+    background-size: cover;
+    float: left;
+    background-position: center;
+    overflow:hidden;
+}
+.gird-img .card {
+    width: 100%;
+    max-width: 100%;
+    opacity: 1;
+    float: left;
+    position: relative;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22); 
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+    background: #fff;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+}
+.gird-img.column-3 .card {
+    width: 100%;
+}
+.card--loaded {opacity: 1 !important ;}
+.card-image img {width: 100%;}
+.card-info {
+    color: rgb(33, 25, 34);
+    text-align: left; 
+    -webkit-box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.4); 
+    box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.4);
+    z-index:9;
+    width:100%;
+    top:100%;
+    background-color: #f1f1f1;
+    position :relative;
+    display:none;
+}
+.gird-img .card { 
+    float: left;
+    position: relative;
+}
+.gird-img .box-input-comment{
+    position:relative;
+    width:100%; 
+    display:block; 
+    padding: 0px 3px 10px 3px;
+}
+.gird-img .close_box {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    color: #ccc;
+    cursor: pointer;
+    z-index: 999999999;
+}
+
+.gird-img .avatar{padding: 0 3px;} 
+.gird-img .grid-column{
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.grid-column .card{margin-bottom: 8px;}
+/* change card size for small screens */
+#box-like-profile .user .avatar{
+
+}
+@media (max-width: 1200px) {
+    .gird-img .card{width: 100%;}
+}
+@media (max-width: 992px) {
+
+
+}
+@media (max-width: 768px) {
+    .card { width: 100%; opacity: 1; margin: 0 0 8px 0;}
+}
+@media( max-width: 640px ){
+    .gird-img .card{margin-left: 0;margin-right: 0;}
+}
