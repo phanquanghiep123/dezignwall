@@ -151,7 +151,7 @@
     #single-img-view{width: auto !important;}
      #modal_view_photo .card-image{float: inherit;}
     .btn-black{background-color: rgba(0, 0, 0, 0.6); border: 1px solid #fff; color: #fff; font-size: 24px; border-radius:  0;}
-     #modal_choose_photo .logo img{width: 40px;}
+    #modal_choose_photo .logo img{width: 40px;}
 </style>
 <script type="text/javascript">
     $(document).on("click","#modal_choose_photo .choose-image",function(){

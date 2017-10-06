@@ -506,6 +506,7 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+$config["allowed_types"] ="*";
 
 $config['country']=array(
 	"US" => "United States",

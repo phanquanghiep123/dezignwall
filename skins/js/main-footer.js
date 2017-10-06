@@ -522,6 +522,7 @@ function before_search() {
 }
 var width_paging =  $(window).width() ;
 function get_record_search(page_get) {
+    
     before_search();
     $.ajax({
         url: base_url + "photos/seachimages",
@@ -537,9 +538,11 @@ function get_record_search(page_get) {
             "type_photo": photo_type,
             "slug_category": slug_category,
             "offer_product": offer_product,
-            "is_home" : is_home
+            "is_home" : is_home,
+            "post_social_show" : post_social 
         },
         success: function (data) {
+
             arg_record = data["photo"];
             if (arg_record.length > 0) {
                 var nav_html = 3;
@@ -571,6 +574,7 @@ function get_record_search(page_get) {
                              $(".gird-img .cards #grid-column-3").append(value);
                         }
                     }
+                    
                 });
 
             }
@@ -656,8 +660,14 @@ $(document).on("click", "#like-photo", function () {
                         } else {
                             this_total.find(" > i").removeClass("like");
                         }
-                        this_total.parents(".commen-like").find("#number-like").html(data["record_tracking"]);
-                        this_total.parents(".like-blog").find("#number-like").html(data["record_tracking"]);
+                        if(data["record_tracking"] == 0){
+                            this_total.parents(".commen-like").find("#number-like").html("");
+                            this_total.parents(".like-blog").find("#number-like").html("");
+                        }else{
+                            this_total.parents(".commen-like").find("#number-like").html(data["record_tracking"]+" Likes");
+                            this_total.parents(".like-blog").find("#number-like").html(data["record_tracking"]+" Likes");
+                        }
+                        
                         this_total.find(" > i").addClass(img_like).attr("title", title_like);
                     }
                     reset_like = 0;
@@ -1576,64 +1586,7 @@ $(document).on("click", "#view-more-detail", function (event) {
 $(document).on("click", "#more-comment", function () {
     $(this).parents(".text-comment").find(".comment-item-text").toggleClass("block");
 });
-$(function () {
 
-    // Elements on which to bind the event.
-    var elems = $('.commen-like');
-    // Clear any previous highlights and text.
-    $(document).bind('click', function (event) {
-        $(".select-true").removeClass("select-true");
-        var number_comment = 0;
-        var data_type = elems.parents(".card").data("type");
-        if (typeof data_type === "undefined") {
-            data_type = "photo";
-        }
-        var html_view_more = '<p class="view-more-comment" id="view-more" data-type="' + data_type + '" number-click="0"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> View older comments…</p>';
-        $.each(elems, function () {
-            number_comment = $(this).find(".box-top #num-comment").text();
-            if (parseInt(number_comment) > 2 && $(this).find(".view-more-comment").length < 1) {
-                $(this).find(".conment-show .uesr-box-impromation").before(html_view_more);
-            }
-            var offset_default = $(this).find(".comment-items").length;
-            $.each($(this).find('.comment-items:not(".single-page-comment")'), function () {
-                offset_default--;
-                if (offset_default > 1) {
-                    $(this).remove();
-                }
-
-            });
-        });
-
-    }).trigger('click');
-
-    // Bind the 'clickoutside' event to each test element.
-    $(document).on("click", ".commen-like", function (event) {
-        event.stopPropagation();
-        $(".select-true").removeClass("select-true");
-        $(this).addClass("select-true");
-        var elems = $('.commen-like:not(.select-true)');
-        var number_comment = 0;
-        var data_type = elems.parents(".card").data("type");
-        if (typeof data_type === "undefined") {
-            data_type = "photo";
-        }
-        var html_view_more = '<p class="view-more-comment" id="view-more" data-type="' + data_type + '" number-click="0"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> View older comments…</p>';
-        $.each(elems, function () {
-            number_comment = $(this).find(".box-top #num-comment").text();
-            if (parseInt(number_comment) > 2 && $(this).find(".view-more-comment").length < 1) {
-                $(this).find(".conment-show .uesr-box-impromation").before(html_view_more);
-            }
-            var offset_default = $(this).find(".comment-items").length;
-            $.each($(this).find('.comment-items:not(".single-page-comment")'), function () {
-                offset_default--;
-                if (offset_default > 1) {
-                    $(this).remove();
-                }
-            });
-        });
-    });
-
-});
 function randomIntFromInterval(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
@@ -1644,12 +1597,24 @@ $(document).on("click","#delete_wall",function(){
     $("#modal_delete_walll").modal();
     return false;
 });
+
+$(document).on({
+    mouseenter: function () {
+        $(this).parents(".follow-hover").find(".follow-box").show();
+        $(this).parents(".follow-hover").find(".follow-box").animate({opacity:1},500);
+    },
+    mouseleave: function () {
+        $(this).parents(".follow-hover").find(".follow-box").animate({opacity:0},1000,function(){
+            $(this).parents(".follow-hover").find(".follow-box").hide();
+        });  
+    }
+}, "#wrapper-impormant-image #follow-company-now"); 
 $(document).on("click","#wrapper-impormant-image #follow-company-now",function(){
     if (check_login() == false){
         return false;
     }
     var _this = $(this);
-    var photo_id  = $(this).parents("#wrapper-impormant-image").attr("data-id");
+    var photo_id  = $(this).parents(".card").attr("data-id");
     $.ajax({
         url      : base_url + "photos/follow_company",
         type     : "post",
@@ -1657,16 +1622,24 @@ $(document).on("click","#wrapper-impormant-image #follow-company-now",function()
         data     : { photo_id : photo_id },
         success  :function (data){
             if(data["status"] == "success"){
-                _this.parents(".follow-hover").find(".follow-box").animate({opacity:1},1000);
+                if(data["response"] == "delete"){
+                    _this.attr("title","Un following this company");
+                    _this.find("img").attr("src",base_url + "skins/images/follow.png");
+                }else{
+                    _this.attr("title","Following this company");
+                    _this.find("img").attr("src",base_url + "skins/images/follow-activer.png");
+                }    
             }
         },
-        error    :function (){
+        error :function (){
 
         }
     });
     return false;
 });
 $(document).on("click","#wrapper-impormant-image .close-box-follow a",function(){
-    $(this).parents(".follow-box").animate({opacity:0},1000);
+    $(this).parents(".follow-box").animate({opacity:0},1000,function(){
+        _this.hide();
+    });
     return false;
 });

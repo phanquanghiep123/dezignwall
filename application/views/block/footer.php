@@ -33,6 +33,8 @@
 	    <?php $this->load->view("include/modal_send_like"); ?>
 	    <?php $this->load->view("include/sentmail-image");?>
 	    <?php $this->load->view("include/sentmail-like");?>
+	    <?php $this->load->view("include/modal-comment");?>
+	    <?php if(@$is_home == true) $this->load->view("include/modal-add-post-social");?>
 	    
 <!-- Google Tag -->
 <!-- Google Tag Manager -->
@@ -50,13 +52,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <!-- End Google Tag -->
 
-    </body>
+    
     <script src="<?php echo skin_url();?>/js/grid-img.js"></script>
     <script src="<?php echo skin_url();?>/js/jquery.matchHeight.js"></script>
     <script src="<?php echo skin_url();?>/js/bootstrap-select.min.js"></script>
     <script src="<?php echo skin_url();?>/js/main-footer.js"></script>
     <script src="<?php echo skin_url();?>/js/comment.js"></script>
-</html>
+
 <?php
 	if(isset($_GET['action']) && ($_GET['action']=='signin' || $_GET['action']=='signup' )  ): 
 		if ($this->session->userdata('user_info')) :
@@ -133,3 +135,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	messenger_box("Oh, <span class='moderate-cyan-color'>@</span><span class='orange-color'>#</span><span class='strong-red-color'>%</span><span class='moderate-green-color'>&</span><span class='very-dark-gray-color'>!</span>", "Oops..."+url_error+"... Don't worry, we're on it!");
 	<?php endif;?>
 </script>
+</body>
+</html>

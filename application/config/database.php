@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'admindw.c6lwartlgg82.us-west-2.rds.amazonaws.com',
-	'username' => 'gosiri_admin',
-	'password' => 'Mosa@123',
-	'database' => 'gosiri_dezignwal_v2',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => 'f9r7F5j786',
+	'database' => 'dezignwall_developmet',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

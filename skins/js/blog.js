@@ -184,17 +184,13 @@ var delete_comment = function(obj){
               if (data['status'].trim() == "true") {
 
                   $(obj).parents('.comment-items').fadeOut('slow', function () {
-
-                      $(this).remove();
-
+                    $(this).remove();
                   });
-
-                  var qty = parseInt($("#number-comment").text())-1;
-
+                  var qty = parseInt($("body #number-comment").first().text())-1;
                   if(qty >= 0){
-
-                  	$("#number-comment").text(qty);
-
+                    $.each($("body #number-comment"),function(){
+                      $(this).text(qty);
+                    });
                   }
 
               }

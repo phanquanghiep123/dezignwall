@@ -51,7 +51,7 @@ $(document).ready(function() {
         return false;
     });
     var reset_click = 0;
-    $(document).on('submit', '.rep-item form', function() {
+    $(document).on('submit', '.rep-item form', function() { 
         var bool = true;
         var messenger = "";
         $(this).find("#password,#password-confirm").attr("type","password");
@@ -60,7 +60,7 @@ $(document).ready(function() {
         $(this).find('input,textarea').each(function(){
             if($(this).hasClass('required')){
                 var value=$(this).val();
-                if(value==null || $.trim(value)==''){
+                if(value == null || $.trim(value)==''){
                     $(this).addClass("warning");
                     bool = false;
                     messenger = 'Please fill in all required fields marked with an asterisk.';
@@ -87,19 +87,27 @@ $(document).ready(function() {
                   if(!isEmail(value)){
                     $(this).addClass("warning");
                     messenger = "Email is invalid. Please try again.";
-                    bool == false;
+                    bool = false;
+                  }
+                }
+                if($(this).hasClass("format-url") == true){
+                  if(!ValidURL(value)){
+                    $(this).addClass("warning");
+                    messenger = "URL is invalid. Please try again.";
+                    bool = false;
                   }
                 }
             }
         });
         if (bool == false) {
             messenger_box("Edit Reps",messenger);
+            return false;
         } else {
             bool = bool && valid_all_format($(this), false);
         }
 
         if (bool == false) {
-            return bool;
+            return false;
         }
         var parent = $(this).parents('.rep-item');
         var data_form = new FormData($(this)[0]);
@@ -207,4 +215,8 @@ $(document).ready(function() {
 function isEmail(email) {
   var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   return regex.test(email);
+}
+function ValidURL(str) {
+  var urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+  return urlregex.test(str);
 }

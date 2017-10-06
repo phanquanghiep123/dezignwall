@@ -72,3 +72,5 @@ body .company-body-right .bottom-services{margin-top:5px; margin-left: 0;}
 	.dl-horizontal dt{width: 115px; text-align: left; font-weight: normal;}
 	.dl-horizontal dd{margin-left: 120px;}
 }
+
+.service_page h2 strong{color: #fff;}

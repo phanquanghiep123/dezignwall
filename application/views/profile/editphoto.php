@@ -680,14 +680,14 @@ $url = base_url('profile/myphoto');
   </div><!-- /.modal-dialog -->
 </div>
 <?php if (isset($_GET['show_popup'])) : ?>
-<script>
-    $(document).ready(function () {
-        $("#share-modal #photo-share").attr("src", $('.wrap-cropper .image-cropper').attr('src'));
-        $("#share-modal #url-share-photo").val('<?php echo @$url_photo_public; ?>');
-        url_share_social = '<?php echo @$url_photo_public; ?>';
-        $('#share-modal').modal('show');
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            $("#share-modal #photo-share").attr("src", $('.wrap-cropper .image-cropper').attr('src'));
+            $("#share-modal #url-share-photo").val('<?php echo @$url_photo_public; ?>');
+            url_share_social = '<?php echo @$url_photo_public; ?>';
+            $('#share-modal').modal('show');
+        });
+    </script>
 <?php endif; ?>
 <script>
     $("#sample_apply").click(function () {
@@ -755,3 +755,10 @@ $url = base_url('profile/myphoto');
     });
    
 </script>
+
+
+<?php if (isset($status_member) && $status_member == 0): ?>
+    <script>
+        $("#getting-started-popup").modal();   
+    </script>
+<?php endif; ?>

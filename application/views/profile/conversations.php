@@ -18,7 +18,7 @@
 
                         <div class="col-sm-5">
 
-                            <div class="card-image conversations-images relative" style="background-image:url('<?php echo base_url(@$photo['path_file']); ?>') "></div>
+                            <a title="<?php echo @$photo["name"]; ?>" href ="<?php echo base_url("photos/" . $photo['photo_id'] . "/" . gen_slug($photo["name"])); ?>"><div class="card-image conversations-images relative" style="background-image:url('<?php echo base_url(@$photo['path_file']); ?>') "></div></a>
 
                         </div>
 
@@ -66,19 +66,19 @@
 
                                                             if (isset($comment["avatar"]) && $comment["avatar"] != null) {
 
-                                                                $src = $comment["avatar"];
+                                                                $src = base_url($comment["avatar"]);
 
                                                             }
 
                                                             ?>
 
-                                                            <img src="<?php echo @$src; ?>" class="left">
+                                                            <a href="<?php echo base_url("profile/view/".$comment["member_id"]);?>"><img src="<?php echo @$src; ?>" class="left"></a>
 
                                                         </div>
 
                                                         <div class="col-xs-10">
 
-                                                            <p><strong><?php echo $comment["first_name"] . ' ' . $comment["last_name"]; ?> | <?php echo @$comment["company_name"]; ?></strong></p>
+                                                            <p><strong><a href="<?php echo base_url("profile/view/".$comment["member_id"]);?>"><?php echo $comment["first_name"] . ' ' . $comment["last_name"]; ?></a> | <a href="<?php echo base_url("company/view/".$comment["member_id"]);?>"><?php echo @$comment["company_name"]; ?></strong></a></p>
 
                                                             <div>
 
@@ -371,5 +371,6 @@
         margin-bottom: 10px;
 
     }
-
+    .card.item-conversations a {color: #000;}
+    .card.item-conversations a:hover {color: #37a7a7;}
 </style>

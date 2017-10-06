@@ -42,28 +42,46 @@ class Home extends CI_Controller {
         }
     }
     public function index() {
+        $this->data["is_home"]    = true;
         $this->data["title_page"] = "Home Page";
         $this->data["view_wrapper"] = "home/index";
         $this->data["class_page"] = "search-page";
         $this->load->model("Photo_model");
         $this->load->model("Comment_model");
-        $query_photo = $this->Photo_model->search_index($this->user_id, 30);
-        $recorder = $query_photo;
-        $photo_id = "";
+        $recorder = $this->Photo_model->search_index($this->user_id, 30);
         $this->load->model('Article_model');
         $this->data["article"]  = array();
+        $this->data["social_post"]  = array();
+        $member_id = $this->user_id == null ? 0 : $this->user_id; 
         if($this->data["is_login"] && !$this->session->userdata('user_sr_info'))
-            $this->data["article"] = $this->Article_model->get_article(0,2);
+            $this->data["article"] = $this->Article_model->get_article(0,2);          
         else
-            $this->data["article"] = $this->Article_model->get_article(0,3);
-
+            $this->data["article"] = $this->Article_model->get_article(0,3);   
+        $social_post = $this->Article_model->social_post(0,3,null,null,$member_id);
+        $n_recorder  = array();
+		try {
+			if($social_post != null || $recorder != null)
+            	$n_recorder = array_merge($social_post, $recorder);
+            if($n_recorder != null){
+                usort($n_recorder, function($a, $b) {
+                  $ad = new DateTime($a['created_at']);
+                  $bd = new DateTime($b['created_at']);
+                  if ($ad == $bd) {
+                    return 0;
+                  }
+                  return $ad > $bd ? -1 : 1;
+                });
+            }
+        }
+        catch (Exception $e){
+            $n_recorder = $recorder;
+        }
         $this->data["photo_count"] = $this->Photo_model->total_page();
-
         $this->data["data_wrapper"]["photo_slider"] = $this->Photo_model->get_photo_slider_image_category("Project", "RANDOM", 10);
         $this->data["class_wrapper"] = "home_page";
         $this->data["is_home"] = "true";
         $this->load->view('block/header', $this->data);
-        $this->data["data_wrapper"]["photo"] = $recorder;
+        $this->data["data_wrapper"]["photo"] = $n_recorder;
         $this->load->view('block/wrapper', $this->data);
         $this->load->view('block/footer');
     }
@@ -222,7 +240,7 @@ class Home extends CI_Controller {
                                 <p>Having trouble viewing the V-Card link? Copy and paste the URL to browser:</p>
                                 <p style ="color:#ff9900">'.base_url($csv_file).'</p>';
                     $table_user = $this->Common_model->get_record("members",array("id" => $user_id));
-                    $logo = ($table_user['logo'] != ""&&file_exists(FCPATH . $table_user['logo'])) ? $table_user['logo'] : "skins/images/logo-company.png";
+                    $logo = ($table_user['avatar'] != ""&&file_exists(FCPATH . $table_user['avatar'])) ? $table_user['avatar'] : "skins/images/logo-company.png";
                     $banner = ($table_user['banner'] != "" && file_exists(FCPATH . $table_user['banner'])) ? $table_user['banner'] : "skins/images/banner-default.png";
                     $message_sent = $this->input->post("message_sent");
                     $mail_subject = $fromFullname . ' shared their Dezignwall Business card with you on, ' . date("m/d/Y");
@@ -343,6 +361,7 @@ class Home extends CI_Controller {
         $this->data["title_page"] = "404 page";
         $this->data["responsetracking"] = "Error";
         $this->data["responsemessage"] = "Oops... ". uri_string() ." ... Don't worry, we're on it!";
+        //$_h =  $this->load->view("include/datatracking",$data);
         redirect(base_url("?error=404&url=" . uri_string() . ""));
     }
     public function get_project() {
@@ -639,7 +658,12 @@ class Home extends CI_Controller {
         $today  = date("Y-m-d");
         $xml  = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         $xml .= "\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">";
-        $xml .= "\n<url>\n<loc>$domain</loc>\n<priority>1.0</priority>\n<changefreq>hourly</changefreq>\n<lastmod>$today</lastmod>\n</url>";
+        $xml .= "\n<url>
+                    \n<loc>$domain</loc>
+                    \n<priority>1.0</priority>
+                    \n<changefreq>hourly</changefreq>
+                    \n<lastmod>$today</lastmod>
+                \n</url>";
         $html = file_get_html(base_url());
         $arrayUrlold = array("","javascript:;","#",base_url());
         $index_look = 1;
@@ -650,7 +674,12 @@ class Home extends CI_Controller {
             foreach ( $html->find('a') as $element ) {
                 if(!in_array($element->href,$arrayUrlold) && strpos($element->href,base_url()) !== false && strpos($element->href,".png") === false && strpos($element->href,".jpg") === false){
                     $url  = $element->href;
-                    $xml .= "\n<url>\n<loc>$url</loc>\n<priority>0.8</priority>\n<changefreq>daily</changefreq>\n<lastmod>$today</lastmod>\n</url>";
+                    $xml .= "\n<url>
+                                \n<loc>$url</loc>
+                                \n<priority>0.8</priority>
+                                \n<changefreq>daily</changefreq>
+                                \n<lastmod>$today</lastmod>
+                            \n</url>";
                     $arrayUrlold[] = $element->href;
                     try {
                         $html_1 = file_get_html(str_replace(" ","%20", $element->href));
@@ -682,6 +711,19 @@ class Home extends CI_Controller {
                                                     if( !in_array($element_3->href,$arrayUrlold) && strpos($element_3->href,base_url()) !== false && strpos($element_3->href,".png") === false && strpos($element_3->href,".jpg") === false){   
                                                         $arrayUrlold[] = $element_3->href;
                                                         $arrayPage_3[] = $element_3->href;
+                                                        try {
+                                                            $html_4 = file_get_html(str_replace(" ","%20", $element_3->href));
+                                                        } catch (Exception $e) {
+                                                            $html_4 =false;
+                                                        }
+                                                        if($html_4 != false){
+                                                            foreach ($html_4->find('a') as $element_4) {
+                                                                if( !in_array($element_4->href,$arrayUrlold) && strpos($element_4->href,base_url()) !== false ){   
+                                                                    $arrayUrlold[] = $element_4->href;
+                                                                    $arrayPage_3[] = $element_4->href;   
+                                                                }
+                                                            }
+                                                        } 
                                                     }
                                                 }
                                             }
@@ -698,7 +740,12 @@ class Home extends CI_Controller {
                 foreach ( $arrayPage_1 as $element ) {
                     if(!in_array($element, array("","#","javascript:;"))){
                         $url = $element;
-                        $xml .= "\n<url>\n<loc>$url</loc>\n<priority>0.7</priority>\n<changefreq>daily</changefreq>\n<lastmod>$today</lastmod>\n</url>";
+                        $xml .= "\n<url>
+                                    \n<loc>$url</loc>
+                                    \n<priority>0.7</priority>
+                                    \n<changefreq>daily</changefreq>
+                                    \n<lastmod>$today</lastmod>
+                                \n</url>";
                     }
                 }
             }
@@ -706,7 +753,12 @@ class Home extends CI_Controller {
                 foreach ( $arrayPage_2 as $element ) {
                     if(!in_array($element, array("","#","javascript:;"))){
                         $url = $element;
-                        $xml .= "\n<url>\n<loc>$url</loc>\n<priority>0.6</priority>\n<changefreq>daily</changefreq>\n<lastmod>$today</lastmod>\n</url>";
+                        $xml .= "\n<url>
+                                    \n<loc>$url</loc>
+                                    \n<priority>0.6</priority>
+                                    \n<changefreq>daily</changefreq>
+                                    \n<lastmod>$today</lastmod>
+                                \n</url>";
                     }
                 }
             }
@@ -714,14 +766,17 @@ class Home extends CI_Controller {
                 foreach ( $arrayPage_3 as $element ) {
                     if(!in_array($element, array("","#","javascript:;"))){
                         $url = $element;
-                        $xml .= "\n<url>\n<loc>$url</loc>\n<priority>0.5</priority>\n<changefreq>daily</changefreq>\n<lastmod>$today</lastmod>\n</url>";
+                        $xml .= "\n<url>
+                                    \n<loc>$url</loc>
+                                    \n<priority>0.5</priority>
+                                    \n<changefreq>daily</changefreq>
+                                    \n<lastmod>$today</lastmod>
+                                \n</url>";
                     }   
                 }
             }
         }
         $xml .= "\n</urlset>";
-        $xml = str_replace("&","&amp;", $xml);
-        $xml = str_replace("'","&apos;", $xml);
         $file = FCPATH ."sitemap.xml";
         file_put_contents($file, $xml);
         header('Content-type: text/xml');
@@ -731,20 +786,58 @@ class Home extends CI_Controller {
         $data["status"] = "error";
         if($this->input->is_ajax_request()){
             $id = $this->input->post("dataID");
-            $photo = $this->Common_model->get_record("photos",["photo_id" => $id]);
-            if($photo){
+            $postType = $this->input->post("postType");
+            $argTable = [
+                "photo"  => "photos",
+                "blog"   => "article",
+                "social" => "social_posts"
+            ];
+            $key = "id"  ;
+            if($argTable[$postType] == "photos") $key = "photo_id"; 
+            $check  = $this->Common_model->get_record($argTable[$postType],[$key => $id]);
+            if($check){
                 $this->db->select('mb.*,cl.created_at,cl.id AS likeid');
-                $this->db->from("photos AS pt");
-                $this->db->join("common_like AS cl","cl.reference_id = pt.photo_id");
+                $this->db->from("".$argTable[$postType]." AS pt");
+                $this->db->join("common_like AS cl","cl.reference_id = pt.".$key."");
                 $this->db->join("members as mb","mb.id = cl.member_id");
                 $this->db->where("cl.reference_id",$id);
-                $this->db->where("cl.type_object","photo");
+                $this->db->where("cl.type_object",$postType);
+                $this->db->where("cl.status",1);
                 $list = $this->db->get();
                 $data["result"] = $list->result_array(); 
                 $data["status"] = "success";
-            }
+            }  
         }
         echo(json_encode($data));
+        return;
+    }
+
+    public function getcomments(){
+        $data["status"] = "error";
+        if($this->input->is_ajax_request()){
+            $id = $this->input->post("dataID");
+            $postType = $this->input->post("postType");
+            $argTable = [
+                "photo"  => "photos",
+                "blog"   => "article",
+                "social" => "social_posts"
+            ];
+            $key = "id" ;
+            if($argTable[$postType] == "photos") $key = "photo_id"; 
+            $check  = $this->Common_model->get_record($argTable[$postType],[$key => $id]);
+            if($check){
+                $this->db->select('mb.*,cl.created_at,cl.id AS likeid');
+                $this->db->from("common_comment AS cl");
+                $this->db->join("members as mb","mb.id = cl.member_id");
+                $this->db->where("cl.reference_id",$id);
+                $this->db->where(["cl.type_object" => $postType,"cl.pid" => 0]);
+                $list = $this->db->get();
+                $data["result"] = $list->result_array(); 
+                $data["status"] = "success";
+            }  
+        }
+        echo(json_encode($data));
+        return;
     }
  
 }

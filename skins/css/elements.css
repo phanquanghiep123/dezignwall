@@ -1,0 +1,59 @@
+/*=================*/
+/*Modal skin 17*/
+/*=================*/
+.modal-skin17{color: #212121;}
+.modal-skin17 .modal-content{border-radius: 0; border: 0; box-shadow: none;}
+.modal-skin17 .modal-header{background-color: transparent; color: #212121; border-bottom: 0; border-radius: 0;}
+.modal-skin17 .modal-title{font-size: 30px;}
+.modal-skin17 .modal-header.bg{background-color: #37a7a7;}
+.modal-skin17 .modal-header.bg .modal-title{color: #fff;}
+.modal-skin17 .modal-footer{border-top: 0;}
+.modal-skin17 .close{font-size: 30px; color: #212121; text-shadow: none; opacity: 1; margin-top: 3px;}
+.modal-skin17 .btn{font-size: 19px; border-radius: 0;}
+.modal-skin17 .btn-default{color: #212121;}
+.modal-skin17 .btn-default:hover,.modal-skin17 .btn-default:focus{border-color: #37a7a7; color: #fff;}
+.modal-skin17 .btn-primary{border-color: #37a7a7;}
+.modal-skin17 .btn-primary:hover,.modal-skin17 .btn-primary:focus{border-color: #000;}
+
+/*=================*/
+/*Modal skin 17*/
+/*=================*/
+.form-skin-17 label{line-height: 26px;}
+.form-skin-17 label small{font-size: 16px;}
+.form-skin-17 .control-label{padding-top: 0;}
+.form-skin-17 .help-block{font-size: 12px;color: #212121; margin-bottom: 8px;}
+.form-skin-17 .form-group{margin-bottom: 8px;}
+.form-skin-17 .form-control{font-size: 16px; border-radius: 2px; height: 26px;}
+.form-skin-17 textarea.form-control{height: auto;}
+.form-skin-17 input[type=date]::-webkit-inner-spin-button{display: none;}
+.form-skin-17 .custom .check-yelow.small label::before, 
+.form-skin-17 .custom .check-yelow.small label::after{margin-top: 5px;}
+
+/*=================*/
+/*Your Wall*/
+/*=================*/
+
+/*Favorites Bar*/
+.box-favorite-bar{margin-bottom: 10px;font-size: 14px;}
+.box-favorite-bar ul{list-style: none; padding-left: 0;}
+.box-favorite-bar ul li{display: inline-block;vertical-align: top; position: relative; margin-right: 20px; margin-bottom: 10px;}
+.box-favorite-bar ul li:last-child{margin-right: 0;}
+.box-favorite-bar ul li img{width: 64px; border-radius: 50%;}
+.box-favorite-bar ul li .counter{position: absolute; left: 100%; bottom: -4px; margin-left: -6px;}
+
+/*=================*/
+/*Work Experience*/
+/*=================*/
+
+.modal-work-experience .work-add{color: #37a7a7; font-size: 6em; line-height: 60px; line-height: 60px; cursor: pointer;}
+.modal-work-experience .work-add:hover{color: #212121;}
+.modal-work-experience hr{border-color: #7f7f7f; margin-bottom: 25px;}
+.modal-work-experience .media-left{padding-right: 18px;}
+.modal-work-experience .media-left img{max-width: none;}
+.modal-work-experience input[name=work-start-date]{margin-bottom: 8px;}
+@media (min-width: 768px){
+    .modal-work-experience .modal-dialog{width: 672px;}
+    .modal-work-experience .date-range label[for="work-end-date"]{width: 17%}
+    .modal-work-experience .date-range div.col-sm-3{width: 29%;}
+    .modal-work-experience input[name=work-start-date]{margin-bottom: 0;}
+}

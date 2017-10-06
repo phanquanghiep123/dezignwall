@@ -13,6 +13,9 @@
     </div>
 </div>
 <style type="text/css">
+    #modal_view_story audio{
+	    width: 100%;
+	}
 	#modal_view_story .not-border-radius{border-radius: 0;}
 	#modal_view_story .media_url{text-align:  center;max-height: 100%;}
 	#modal_view_story .media_url img{margin: 0 auto;}

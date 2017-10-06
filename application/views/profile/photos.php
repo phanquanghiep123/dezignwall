@@ -1,18 +1,6 @@
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css");?>">
 <?php
-if ($this->session->userdata('user_sr_info') === NULL) {
-    $data['menu_banner'] = array(
-        array('href' => base_url('profile/edit'), 'title' => 'Edit profile', 'class' => ''),
-        array('href' => base_url('profile/'), 'title' => 'View public profile', 'class' => ''),
-        array('href' => base_url('profile/conversations/'), 'title' => 'View Messages', 'class' => ''),
-        array('href' => base_url('/profile/upgrade/'), 'title' => 'Upgrade Account', 'class' => ''),
-        array('href' => '#', 'title' => 'Delete account', 'class' => 'delete_account')
-    );
-} else {
-    $data['menu_banner'] = array();
-}
-$data["view_profile"] = false;
-$data["show_upload"] = true;
-$this->load->view("include/banner.php", $data);
+    $this->load->view("include/banner", @$member);
 ?>
 <?php 
 $project = $product = $project_and_product = "";
@@ -232,6 +220,7 @@ if( isset($random_project) && is_array($random_project) ){
 	}
 </style>
 <script type="text/javascript">
+    
     var height_ =  $(".company_catalog .compamy_catalog_cat").offset();
 	$(document).ready(function(){
 		$(".icon-catalog").click(function(){

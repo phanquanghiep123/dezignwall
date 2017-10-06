@@ -1,6 +1,8 @@
+    <link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css")?>">
 	<?php
-	    $this->load->view("include/banner.php", @$member);
+	    $this->load->view("include/banner.php", $member);
 	?>
+
 	<section class="section box-wapper-show-image">
 		<div class="container">
 		    <div class="row row-height">
@@ -69,7 +71,15 @@
 						    <div class="form-group">
 						        <label class="col-sm-4 control-label">City, State:</label>
 						        <div class="col-sm-8">
-						            <p class="form-control-static"><?php echo @$company_info['city'].','.@$company_info['state']; ?></p>
+						            <p class="form-control-static">
+						            	<?php 
+						            	if ($company_info['city'] && $company_info['state']) :
+						            		echo $company_info['city'].','.@$company_info['state'];
+						            	else :
+						            		echo $company_info['city'].@$company_info['state'];
+						            	endif;
+						            	?>
+						            </p>
 						        </div>
 						    </div>
 
@@ -310,6 +320,7 @@
 	body.not_bg .modal-backdrop{background-color: transparent!important;}
 	#modal_view_catalog{top: 20%;}
 	#modal_view_catalog .logo-catalog > img{max-height: 40px;}
+	
 	@media screen and ( max-width: 768px ){
 		.manufacturers li{width: 48%;}
 		#modal_view_catalog .seach-sumit{
@@ -391,7 +402,6 @@
     		data:{"id":id},
     		success:function(data){		
     			if(data["status"]){
-    				console.log(data);
     				$("#modal_view_catalog #catalog_id").val(data["reponse"]["id"]);
     				$("#modal_view_catalog .logo-catalog > img").attr("src",base_url+data["reponse"]["logo"]);
     				$("#modal_view_catalog .title-catalog > p").text(data["reponse"]["description"]);

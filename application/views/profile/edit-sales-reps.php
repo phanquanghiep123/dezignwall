@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css")?>">
 <?php if(! (isset($sales_reps) && count($sales_reps)>0)  ){
    $sales_reps=array(
       array('id'=>0),
@@ -12,7 +13,7 @@
       array('href' => base_url('/profile/upgrade/'), 'title' => 'Upgrade Account', 'class' => ''),
       array('href' => '#', 'title' => 'Delete account', 'class' => 'delete_account')
   );
-  $this->load->view("include/banner.php", $data);
+  $this->load->view("include/banner-wall.php", $data);
   ?>
       <section class="section box-wapper-show-image">
 <div class="container">

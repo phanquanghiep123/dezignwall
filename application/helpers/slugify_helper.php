@@ -128,16 +128,14 @@ if (!function_exists('upload_flie')){
         //config;
         $config['upload_path'] = $upload_path;
         $config['allowed_types'] = $allowed_types;
+        $config['file_ext_tolower'] = 'TRUE';
+        $config['remove_spaces'] = TRUE;
         if($max_size !="auto"){$config['max_size'] = $max_size;}
         if($max_width !="auto"){$config['max_width'] = $max_width;}
         if($max_height !="auto"){$config['max_height'] = $max_height;}
         $type = explode(".", $file['name']);
-        $name = $type[0]."_".uniqid().".".$type[1];
-        $name = str_replace(" ","",$name);
-        $name = str_replace("[","",$name);
-        $name = str_replace("]","",$name);
-        $name = str_replace("(","",$name);
-        $name = str_replace(")","",$name);
+        $count = count($type) - 1;
+        $name = uniqid().".".$type[$count];
         $_FILES['file']['name']     = $name ;
         $_FILES['file']['type']     = $file['type'];
         $_FILES['file']['tmp_name'] = $file['tmp_name'];
@@ -147,7 +145,9 @@ if (!function_exists('upload_flie')){
         $CI->upload->initialize($config);
         if (!$CI->upload->do_upload('file'))
         {
-            $data["message"] = $CI->upload->display_errors();
+            $data["error"]   = $CI->upload->display_errors();
+            $data["message"] = "Upload process an error please check back";
+            $data["file"]    = $_FILES["file"];
         }
         else
         {   
@@ -158,11 +158,11 @@ if (!function_exists('upload_flie')){
         return $data;
 
     }
+}
     if (!function_exists('gen_slug')){
         function gen_slug($str){
-            $str = ($str == null || trim($str) == "") ? "photo" : $str;
-            $a = array("'",'"','À','Á','Â','Ã','Ä','Å','Æ','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ð','Ñ','Ò','Ó','Ô','Õ','Ö','Ø','Ù','Ú','Û','Ü','Ý','ß','à','á','â','ã','ä','å','æ','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ý','ÿ','A','a','A','a','A','a','C','c','C','c','C','c','C','c','D','d','Ð','d','E','e','E','e','E','e','E','e','E','e','G','g','G','g','G','g','G','g','H','h','H','h','I','i','I','i','I','i','I','i','I','i','?','?','J','j','K','k','L','l','L','l','L','l','?','?','L','l','N','n','N','n','N','n','?','O','o','O','o','O','o','Œ','œ','R','r','R','r','R','r','S','s','S','s','S','s','Š','š','T','t','T','t','T','t','U','u','U','u','U','u','U','u','U','u','U','u','W','w','Y','y','Ÿ','Z','z','Z','z','Ž','ž','?','ƒ','O','o','U','u','A','a','I','i','O','o','U','u','U','u','U','u','U','u','U','u','?','?','?','?','?','?');
-            $b = array("",'','A','A','A','A','A','A','AE','C','E','E','E','E','I','I','I','I','D','N','O','O','O','O','O','O','U','U','U','U','Y','s','a','a','a','a','a','a','ae','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','o','u','u','u','u','y','y','A','a','A','a','A','a','C','c','C','c','C','c','C','c','D','d','D','d','E','e','E','e','E','e','E','e','E','e','G','g','G','g','G','g','G','g','H','h','H','h','I','i','I','i','I','i','I','i','I','i','IJ','ij','J','j','K','k','L','l','L','l','L','l','L','l','l','l','N','n','N','n','N','n','n','O','o','O','o','O','o','OE','oe','R','r','R','r','R','r','S','s','S','s','S','s','S','s','T','t','T','t','T','t','U','u','U','u','U','u','U','u','U','u','U','u','W','w','Y','y','Y','Z','z','Z','z','Z','z','s','f','O','o','U','u','A','a','I','i','O','o','U','u','U','u','U','u','U','u','U','u','A','a','AE','ae','O','o');
+            $a = array('À','Á','Â','Ã','Ä','Å','Æ','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ð','Ñ','Ò','Ó','Ô','Õ','Ö','Ø','Ù','Ú','Û','Ü','Ý','ß','à','á','â','ã','ä','å','æ','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ý','ÿ','A','a','A','a','A','a','C','c','C','c','C','c','C','c','D','d','Ð','d','E','e','E','e','E','e','E','e','E','e','G','g','G','g','G','g','G','g','H','h','H','h','I','i','I','i','I','i','I','i','I','i','?','?','J','j','K','k','L','l','L','l','L','l','?','?','L','l','N','n','N','n','N','n','?','O','o','O','o','O','o','Œ','œ','R','r','R','r','R','r','S','s','S','s','S','s','Š','š','T','t','T','t','T','t','U','u','U','u','U','u','U','u','U','u','U','u','W','w','Y','y','Ÿ','Z','z','Z','z','Ž','ž','?','ƒ','O','o','U','u','A','a','I','i','O','o','U','u','U','u','U','u','U','u','U','u','?','?','?','?','?','?');
+            $b = array('A','A','A','A','A','A','AE','C','E','E','E','E','I','I','I','I','D','N','O','O','O','O','O','O','U','U','U','U','Y','s','a','a','a','a','a','a','ae','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','o','u','u','u','u','y','y','A','a','A','a','A','a','C','c','C','c','C','c','C','c','D','d','D','d','E','e','E','e','E','e','E','e','E','e','G','g','G','g','G','g','G','g','H','h','H','h','I','i','I','i','I','i','I','i','I','i','IJ','ij','J','j','K','k','L','l','L','l','L','l','L','l','l','l','N','n','N','n','N','n','n','O','o','O','o','O','o','OE','oe','R','r','R','r','R','r','S','s','S','s','S','s','S','s','T','t','T','t','T','t','U','u','U','u','U','u','U','u','U','u','U','u','W','w','Y','y','Y','Z','z','Z','z','Z','z','s','f','O','o','U','u','A','a','I','i','O','o','U','u','U','u','U','u','U','u','U','u','A','a','AE','ae','O','o');
             return strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/','/[ -]+/','/^-|-$/'),array('','-',''),str_replace($a,$b,$str))).".html";
         }
     }
@@ -220,7 +220,6 @@ if (!function_exists('upload_flie')){
         return $html;
         
     }
-}
 if ( ! function_exists('paging')) {
     function paging($total_rows,$perpage,$number_itmems = 5,$url ="",$number_page = 20){
         $page = $total_rows/$number_page;
@@ -258,4 +257,103 @@ if ( ! function_exists('paging')) {
         }
         return "";
     }
+    function get_notifications($user_id){
+        $CI = get_instance();
+        $CI->db->select("id");
+        $CI->db->from("notifications_common");
+        $CI->db->where(["member_id" => $user_id,"status" => 0]);
+        $data = $CI->db->count_all_results();
+        return $data;
+    }
+    function get_notifications_by_user($user_id,$type_object,$type,$offset = 0,$limit = 6){
+        $CI = get_instance();
+        $CI->db->select("tbl1.*,count(tbl1.id) AS number_data");
+        $CI->db->from("notifications_common AS tbl1");
+        
+        $CI->db->where([
+            "tbl1.member_id" => $user_id,
+            "tbl1.type_object" => $type_object,
+            "tbl1.type" => $type
+        ]);
+        $CI->db->group_by("tbl1.reference_id");
+        $CI->db->order_by("tbl1.id","DESC");
+        $CI->db->limit($limit,$offset);
+        $data = $CI->db->get();
+        return $data->result_array();
+    }
+    function get_notifications_by_type ($user_id,$reference_id,$type_object,$type,$offset = 0,$limit = 2){
+        $CI = get_instance();
+        $CI->db->select("tbl1.*, tbl2.avatar,tbl2.first_name,tbl2.last_name,tbl2.job_title,tbl3.company_name");
+        $CI->db->from("notifications_common AS tbl1");
+        $CI->db->join("members AS tbl2","tbl2.id = tbl1.member_owner");
+        $CI->db->join("company AS tbl3","tbl3.member_id = tbl2.id","LEFT");
+        $CI->db->where([
+            "tbl1.member_id" => $user_id,
+            "tbl1.type_object" => $type_object,
+            "tbl1.type" => $type,
+            "tbl1.reference_id" => $reference_id,
+            "tbl1.allow"   => 1
+        ]);
+        $CI->db->group_by("tbl1.id");
+        $CI->db->limit($limit,$offset);
+        $CI->db->order_by("tbl1.id","DESC");
+        $data = $CI->db->get();
+        return $data->result_array();
+    }
+    function get_company_top_follow ($user_id){
+        $CI = get_instance();
+        $sql = "SELECT `tbl1`.*, count(`tbl2`.`id`) AS number_follow
+                FROM `company` AS `tbl1`
+                JOIN `common_follow` AS `tbl2` ON `tbl2`.`reference_id` = `tbl1`.`id`
+                JOIN ( select `tbl3`.`reference_id` from common_follow AS tbl3 WHERE `tbl3`.`member_id` = $user_id AND `tbl3`.`type_object` = 'company') 
+                AS tbl4 on `tbl4`.`reference_id` = `tbl2`.`reference_id` 
+                WHERE `tbl2`.`type_object` = 'company' and `tbl2`.`allow` != 2
+                GROUP BY `tbl2`.`reference_id`
+                ORDER BY `number_follow` DESC
+                LIMIT 8";
+        $query = $CI->db->query($sql);
+        return $query->result_array();
+
+    }
+
+    function get_follow_by_user($user_id,$type_object,$type,$offset = 0,$limit = 6){
+        $CI = get_instance();
+        $CI->db->select("tbl1.*,tbl2.avatar,tbl2.first_name,tbl2.last_name,tbl2.job_title,tbl3.company_name,tbl3.logo");
+        $CI->db->from("notifications_common AS tbl1");
+        $CI->db->join("members AS tbl2","tbl2.id = tbl1.member_owner");
+        $CI->db->join("company AS tbl3","tbl3.member_id = tbl2.id","LEFT");
+        $CI->db->where([
+            "tbl1.member_id" => $user_id,
+            "tbl1.type_object" => $type_object,
+            "tbl1.type" => $type,
+            "tbl1.allow <"   => 2
+        ]);
+
+        $CI->db->order_by("tbl1.id","DESC");
+        $CI->db->limit($limit,$offset);
+        $data = $CI->db->get();
+        return $data->result_array();
+    }
+    function get_diff_year ($old,$to){
+        $d1 = new DateTime($old);
+        $d2 = new DateTime($to);
+        $diff = $d2->diff($d1);
+        $y = $diff->y;
+        $m = $diff->m;
+
+        if($m != 0){
+            if($y == 0){
+                return " &#8226; <span style='color:#7f7f7f'>" . $m . " mos</span>";
+            }
+            return " &#8226; <span style='color:#7f7f7f'>" .$y." yrs " . $m . " mos</span>";
+        }else{
+            if($y != 0){
+                return " &#8226; <span style='color:#7f7f7f'>" .$y . " yrs<span>";
+            }else{
+                return "";
+            }
+            
+        }
+    }
+
 }

@@ -1,12 +1,13 @@
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css");?>">
 <style>
 .uesr-box-impromation {height:auto;}
 .custom-columns .col-xs-2{
     width: 13.5%;
 }
 .wrapper-image .item  .view-story img{
-	width: auto;
-	height: auto;
-	max-height: inherit;
+    width: auto;
+    height: auto;
+    max-height: inherit;
     min-height: inherit;
     object-fit: inherit;
     padding-top: 0;
@@ -23,6 +24,10 @@
     z-index: 1;
     padding-top: 4px;
 }
+.uesr-box-impromation #list-table-comment p {color: #9E9E9E!important;  text-align: left;}
+.uesr-box-impromation #list-table-comment p span {color: #9E9E9E!important;}
+.commen-like p {color: #fff !important;}
+.commen-like p span{color: #fff !important;}
 #wrapper-impormant-image .image-page .impromation-project .logo-company img {
     width: 50px;
     height: 50px;
@@ -96,6 +101,17 @@ body .image-page .dropdown-impromation .dropdown-impromation-menu{
 .show-mobile{display: none;}
 .bx-wrapper{margin: inherit !important; }
 body .image-page .bx-wrapper .bx-controls-direction a{top: 45% !important}
+body .logo-company{
+    width: 55px;
+    float: left;
+    padding-right: 0;
+}
+body .impromation{
+    width: 86%;
+    float: left;
+}
+body .image-page .photo-name{width: 100%;}
+body .image-page .impromation-project .impromation p{width: 100%;}
 body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: relative;}
 @media screen and (max-width: 768px){
     body .image-page .bx-wrapper .bx-controls-direction a{top: 40%;}
@@ -116,10 +132,22 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
         font-size: 15px;
     }
     .show-mobile{display: inline;}
+    body .impromation {
+        width: 66%;
+        float: left;
+    }
 }
-@media screen and (max-width: 350px){
+@media screen and (max-width: 420px){
     .image-page .impromation-project .impromation p {
         width: 71%;
+    }
+    body .image-page .impromation-project .impromation p {
+        width: 100%;
+        font-size: 12px;
+    }
+    body .image-page .photo-name {
+        width: 100%;
+        font-size: 12px;
     }
 }
 </style>
@@ -187,7 +215,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                     <img class="photo-detail" title="<?php echo @$photo["name"];?>" data-w="<?php echo @$size_new[0]; ?>" data-h="<?php echo @$size_new[1]; ?>" src="<?php echo base_url($images); ?>">
                                     <div class="save-dw">
                                         <ul class="memu-save">
-                                            <li style="list-style: none;"><a class="not-report download_photo" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" id="login-check" href="<?php echo base_url($images);?>" download><span class="show-mobile">> </span>Save as jpeg...</a></li>
+                                            <li style="list-style: none;"><a class="not-report download_photo" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" id="login-check" href="<?php echo base_url("photos/savejpg/".$photo['photo_id']);?>" download ="true" ><span class="show-mobile">> </span>Save as jpeg...</a></li>
                                             <li style="list-style: none;"><a class="not-report" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  id="login-check" href="<?php echo base_url("photos/download_pdf/". $photo["photo_id"]);?>"><span class="show-mobile">> </span>SAVE / Print PDF...</a></li>
                                             <li style="list-style: none;"><a id="pins-to" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  class="upgrade-account-link not-report" href="#"><span class="show-mobile">> </span>Pin to Wall...</a></li>
                                         </ul>
@@ -231,7 +259,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                         <li style="list-style: none;"><a href="#" class="not-report" id="report-image" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Report this image...</a></li>
                                     </ul>
                                     <ul class="memu-save-top">
-                                        <li style="list-style: none;"><a data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" id="login-check" data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" class="not-report" href="<?php echo base_url($images);?>" download><span class="show-mobile">> </span>Save as jpeg...</a></li>
+                                        <li style="list-style: none;"><a data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" id="login-check" data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" class="not-report" href="<?php echo base_url("photos/savejpg/".$photo['photo_id']);?>" download ="true"><span class="show-mobile">> </span>Save as jpeg...</a></li>
                                         <li style="list-style: none;"><a id="login-check" class="not-report" href="<?php echo base_url("photos/download_pdf/". $photo["photo_id"]);?>"><span class="show-mobile">> </span>SAVE / Print PDF...</a></li>
                                         <li style="list-style: none;"><a id="pins-to" class="upgrade-account-link not-report" href="#"><span class="show-mobile">> </span>Pin to Wall...</a></li>
                                     </ul>
@@ -239,10 +267,10 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                             </div>
                             <?php $record_type = 1; ?>
                             <?php if ($record_type != 0): ?>
-                                <?php $logo = ( $user["logo"] != "" && file_exists(FCPATH . "/" . $user["logo"]) ) ? base_url($user["logo"]) : skin_url("images/logo-company.png"); ?>
-                                <div class="logo-company"><a id="login-check" href="<?php echo base_url("profile/index/" . $user["id"]); ?>"><img src="<?php echo $logo; ?>"></a></div>
+                                <?php $logo = ( $company["logo"] != "" && file_exists(FCPATH . "/" . $company["logo"]) ) ? base_url($company["logo"]) : skin_url("images/logo-company.png"); ?>
+                                <div class="logo-company"><a id="login-check" href="<?php echo base_url("profile/view/" . $user["id"]); ?>"><img src="<?php echo $logo; ?>"></a></div>
                                 <div class="impromation">
-                                    <h1 class="photo-name"><a id="login-check" href="<?php echo base_url("profile/index/" . $user["id"]); ?>"><?php echo $company["company_name"]; ?></a></h1>
+                                    <h1 class="photo-name"><a id="login-check" href="<?php echo base_url("profile/view/" . $user["id"]); ?>"><?php echo $company["company_name"]; ?></a></h1>
                                     <p><?php echo $company["business_type"] ?> | <?php echo $company["business_description"]?></p>
                                 </div>
                             <?php endif; ?>
@@ -269,13 +297,13 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                             <div class="col-xs-2 remove-padding text-center">
                                                 <div class="microsite">
                                                     <p style="height:15px"></p>
-                                                    <a id="goto-microsite" title="Go to microsite." href="<?php echo base_url("profile/index/" . $user["id"]); ?>"><img src="<?php echo base_url("skins/images/i-white.png");?>"></a>
+                                                    <a id="goto-microsite" title="Go to microsite." href="<?php echo base_url("company/view/" . $user["id"]); ?>"><img src="<?php echo base_url("skins/images/i-white.png");?>"></a>
                                                 </div>
                                             </div>
                                             <div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><a id="myphoto_user" href="<?php echo base_url("profile/myphoto/" . $user["id"]."?catalog=".$photo["manufacture"]);?>"><img src="<?php echo skin_url("images/catalog-white.png")?>"></a></div>
                                             <?php if ($photo['type'] == 2) : ?>
                                                 <div class="col-xs-2 remove-padding text-center"><p><span id="num-pin"><?php echo $record_pin; ?></span> Pins</p><h3 id="pins-to" title="Click here to Save to DEZIGNWALL."><i class="fa fa-thumb-tack"></i></div>
-                                                <div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><h3 id="share-social" title="Click here to share image." data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>"><i class="fa fa-share-alt"></i></h3></div>
+                                                <div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><h3 id="share-social" title="Click here to share image." data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>"><span class="glyphicon glyphicon-share-alt"></span></h3></div>
                                                 <?php if($photo['image_category'] == "Product"){
                                                     echo '<div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><h3 title="Click here to RFQ of image."><a id ="login-check" href="'.base_url("profile/request_quote/".$photo["photo_id"]).'" name="RFQ"><img src="'.skin_url("images/RFQ-white.png").'"></a></h3></div> ';
                                                 }?>

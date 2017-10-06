@@ -1,9 +1,11 @@
+
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/company.css")?>">
 <style type="text/css">
 <?php if (isset($_GET["payment"]) && $_GET["payment"] == "true") { ?>
         #message-upgrade{display: block !important;}
 <?php } else { ?>
         #message-upgrade{display: none !important;}
-<?php } ?>	
+<?php } ?>  
 </style>
 <?php if (isset($_GET["payment"]) && $_GET["payment"] == "true") { 
     $user_info = $this->session->userdata('user_info');
@@ -73,41 +75,37 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
 </section>
 
 <?php
-$data['menu_banner'] = array(
-    array('href' => base_url('profile/edit'), 'title' => 'Edit profile', 'class' => ''),
-    array('href' => base_url('profile/'), 'title' => 'View public profile', 'class' => ''),
-    array('href' => base_url('profile/conversations/'), 'title' => 'View Messages', 'class' => ''),
-    array('href' => base_url('profile/your_reports/'), 'title' => 'View Reports', 'class' => ''),
-    array('href' => base_url('/profile/upgrade/'), 'title' => 'Upgrade Account', 'class' => ''),
-    array('href' => '#', 'title' => 'Delete account', 'class' => 'delete_account')
-);
-$this->load->view("include/banner.php", $data);
+    $this->load->view("include/banner.php", $member);
 ?>
 <section class="section box-wapper-show-image">
     <div class="container">
-        <div class="panel panel-default relative">
+        <div class="panel panel-default">
             <div class="custom-loading"><img width="48" src="<?php echo skin_url(); ?>/images/loading.gif"></div>
             <div class="panel-header">
-                <h2 class="panel-title">Personal Profile Info</h2>
+                <h2 class="panel-title">Admin Profile Info</h2>
                 <a class="panel-action" href="#"><i class="fa fa-pencil"></i></a>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <div class="media">
-                        <div class="media-left">
-                            <?php
-                            $src = skin_url() . '/images/avatar-full.png';
-                            if (isset($member['avatar']) && file_exists('.' . $member['avatar']) && !empty($member['avatar'])) {
-                                $src = $member['avatar'];
-                            }
-                            ?>
-
-                            <div class="profile-image relative">
-                                <img class="media-object avatar-full" src="<?php echo $src; ?>" alt="..." width="162" height="162">
-                                <div class="profile-edit-photo custom-avatar">
-                                    <div class="profile-action-edit">
-                                        <a class="text-white" href="#" onclick="$('#imageCropper-modal #ImageUploader_image').click();return false;"><i class="fa fa-camera"></i> <small>  Change Image</small></a>
-                                    </div>
+                    <div id="crop-avatar">
+                        <?php $this->load->view("include/modal-cropper");?>
+                        <div class="media">
+                            <div class="media-left">
+                                <?php
+                                $src = skin_url() . '/images/avatar-full.png';
+                                if (isset($member['avatar']) && file_exists('.' . $member['avatar']) && !empty($member['avatar'])) {
+                                    $src = base_url($member['avatar']);
+                                }
+                                ?>
+                                <div class="profile-image relative">
+                                    
+                                        <img id="avatarshow" class="img-circle media-object avatar-full" src="<?php echo $src; ?>" alt="..." width="162" height="162">
+                                        <div class="profile-edit-photo custom-avatar">
+                                            <div class="profile-action-edit">
+                                                <a class="avatar-view text-white" data-type="avatar" data-img="<?php echo $src; ?>" href="javascript:;"><i class="fa fa-camera"></i> <small>  Change Image</small></a>
+                                            </div>
+                                        </div>
+                                        
                                 </div>
                             </div>
                         </div>
@@ -116,7 +114,7 @@ $this->load->view("include/banner.php", $data);
                             <p><small>Your profile picture will be viewed by the commercial design community, worldwide. Be sure to use a photo that best supports your companies public profile image.</small></p>
                         </div>
                     </div>
-					<?php if ($is_blog === 'yes') : ?><a class="link-article color-brand-secondary" href="<?php echo base_url('/article/add')?>">Dezignwall Industry Articles Program Platform</a><?php endif; ?>
+                    <?php if ($is_blog === 'yes') : ?><a class="link-article color-brand-secondary" href="<?php echo base_url('/article/add')?>">Dezignwall Industry Articles Program Platform</a><?php endif; ?>
                 </div>
                 <div class="col-sm-6">
                     <form action="" method="post" class="form-horizontal form-profile">
@@ -372,37 +370,37 @@ $this->load->view("include/banner.php", $data);
                 </form>
             </div>
         </div>
-    	<?php endif;?>
-    	<div class="row row-height">
-		    	<div class="col-sm-12">
-					<div class="inner-height panel panel-default box-manufacturers">
-						<div class="panel-header">
-							<div class="panel-header">
-				                <h2 class="panel-title">Product Lines</h2>
-				                <a class="panel-action" href="#"><i class="fa fa-pencil"></i></a>
-				            </div>
-							<ul class=" manufacturers list-inline custom required-group">
-                        	    <?php if(@$manufacturers != "" && is_array($manufacturers)):?>
-                               	<?php 
-                               	$i = 0;
-                               	foreach($manufacturers AS $value):?>
-                               		<li>   
+        <?php endif;?>
+        <div class="row row-height">
+                <div class="col-sm-12">
+                    <div class="inner-height panel panel-default box-manufacturers">
+                        <div class="panel-header">
+                            <div class="panel-header">
+                                <h2 class="panel-title">Product Lines</h2>
+                                <a class="panel-action" href="#"><i class="fa fa-pencil"></i></a>
+                            </div>
+                            <ul class=" manufacturers list-inline custom required-group">
+                                <?php if(@$manufacturers != "" && is_array($manufacturers)):?>
+                                <?php 
+                                $i = 0;
+                                foreach($manufacturers AS $value):?>
+                                    <li>   
                                         <img src="<?php echo base_url($value["logo"]);?>">
                                         <div class="action">
-                                        	<div id="delete" data-type ="delete" data-id="<?php echo $value["id"];?>"><img src="<?php echo skin_url("images/delete_catalog.png");?>"></div>
-                                        	<div id="edit" data-type ="edit" data-id="<?php echo $value["id"];?>"><img src="<?php echo skin_url("images/edit-catalog.png")?>"></div>
-                                        	<div><a href="<?php echo base_url("profile/addphotos?catalog=".$value["id"]."")?>"><img src="<?php echo skin_url("images/catalog-view.png")?>"></a></div>
+                                            <div id="delete" data-type ="delete" data-id="<?php echo $value["id"];?>"><img src="<?php echo skin_url("images/delete_catalog.png");?>"></div>
+                                            <div id="edit" data-type ="edit" data-id="<?php echo $value["id"];?>"><img src="<?php echo skin_url("images/edit-catalog.png")?>"></div>
+                                            <div><a href="<?php echo base_url("profile/addphotos?catalog=".$value["id"]."")?>"><img src="<?php echo skin_url("images/catalog-view.png")?>"></a></div>
                                         </div>
                                     </li>
-                               	<?php endforeach;?>
-                               	
+                                <?php endforeach;?>
+                                
                                <?php endif?>
                             </ul>
                             <div class="more-manufacturers" style="display: none;"><a href="#" class="btn btn-primary">MORE</a></div>
-						</div>
-					</div>
-				</div>
-		    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div class="row row-height">
             <div class="col-sm-6">
                 <div class="inner-height panel panel-default relative">
@@ -583,20 +581,20 @@ $this->load->view("include/banner.php", $data);
                     <div class="panel-header">
                         <h2 class="panel-title remove-margin-bottom">Photos</h2>
                         <div class="impromation-project" style="display:block;background: none;left:auto;top:-10px;">
-				            <div class="container relative">
-				                <div class="impromation-project-dropdown">
-				                    <div class="dropdown-impromation relative">
-				                        <span class="glyphicon glyphicon-menu-down" aria-hidden="true" style="color:#212121;"></span>
-				                        <ul class="dropdown-impromation-menu" style="background: #f1f1f1;min-width: 120px;" id="deziwall">
-				                            <li><a href="<?php echo base_url('profile/myphoto'); ?>">View all images</a></li>
-				                            <li><a href="<?php echo base_url('profile/addphotos'); ?>">Upload images</a></li>
-				                            <li><a class="edit-image" href="#" >Edit images</a></li>
-				                            <li><a href="#" class="not-report" data-reporting="company" id="share-social" data-title ="<?php echo @$member['company_name']; ?>" data-type ="profile" data-id ="<?php echo $member["id"]; ?>">Share Profile</a></li>
-				                        </ul>
-				                    </div>
-				                </div>
-				            </div>
-				        </div>
+                            <div class="container relative">
+                                <div class="impromation-project-dropdown">
+                                    <div class="dropdown-impromation relative">
+                                        <span class="glyphicon glyphicon-menu-down" aria-hidden="true" style="color:#212121;"></span>
+                                        <ul class="dropdown-impromation-menu" style="background: #f1f1f1;min-width: 120px;" id="deziwall">
+                                            <li><a href="<?php echo base_url('profile/myphoto'); ?>">View all images</a></li>
+                                            <li><a href="<?php echo base_url('profile/addphotos'); ?>">Upload images</a></li>
+                                            <li><a class="edit-image" href="#" >Edit images</a></li>
+                                            <li><a href="#" class="not-report" data-reporting="company" id="share-social" data-title ="<?php echo @$member['company_name']; ?>" data-type ="profile" data-id ="<?php echo $member["id"]; ?>">Share Profile</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <?php if (isset($photos) && count($photos) > 0): ?>
                         <ul class="pgwSlideshow">
@@ -635,7 +633,7 @@ $this->load->view("include/banner.php", $data);
                                     $certifications_image = json_encode($image);
                                     if (isset($image) && count($image) > 0) {
                                         foreach ($image as $key => $value) {
-                                            ?>	<span style="display: inline-block;position: relative;">
+                                            ?>  <span style="display: inline-block;position: relative;">
                                                 <a href="#" class="edit-profile delete-image-certifications"><i class="fa fa-times"></i></a>
                                                 <img src="<?php echo $value; ?>" style="height:100px;display:inline-block;margin-right:10px;margin-bottom:10px;">
                                             </span>
@@ -670,65 +668,65 @@ $this->load->view("include/banner.php", $data);
                 </div>
             </div>
         </div>
-    	<?php else:?>
-    		<div class="row row-height">
+        <?php else:?>
+            <div class="row row-height">
             <div class="col-sm-12">
                 <div class="inner-height panel panel-default relative profile">
                     <div class="custom-loading"><img width="48" src="<?php echo skin_url(); ?>/images/loading.gif"></div>
                     <div class="panel-header">
                         <h2 class="panel-title remove-margin-bottom">Posted Articles</h2>
                         <?php if(isset($article[0])):?>
-                        	<a class="panel-action-photo" id="goto-edit-post" title="edit article" href="<?php echo base_url("article/edit/".$article[0]["id"]);?>"><i class="fa fa-pencil"></i></a>
+                            <a class="panel-action-photo" id="goto-edit-post" title="edit article" href="<?php echo base_url("article/edit/".$article[0]["id"]);?>"><i class="fa fa-pencil"></i></a>
                         <?php endif; ?>
                     </div>
                     <?php if (isset($article) && count($article) > 0): ?>
-                    	<div class="bx-slider-edit">
+                        <div class="bx-slider-edit">
                             <div class="slider-top">
-                    			<ul class="bxsliders_edit">
-                    			    <?php $page_slider = ""?>
-                    			    <?php $i_page = 0;?>
-    	                            <?php foreach ($article as $key => $value): ?>
-    	                                <li data-id ="<?php echo $value["id"];?>">
-    	                                    <div class="row">
-    	                                		<div class="col-sm-6 slider-left"><img src="<?php echo @$value['thumbnail'] ?>" alt="<?php echo @$value['title'] ?>"></div>
-    	                               			<div class="col-sm-6 slider-right">
-    	                               				<p class="text-right"><?php echo date('F j, Y',strtotime($value['date_create'])); ?></p>
-                                           			<h3 class="text-center" style="margin-bottom:10px;"><strong><?php echo $value['title']; ?></strong></h3>
-    		                                        <div class="row" style="margin-bottom:10px;">
-    		                                            <div class="col-sm-1 col-xs-4 avatar-slider text-center remove-padding">
-    		                                                <?php 
-    		                                                    $avatar = skin_url().'/images/avatar-full.png';
-    		                                                    if(isset($value['avatar']) && $value['avatar'] != null && file_exists('.'.$value['avatar'])) {
-    		                                                        $avatar = $value['avatar'];
-    		                                                    }
-    		                                                ?>
-    		                                                <img width="60" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>">
-    		                                            </div>
-    		                                            <div class="col-sm-11 col-xs-8 profile-slider">
-    		                                            <?php $full_name = @$value['first_name'] . " ". @$value['last_name'];
+                                <ul class="bxsliders_edit">
+                                    <?php $page_slider = ""?>
+                                    <?php $i_page = 0;?>
+                                    <?php foreach ($article as $key => $value): ?>
+                                        <li data-id ="<?php echo $value["id"];?>">
+                                            <div class="row">
+                                                <div class="col-sm-6 slider-left"><img src="<?php echo @$value['thumbnail'] ?>" alt="<?php echo @$value['title'] ?>"></div>
+                                                <div class="col-sm-6 slider-right">
+                                                    <p class="text-right"><?php echo date('F j, Y',strtotime($value['date_create'])); ?></p>
+                                                    <h3 class="text-center" style="margin-bottom:10px;"><strong><?php echo $value['title']; ?></strong></h3>
+                                                    <div class="row" style="margin-bottom:10px;">
+                                                        <div class="col-sm-1 col-xs-4 avatar-slider text-center remove-padding">
+                                                            <?php 
+                                                                $avatar = skin_url().'/images/avatar-full.png';
+                                                                if(isset($value['avatar']) && $value['avatar'] != null && file_exists('.'.$value['avatar'])) {
+                                                                    $avatar = $value['avatar'];
+                                                                }
+                                                            ?>
+                                                            <img width="60" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>">
+                                                        </div>
+                                                        <div class="col-sm-11 col-xs-8 profile-slider">
+                                                        <?php $full_name = @$value['first_name'] . " ". @$value['last_name'];
                                                             $user_info_bar = $full_name ;
                                                             if($value['company_name'] != ""){
                                                                 $user_info_bar.= " | ".$value['company_name'];
                                                             }
                                                         ?>
-    		                                                <p><strong><?php echo $user_info_bar; ?></strong></p>
-    		                                                <p><?php echo @$value['job_title']; ?></p>
-    		                                            </div>
-    		                                        </div>
-    	                                        	<p><?php echo substr(strip_tags($value['content']), 0, 450); ?> <a href="<?php echo base_url(); ?>article/post/<?php echo $value['id']; ?>">MORE</a></p>
-    		                               		</div>
-    		                               	</div>
-    	                                </li>
-    	                            	<?php $page_slider.= '<li><a data-slide-index="'.$i_page.'" href="#"><img src="'.@$value['thumbnail'].'"></a></li>'; ?>
+                                                            <p><strong><?php echo $user_info_bar; ?></strong></p>
+                                                            <p><?php echo @$value['job_title']; ?></p>
+                                                        </div>
+                                                    </div>
+                                                    <p><?php echo substr(strip_tags($value['content']), 0, 450); ?> <a href="<?php echo base_url(); ?>article/post/<?php echo $value['id']; ?>">MORE</a></p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php $page_slider.= '<li><a data-slide-index="'.$i_page.'" href="#"><img src="'.@$value['thumbnail'].'"></a></li>'; ?>
                                             <?php $i_page++; ?>
-    	                            <?php endforeach; ?>
-                            	</ul>
-                            </div>
-                        	<div class="slider-bottom">
-                                <ul id="bx-pager-edit">
-                        	       <?php echo $page_slider;?>
+                                    <?php endforeach; ?>
                                 </ul>
-							</div>
+                            </div>
+                            <div class="slider-bottom">
+                                <ul id="bx-pager-edit">
+                                   <?php echo $page_slider;?>
+                                </ul>
+                            </div>
 
                         </div>
                         <div class="row">
@@ -786,7 +784,9 @@ $this->load->view("include/banner.php", $data);
 </div>
 <?php $this->load->view("include/edit-catalog"); ?>
 <?php $this->load->view("include/delete_catalog"); ?>
-
+<?php if (isset($status_member) && $status_member == 0): ?>
+<?php $this->load->view("include/getting-started-popup"); ?> 
+<?php endif; ?>
 <style type="text/css">
     .form-group{margin-bottom: 0;}
     @media screen and ( max-width: 768px ){
@@ -796,8 +796,8 @@ $this->load->view("include/banner.php", $data);
 </style>
 <?php if ($is_blog === 'yes') : ?>
 <script type="text/javascript">
-	var mySider = $('.bxsliders_edit').bxSlider({
-		pagerCustom: '#bx-pager-edit',
+    var mySider = $('.bxsliders_edit').bxSlider({
+        pagerCustom: '#bx-pager-edit',
         auto:true,
         pause:4000,
         autoStart:true,
@@ -817,7 +817,7 @@ $this->load->view("include/banner.php", $data);
             var id = $slideElement.attr("data-id");
             $("#goto-edit-post").attr("href",base_url+"article/edit/"+id);
         }
-	});
+    });
     var box_width = $(".bx-slider-edit").width();
     var number_slider = 10;
     if(box_width < 768){
@@ -848,14 +848,14 @@ $this->load->view("include/banner.php", $data);
     </script>
 <?php endif; ?>
 <script type="text/javascript">
-	$(document).ready(function(){
+    $(document).ready(function(){
         var number = $(".manufacturers li").length;
         if(number > 4){
             $(".more-manufacturers").show();
         }else{
             $(".more-manufacturers").hide();
         }
-	    $(".more-manufacturers a.btn").click(function(){
+        $(".more-manufacturers a.btn").click(function(){
             if(!$(this).hasClass("show-now")){
                 $(this).text("LESS");
                 $(this).addClass("show-now");
@@ -915,22 +915,22 @@ $this->load->view("include/banner.php", $data);
     #modal_edit_catalog .modal-content{border-radius: 0;}
     .bx-slider-edit{background-color: #7f7f7f; padding: 10px 10px 10px 0px;}
     .bx-slider-edit .slider-top .bx-wrapper .bx-viewport{
-    	margin: 0;
-    	margin-left: 10px;
+        margin: 0;
+        margin-left: 10px;
     }
 
-	#bx-pager-edit .slider-top a img {
-		padding: 3px;
-		border: solid #ccc 1px;
-		width: 100px;
-		height: 100px;
-		display: inline-block;
+    #bx-pager-edit .slider-top a img {
+        padding: 3px;
+        border: solid #ccc 1px;
+        width: 100px;
+        height: 100px;
+        display: inline-block;
 
-	}
-	#bx-pager-edit .slider-top a:hover img,
-	#bx-pager-edit .slider-top a.active img {
-		border: solid #5280DD 1px;
-	}
+    }
+    #bx-pager-edit .slider-top a:hover img,
+    #bx-pager-edit .slider-top a.active img {
+        border: solid #5280DD 1px;
+    }
     #myModal-download-contacts .form-group{
         margin-bottom: 10px;
     }
@@ -946,20 +946,27 @@ $this->load->view("include/banner.php", $data);
     .manufacturers li {width: 49%; margin-bottom: 30px;position: relative;}
     .manufacturers {height: 125px; overflow-y: hidden;}
     .manufacturers img{max-width: 100%;max-height: 40px;}
-	.form-group{margin-bottom: 0;}
-	.more-manufacturers a.btn{
-		border-radius: 0;
-		-webkit-box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);
-    	box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);
-    	font-size: 22px;
-	}
-	.more-manufacturers{position: absolute; width: 100%;left: 0; text-align: center;}
-	.box-manufacturers {margin-bottom: 50px;}
-	.manufacturers .action{
-		position: absolute; 
-		right: 40%;
-		top:0;
-	}
-	.manufacturers .action > div{display: inline-block;margin-left: 10px; cursor: pointer;}
-	.manufacturers .action > div img{height: 25px;}
+    .form-group{margin-bottom: 0;}
+    .more-manufacturers a.btn{
+        border-radius: 0;
+        -webkit-box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);
+        box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);
+        font-size: 22px;
+    }
+    .more-manufacturers{position: absolute; width: 100%;left: 0; text-align: center;}
+    .box-manufacturers {margin-bottom: 50px;}
+    .manufacturers .action{
+        position: absolute; 
+        right: 40%;
+        top:0;
+    }
+    .manufacturers .action > div{display: inline-block;margin-left: 10px; cursor: pointer;}
+    .manufacturers .action > div img{height: 25px;}
+    body .box-wapper-show-image{z-index: auto;}
+    body .profile-image .avatar-media-object {
+        width: 162px;
+        height: 162px;
+    }
+    body .avatar-view{border:none;box-shadow: none;}
+
 </style>

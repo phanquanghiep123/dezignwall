@@ -59,6 +59,41 @@ class Article_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+    function social_post($offset = 0,$limit = 3,$not_show = NULL,$where = null,$member_id = 0,$public = -1){
+        $this->db->select("tbl1.*,tbl2.first_name,tbl2.last_name,tbl2.job_title,tbl2.avatar,tbl3.company_name,tbl4.qty_like,tbl4.qty_comment,tbl5.id AS is_like");
+        $this->db->from("social_posts AS tbl1");
+        $this->db->join("members AS tbl2","tbl2.id = tbl1.member_id");
+        $this->db->join("company AS tbl3","tbl3.member_id = tbl2.id");
+        $this->db->join("common_tracking AS tbl4","tbl4.reference_id = tbl1.id AND tbl4.type_object='social'","LEFT");
+        $this->db->join("common_like AS tbl5","tbl5.reference_id = tbl1.id AND tbl5.member_id = ".$member_id." AND tbl5.status = 1","LEFT");
+        if($public == -1){
+            $this->db->where("tbl1.public",1);
+        }
+        if($where != null){
+            $this->db->where($where);
+        }
+        $this->db->group_by("tbl1.id");
+        if($not_show != null){
+            $this->db->where_not_in("tbl1.id",$not_show);
+        }
+        $this->db->order_by("tbl1.id","DESC");
+        $this->db->limit($limit, $offset);
+        $current_post = $this->db->get()->result_array();
+        return $current_post;
+    }
+    function social_post_count($not_show = NULL,$where = null){
+        $this->db->select("tbl1.*,tbl2.first_name,tbl2.last_name,tbl2.job_title,tbl2.avatar,tbl3.company_name,tbl4.qty_like,tbl4.qty_comment,tbl5.id AS is_like");
+        $this->db->from("social_posts AS tbl1");
+        $this->db->join("members AS tbl2","tbl2.id = tbl1.member_id");
+        if($where != null){
+            $this->db->where($where);
+        }
+        if($not_show != null){
+            $this->db->where_not_in("tbl1.id",$not_show);
+        }
+        $current_post = $this->db->count_all_results();
+        return $current_post;
+    }
     function get_comment($member_id,$limit,$start){
         $sql = "SELECT DISTINCT `mb`.`avatar`, MAX(`ptc`.`created_at`), `mb`.`logo`, `mb`.`first_name`, `mb`.`last_name`, `mb`.`company_name`, `pt`.`id` AS photo_id, `pt`.`thumbnail` AS path_file,`pt`.`title` AS name
         FROM `common_comment` AS `ptc`

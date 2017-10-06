@@ -225,8 +225,8 @@ class Designwalls extends MY_Controller {
             'id' => $result['member_id']
         ));
         $record["banner"] = $result["path_file"];
-        $record["id"] =  $result['member_id']; 
-        $record["logo"] =  @$logo_company['logo'];
+        $record["id"]     =  $result['member_id']; 
+        $record["logo"]   =  @$logo_company['logo'];
         $record["company_name"] =  @$logo_company['company_name']; 
         $data['member'] = $record;
         $data["company_info"] = $this->Common_model->get_record("company", array(

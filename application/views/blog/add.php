@@ -147,10 +147,10 @@
 
 	   	  	  	  	 </div>
 
-	   	  	  	  </div>
+	   	  	  	  </div> 
 
 	   	  	  	  <div class="panel panel-default relative" id="box-editor">
-	   	  	  	  		<p><input type="text" name="sub_title"  value="<?php echo @$article['title']; ?>" class="form-control required" placeholder="Give your article a sub-title.."></strong></p>
+	   	  	  	  		<p><input type="text" name="sub_title"  value="<?php echo @$article['sub_title']; ?>" class="form-control required" placeholder="Give your article a sub-title.."></strong></p>
 				  		<textarea id="textarea" name="content" class="required-editer" placeholder="Start writing ..." style="width: 100%; height: 500px"><?php echo @$article['content']; ?></textarea>
 				  </div><!-- end panel -->
 	   	  	  	  <div class="panel panel-default relative">
@@ -379,41 +379,19 @@
     var title = "<?php echo @$article['title']; ?>";
     var type_post = "<?php echo @$type_post;?>";
     var id_post = "<?php echo @$id_post;?>";
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '996950723730938',
-            xfbml: true,
-            version: 'v2.5'
-        });
-    };
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-            return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    var url_share_social = "<?php echo base_url("article/post/".$id_post);?>";
+
     function share() {
-    	tracking_share("facebook",type_post,id_post);
-        img = $("#photo-share").attr("src");     
-        FB.ui({ 
-            method: 'share',
-            href: url,
-            picture: img,
-            title:title,
-            description: description
-        }, function (response) {});
-    }
+       tracking_share("facebook",type_post,id_post);
+	    window.open('https://www.facebook.com/sharer/sharer.php?u=' + url_share_social,'_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left)
+	}
     function share_tw() {
     	tracking_share("twitter",type_post,id_post);
-        window.open("https://twitter.com/share?url=" + url + "&text=dezignwall: ", '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
+        window.open("https://twitter.com/share?url=" + url_share_social + "&text=dezignwall: ", '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
     }
     $(".poup-share-in").click(function () {
     	tracking_share("linkedin",type_post,id_post);
-        window.open("https://www.linkedin.com/shareArticle?mini=true&url=" + url, '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
+        window.open("https://www.linkedin.com/shareArticle?mini=true&url=" + url_share_social, '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
         return false;
     });
     $("#share-image-emailto").click(function () {

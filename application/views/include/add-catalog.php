@@ -233,12 +233,15 @@
     	border-radius: 3px;
     }
     #modal_add_catalog .modal-content{padding: 20px 0;}
-    .group-box-add-catalog .modal-dialog{width: 660px;}
     .group-box-add-catalog #form-add-catalog{padding: 30px 0;}
     .cp-color-picker{z-index: 99999;}
     .bg-img{background-color: transparent !important;}
     @media screen and (max-width:  768px){
     	.sm-text-center{text-align:center;}
+         .content-custom-button{
+            width: 100%;
+            float: right;
+        }
     }
 </style>
 <script type="text/javascript" src="<?php echo skin_url("tinyColorPicker/jqColorPicker.min.js")?>"></script>

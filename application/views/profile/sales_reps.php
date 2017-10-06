@@ -2,13 +2,14 @@
    .filter-profile{list-style: none;padding-left: 0;}
    .filter-profile li{display: inline-block;margin-right: 15px;}
 </style>
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css")?>">
 <div id="wrapper" class="structural-block home-page">
    <div class="container box-public">
       <?php 
          $user_info = $this->session->userdata('user_info');
          $allow_edit = (isset($member) && isset($user_info) && $user_info['id'] == $member['id']) ? true : false;
          $data = null;
-         $this->load->view("include/banner.php", $data);
+         $this->load->view("include/banner-wall.php", $data);
       ?>
       <section class="section box-wapper-show-image">
          <div class="row">

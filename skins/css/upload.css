@@ -40,6 +40,11 @@
     height: 24px;
 
 }
+.catalog-box ul.custom {
+    height: 145px;
+    overflow-x: auto;
+    border:1px solid #000000;
+}
 .catalog-box ul li {
     width: 42%;
     float: left;
@@ -50,6 +55,7 @@
 #modal_add_catalog .form-group .file-input .file-footer-buttons,#modal_add_catalog .form-group .input-group.file-caption-main button.fileinput-upload-button{display: none;visibility: hidden;width: 0;height: 0;}
 #modal_add_catalog .form-group .input-group.file-caption-main button{height: 36px;}
 #modal_add_catalog .modal-header .close{position: relative;z-index: 9999;}
+body .modal-header .close{position: absolute;z-index: 9999; right: 15px ;top:5px;}
 #modal_add_catalog .kv-file-content img{height: auto!important;}
 #modal_add_catalog .file-upload-indicator{display: none;}
 /*#point:hover .box-point-view{display: block !important;}*/

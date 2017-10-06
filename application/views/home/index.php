@@ -67,7 +67,7 @@
                 <div class="box-table">
                     <div class="box-table-cell align-middle">
                         <div class="modal-message-body text-center">
-                            <h3 class="color-white">The social market network exclusively for the commercial <br> design, architecture, products and contract trades.</h3>
+                            <h3 class="color-white">The social market network exclusively for the <br> design, architecture, products and contract trades.</h3>
                             <div class="space-30"></div>
                             <h3 class="color-brand-primary">Share images. Engage directly. Grow business.</h3>
                             <div class="space-30"></div>
@@ -83,11 +83,11 @@
             <div id="slider-home-page">
                 <a href="#" id="how_it_works" onclick="how_it_works();return false;" id="">How It Works</a>
                 <div class="slider-home-img">
-                    <img src="<?php echo skin_url("images/dezignwall-slider.gif");?>">
+                    <img src="<?php echo skin_url("images/Dezignwall-Index-Page-Gif.gif");?>">
                 </div>
                 <div class="slider-home-video">
                 <!--<iframe id="frame-slide" src="//giphy.com/embed/2sz9QzFB9RrHy" width="100%" height="513px" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>-->
-                <video  autoplay muted loop webkit-playsinline src="<?php echo ("//media.dezignwall.com/media/Dezignwall-Index-Page-Video-8.mp4");?>" id="video1" class="video"  poster ="<?php echo skin_url("images/bg-slider.png")?>" width="100%"></video></div>
+                <video  autoplay muted loop webkit-playsinline src="<?php echo  skin_url("/media/Dezignwall-Index-Page-Video-12.mp4");?>" id="video1" class="video"  poster ="<?php echo skin_url("images/bg-slider.png")?>" width="100%"></video></div>
                 <div id="home-bg-slider">
                     <div class="seach-in-slider">
                         <div class="container">
@@ -95,14 +95,25 @@
                                 <div class="col-md-12 content-cented"></div>
                             </div>
                         </div>
-                        <h2 class="prodemiCn text-center color-white">DESIGN YOUR COMMERCIAL SPACE</h2>
-                        <h4>A visual way to discover and source products and design inspiration with tools to make collaborating on the go, easy.</h4>
-                        <form id="seach-home-photo" method="get" action="<?php echo base_url("search") ?>" class="relative fom-seach-slider content-cented destop">
-                            <input type="text" class="seach-input-slider form-control" name="keyword" id="input-seach" placeholder="Find your commercial design inspiration..." autocomplete="off">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-10 content-cented">
+                                <div class="row">
+                                    <div class="col-xs-3 col-md-2 text-right">
+                                        <img class="wordmark-image" src="<?php echo skin_url("images/Dezignwall-Icon-with-Wordmark.png");?>" title="Dezignwall-Icon-with-Wordmark">
+                                    </div>
+                                    <div class="col-xs-9 col-md-10 custom-colum-fastest">
+                                        <h2 class="prodemiCn color-white text-left">The Fastest Growing Network for Design Professionals</h2>
+                                    </div>
+                                </div>                              
+                            </div>                        
+                        </div>
+                        <h4>A virtual marketplace connecting a global design .</h4>
+                        <form id="seach-home-photo" method="get" action="<?php echo base_url("search") ?>" class="relative fom-seach-slider content-cented">
+                            <input type="text" class="seach-input-slider form-control" name="keyword" id="input-seach" placeholder="Find your design inspiration..." autocomplete="off">
                             <button class="seach-sumit"><img src="<?php echo skin_url(); ?>/images/search-icon-1.png"></button>
                         </form>
                     </div>  
-                    <h3 class="free-join">Free to join. Free to use. Upgrade to unlock tools to grow your business.</h3>
+                    <h2 class="free-join">Free to join. Free to use. Free to grow your business.</h2>
                 </div>
             </div>
         <?php endif;?>
@@ -110,27 +121,34 @@
     <?php if (!isset($is_login) || $is_login != true) : ?>
         <div class="section section-2 section-intro text-center">
             <div class="container">
-                <h3><strong>the bold new way to find and share design inspiration.</strong></h3>
+                <h3><strong>A social platform for us. The Design.</strong></h3>
                 <div class="row">
-                    <div class="col-sm-4">
+                     <div class="col-sm-3">
+                        <div class="box-intro">
+                            <img src="<?php echo skin_url(); ?>/images/user_two.png">
+                            <p><strong>Connect with colleagues, vendors, suppliers and reps in a global </strong></p>
+                            <a href="#" name="started-one" class="singup" id="get-started"><strong>Connect...</strong></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
                         <div class="box-intro">
                             <img src="<?php echo skin_url(); ?>/images/home-intro-1.png">
                             <p><strong>Post high quality images to showcase your projects or products to a B2B audience</strong></p>
-                            <a href="#" name="started-one" class="singup" id="get-started"><strong>Get started...</strong></a>
+                            <a href="#" name="started-one" class="singup" id="get-started"><strong>Share...</strong></a>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="box-intro">
                             <img src="<?php echo skin_url(); ?>/images/home-intro-2.png">
-                            <p><strong>Engage directly with companies interested in buying or selling commercial design solutions</strong></p>
-                            <a href="#" name="started-two" class="singup" id="get-started"><strong>Get started...</strong></a>
+                            <p><strong>Engage directly with designers, manufacturers, suppliers, artists and craftsmen of all sizes</strong></p>
+                            <a href="#" name="started-two" class="singup" id="get-started"><strong>Source...</strong></a>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="box-intro">
                             <img src="<?php echo skin_url(); ?>/images/home-intro-3.png">
                             <p><strong>Pin your images to virtual mood boards and collaborate with colleagues 24/7</strong></p>
-                            <a href="#" class="singup" name="started-three" id="get-started"><strong>Get started...</strong></a>
+                            <a href="#" class="singup" name="started-three" id="get-started"><strong>Collaborate....</strong></a>
                         </div>
                     </div>
                 </div>
@@ -140,12 +158,9 @@
             <div class="manufacturer-box">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-9 text-sm-center">
-                            <h1>Are you a design firm or a product manufacturer?</h1>
-                        </div>
-                        <div class="col-md-3 text-left text-sm-center">
-                            <a class="btn singup" name="singup-now" id="get-started" href="#">Sign Up</a>
-                        </div>
+                        <div class="col-md-12 text-sm-center">
+                            <h1 class="is_dezignwall"><span>Is Dezignwall a fit for you? Yes, it is.</span> <a class="btn singup" name="singup-now" id="get-started" href="#">Join Now</a></h1>
+                        </div>                       
                     </div>
                 </div>
             </div>
@@ -155,7 +170,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 relative">
-                <h2 class="text-center find-inspiration" style="padding-bottom: 20px;">Find your commercial design inspiration...</h2>
+                <h2 class="text-center find-inspiration" style="padding-bottom: 20px;">Find your design inspiration...</h2>
                 <div id="refresh-new-image"><a href="<?php echo base_url(); ?>" class="btn btn-primary">15 New Images Posted</a></div>
             </div>
             <?php if (isset($is_login) && $is_login == true && !$this->session->userdata('user_sr_info')) { ?>

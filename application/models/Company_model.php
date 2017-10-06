@@ -224,5 +224,78 @@ class Company_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    public function get_company_follow_company ($member_id,$offset = 0,$limit = 8,$order_by ="company_name"){
+        $this->db->select("tbl1.*,tbl2.id AS follow_id");
+        $this->db->from("company AS tbl1");
+        $this->db->join("common_follow AS tbl2","tbl2.owner_id = tbl1.member_id");
+        $this->db->where(["tbl2.type_object"=>"company","tbl2.member_id" => $member_id]);
+        $this->db->limit($limit,$offset);
+        if($order_by == "created_at"){
+            $this->db->order_by("tbl2.id","DESC");
+        }else{
+            $this->db->order_by("tbl1.company_name","ASC");
+        }
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    public function count_company_follow_company ($member_id){
+        $this->db->select("tbl1.id");
+        $this->db->from("company AS tbl1");
+        $this->db->join("common_follow AS tbl2","tbl2.owner_id = tbl1.member_id");
+        $this->db->where(["tbl2.type_object"=>"company","tbl2.member_id" => $member_id]);
+        return $this->db->count_all_results();
+    }
+    
+    public function get_my_follow_company ($member_id,$offset = 0,$limit = 8,$order_by ="company_name"){
+        $this->db->select("tbl1.*,tbl2.id AS follow_id");
+        $this->db->from("company AS tbl1");
+        $this->db->join("common_favorite AS tbl2","tbl2.owner_id = tbl1.member_id");
+        $this->db->where(["tbl2.type_object"=>"company","tbl2.member_id" => $member_id]);
+        $this->db->limit($limit,$offset);
+        if($order_by == "created_at"){
+            $this->db->order_by("tbl2.id","DESC");
+        }else{
+            $this->db->order_by("tbl1.company_name","ASC");
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 
+    public function count_my_follow_company ($member_id){
+        $this->db->select("tbl1.id");
+        $this->db->from("company AS tbl1");
+        $this->db->join("common_favorite AS tbl2","tbl2.reference_id = tbl1.id");
+        $this->db->where(["tbl2.type_object"=>"company","tbl2.member_id" => $member_id]);
+        return $this->db->count_all_results();
+    }
+    function get_all_30_day_photo_by_company($member_id,$day = null){
+        $this->db->select("tbl1.*");
+        $this->db->from("photos AS tbl1");
+        $this->db->where(["tbl1.member_id" => $member_id ,"tbl1.created_at >=" => $day]);
+        $this->db->limit(5);
+        $this->db->group_by("tbl1.photo_id");
+        $this->db->order_by("tbl1.photo_id","DESC");
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    function count_all_30_day_photo_by_company($member_id,$day = null){
+        $this->db->select("tbl1.*");
+        $this->db->from("photos AS tbl1");
+        $this->db->where(["tbl1.member_id" => $member_id ,"tbl1.created_at >=" => $day]);
+        return $this->db->count_all_results();
+    }
+    public function get_active($member_id , $offset = 0 ,$limit = 6){
+        $this->db->select("tbl2.*,tbl3.thumb AS photo_thumb,tbl1.type_object,tbl1.type,tbl1.created_at AS enter_active,tbl3.name,tbl3.photo_id,tbl4.company_name,tbl4.member_id,tbl4.logo,tbl3.created_at AS photo_created,tbl4.created_at AS company_created");
+        $this->db->from("notifications_common AS tbl1");
+        $this->db->join("company AS tbl2","tbl1.member_id = tbl2.member_id AND tbl1.type = 'company'","left");
+        $this->db->join('photos AS tbl3',"tbl3.photo_id = tbl1.reference_id AND tbl1.type ='photo'","left");
+        $this->db->join("company AS tbl4","tbl1.member_id = tbl4.member_id","left");
+        $this->db->where('tbl1.member_owner' ,$member_id);
+        $this->db->group_by("tbl1.id");
+        $this->db->order_by("tbl1.id","DESC");
+        $this->db->limit($limit,$offset);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

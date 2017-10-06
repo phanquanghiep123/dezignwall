@@ -8,9 +8,6 @@
     float: left;
     width: 100%;
     background: #fff;
-    padding: 16px 5px;
-    webkit-box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);
-    box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);
 }
 .wysihtml5-toolbar a{float: left; width: 33px; margin-right: 28px; height: 33px;background-repeat: no-repeat;}
 .profile-edit-photo{display: none;position: absolute;text-align: center;z-index: 99;top: 50%;left:0;width: 100%;}
@@ -350,7 +347,7 @@ body ul#keyword-tag{
     background-size: 100%;
 
 }
-.panel.social-profile{padding-bottom: 7px;}
+.panel.social-profile{padding-bottom: 15px;}
 .social-profile h3{
 
     margin-bottom: 3px;
@@ -420,14 +417,17 @@ body ul#keyword-tag{
 .link-box {
     z-index: 999;
     position: fixed;
-    border: rgb(119, 119, 119);
+    border: 1px solid #ccc;
     top: 30%;
     left: 30%;
     padding: 20px;
     min-width: 200px;
     background: rgb(238, 238, 238);
 }
-
+body .wysihtml5-toolbar .link-box  a{
+    width: auto;
+    height:  auto;
+}
 
 .impromation-project {
     display: block;

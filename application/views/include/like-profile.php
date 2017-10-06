@@ -70,13 +70,13 @@
         <div class="box-bg-white box-ball">
             <div clas="row">
                 <div class="col-sm-3 text-center">
-                    <a class="btn-upload" href="<?php echo base_url() ?>profile/your_reports">
+                    <a class="btn-upload" href="<?php echo base_url() ?>profile/reports">
                         <img src="<?php echo base_url() ?>skins/images/reports.png">
                     </a>
                 </div>
                 <div class="col-sm-9">
                     <h4 class="number">View reports</h4>
-                    <a href="<?php echo base_url() ?>profile/your_reports" class=" text-center btn btn-secondary browse">Reports</a>
+                    <a href="<?php echo base_url() ?>profile/reports" class=" text-center btn btn-secondary browse">Reports</a>
                 </div>
             </div>
         </div> 
@@ -162,7 +162,7 @@
                             </div>
                             <div class="importation left">
                                 <h6><strong><?php echo $value["first_name"] . " " . $value["last_name"]; ?></strong></h6>
-                                <p><?php echo $value["company_name"]; ?> | <?php echo date('Y F d h:ia', strtotime($value["created_at"])); ?></p>                                  
+                                <p><?php echo $value["company_name"]; ?> | <?php echo date('F d\, Y \a\t h:ia', strtotime($value["created_at"])); ?></p>                                  
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -178,18 +178,11 @@
                                     </p>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="comment">
-                                        <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span>
-                                        	<?php if($user["is_blog"] == "no"):?>
-                                        	    <a href="<?php echo base_url("photos/".$value["photo_id"]."/". gen_slug($value["name"])."?show_comment");?>" id="add-commemt-input"></a>
-                                        	<?php else:?>
-                                        		<a href="<?php echo base_url("article/post/".$value["photo_id"]."?show_comment");?>" id="add-commemt-input"></a>
-                                        	<?php endif;?>
-                                        </h3>
+                                    <div class="card" data-id="<?php echo $value["photo_id"];?>" data-type="<?php echo ($user["is_blog"] == "no") ? "photo" : "blog"; ?>"> 
+                                        <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span></h3>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 <?php endforeach; ?>

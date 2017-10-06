@@ -75,6 +75,34 @@ class Report extends CI_Controller {
         } else
             redirect('/report');
     }
+    public function change_email($id = null){
+        $is_login_report = $this->session->userdata('is_login_report');
+        if ($is_login_report) {
+            if($id != null){
+                $check = $this->Common_model->get_record("members",["id" => $id]);
+                if($check != null){
+                    if($this->input->post() ){
+                        $email = $this->input->post("email");
+                        $check = $this->Common_model->get_record("members",["email" => $email]);
+                        if( $check == null){
+                            $pwd = md5( strtolower($email . ":" . md5( trim("123456") ) ) );
+                            $this->Common_model->update("members",["email" => $email,"pwd" => $pwd],["id" => $id]);
+                            $data["error"] = "Change email successfully";
+                        }else{
+                            $data["error"] = "Error! This email exists";
+                        }                       
+                    }
+                    $check = $this->Common_model->get_record("members",["id" => $id]);
+                    $data["user"] = $check;
+                    $this->load->view("report/includes/header", $data);
+                    $this->load->view("report/change_email", $data);
+                }else
+                    redirect('/report');
+            }else
+                redirect('/report');
+        } else
+            redirect('/report');
+    }
     public function activity() {
         $is_login_report = $this->session->userdata('is_login_report');
         if ($is_login_report) {

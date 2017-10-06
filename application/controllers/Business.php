@@ -9,8 +9,11 @@ class Business extends CI_Controller {
     public $data = null;
     private $is_sale_rep = false;
     public function __construct() {
+
         parent::__construct();
+
         $this->data["view_profile"] = false;
+
         if ( $this->session->userdata('user_sr_info') ) {
             $this->user_info = $this->session->userdata('user_sr_info');
             if($this->user_info["type_member"] == "1"){
@@ -21,7 +24,9 @@ class Business extends CI_Controller {
         }else{
 
             redirect(base_url());
+
         }
+
     }
 
     public function index() {
