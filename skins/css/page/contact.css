@@ -1,0 +1,21 @@
+body #wrapper{font-size: 24px;}
+h3{font-size: 30px;}
+.page-title{font-weight: bold;}
+#wrapper{background: url(../../images/bg-page-contact.jpg) no-repeat top center; background-size: cover;}
+
+
+
+.panel-contact{padding: 20px 5%; color: #fff;}
+
+.list-social{padding: 0; list-style: none;}
+.list-social li{display: inline-block;}
+.list-social li a{display: inline-block; text-align: center; border-radius: 50%; border: 1px solid #fff; 
+	width: 90px; height: 90px; color: #fff; font-size: 65px; line-height: 90px;}
+.list-social li a:hover, .list-social li a:focus, .list-social li a:active{background-color: #ff9900;}
+.dl-horizontal{margin-bottom: 40px;}
+.list-logo li:first-child{margin-right: 20px;}
+@media (min-width: 768px){
+	.form-horizontal .control-label{padding-right: 0;}
+	.dl-horizontal dt {width: 110px; text-align: left;}
+	.dl-horizontal dd{margin-left: 110px;}
+}

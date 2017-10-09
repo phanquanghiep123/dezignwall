@@ -1,0 +1,2 @@
+[30-May-2016 03:34:17 America/Chicago] PHP Warning:  require_once(google-api-php-client-1.1.7/src/Google/autoload.php): failed to open stream: No such file or directory in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/index.php on line 5
+[30-May-2016 03:34:17 America/Chicago] PHP Fatal error:  require_once(): Failed opening required 'google-api-php-client-1.1.7/src/Google/autoload.php' (include_path='.:/opt/php55/lib/php') in /home3/tg4ever/public_html/betadev.dezignwalldev.com/social/index.php on line 5

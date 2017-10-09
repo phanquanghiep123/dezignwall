@@ -1,0 +1,201 @@
+.box-bg-white.box-ball .list-show-album{padding-left: 0; max-height: inherit;}
+.box-bg-white.box-ball .list-show-album li.last-sum{display: none;}
+.list-show-album{max-height:  100px ;overflow:hidden;}
+.list-inline.custom li>label{position: relative; bottom: -2px;}
+.top-upload {
+    background-color: #37a7a7;
+    padding: 10px 0;
+    -webkit-box-shadow: inset 25px 58px 22px -44px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: inset 25px 58px 22px -44px rgba(0, 0, 0, 0.75);
+    box-shadow: inset 25px 58px 22px -44px rgba(0, 0, 0, 0.75);
+}
+.top-upload .btn{
+    font-size: 18px;
+}
+.top-upload h1 {
+    color: #fff;
+    font-size: 30px;
+    margin-bottom: 0;
+}
+.top-upload h1 span {
+    color: #fff;
+    font-size: 24px;
+}
+.top-upload h1 span button {
+    margin-left: 20px;
+    min-width: 130px;
+}
+.top-upload p {
+    color: #fff;
+    font-size: 18px;
+}
+.action-image {
+    text-align: left;
+}
+.action-image button {
+    min-width: 128px;
+    font-size: 20px;
+}
+.box-ball {
+    padding: 15px 15px 0px 15px;
+    margin-bottom: 20px;
+}
+
+.box-ball li label {
+    
+    color: #222222;
+    font-weight: bold;
+}
+.box-ball .radio label::before {
+    width: 25px;
+    height: 25px;
+}
+.box-ball .radio label::after {
+    width: 21px;
+    height: 21px;
+    left: 2px;
+    top: 2px;
+}
+.box-ball .radio label {
+    padding-left: 20px;
+}
+.box-ball p {
+    font-size: 20px;
+    line-height: 2;
+}
+.box-ball .form-group {
+    margin-bottom: 15px;
+    float: left;
+    width: 100%;
+}
+.box-ball textarea {
+    width: 100%;
+    height: 125px;
+}
+.box-ball textarea.auto-height {
+    height: auto;
+}
+.box-ball .radio .check-susses-upload {
+    font-size: 14px;
+    color: #212121;
+}
+.action-save button {
+    padding: 6px 40px;
+}
+.section-product{
+    display: none;
+}
+.section-upload{
+    padding: 0 0 15px 0;
+    background: url(../../images/bg-upload-croper.png) repeat-x bottom;
+    -webkit-box-shadow: 0 2px 6px 1px rgba(0,0,0,0.75);
+	box-shadow: 0 2px 6px 1px rgba(0,0,0,0.75);
+}
+.wrap-cropper{
+	background-repeat: no-repeat;
+    background-position: left 0px bottom -45px;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    margin-bottom: 30px;
+    margin-top: 15px;
+}
+
+.wrap-cropper.active{
+   width: auto !important;
+   height: auto !important;
+   background: none !important;
+   border: none !important;
+   padding: 0 !important;
+   display: inline-block !important;
+   margin-bottom: 0;
+   margin-top: 0;
+}
+#section-cropper .action-image{
+	position: absolute;
+    bottom: 0;
+    right : 10px;
+    z-index: 101;
+}
+.jcrop-keymgr{
+  opacity: 0 !important;
+}
+
+@media (max-width: 1200px) {} 
+@media (max-width: 992px) {} 
+@media (max-width: 768px) {
+
+.top-upload h1 {
+    color: #fff;
+    font-size: 20px;
+}
+.top-upload h1 span {
+    color: #fff;
+    font-size: 16px;
+}
+
+    .top-upload h1 span button {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+    .action-image {
+        width: 100%;
+        left: 0;
+    }
+    .action-image ul {
+        text-align: center;
+        width: 100%;
+    }
+    .action-image button {
+        min-width: 100%;
+    }
+    .upload-box-button {
+        width: 100%;
+        text-align: center;
+        float: left;
+    }
+    .action-save {
+        text-align: center;
+    }
+    .action-save button {
+        margin-bottom: 10px;
+    }
+}
+@media screen and (max-width: 640px) {
+    h1 {
+        font-size: 25px;
+    }
+    h2 {
+        font-size: 23px;
+    }
+    h3 {
+        font-size: 21px;
+    }
+    h4 {
+        font-size: 19px;
+    }
+    h5 {
+        font-size: 17px;
+    }
+    h6 {
+        font-size: 15px;
+    }
+    .box-bg-white.box-ball .list-show-album li{width: 94px;height: 94px;}
+    .box-bg-white.box-ball .list-show-album li img{width: 100%;height: 100%;}
+    .box-bg-white.box-ball .list-show-album{max-height:  120px ;overflow:hidden;position: relative;}
+    .box-bg-white.box-ball .list-show-album li.last-sum{
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        vertical-align: middle;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: table;
+    }
+    .box-bg-white.box-ball .list-show-album li.last-sum p {
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        text-align: center;
+        width: 100%;
+        line-height: 90px;
+    }
+}

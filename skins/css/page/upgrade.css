@@ -1,0 +1,59 @@
+.align-bottom{vertical-align: bottom;}
+.remove-margin{margin: 0 !important;}
+.remove-padding-left{padding-left: 0 !important;}
+.remove-padding-right{padding-right: 0 !important;}
+.remove-border-top{border-top: none !important;}
+.space-10{height: 10px;}
+.space-20{height: 20px;}
+.form-horizontal .form-icon-help{margin-top: 4px; display: inline-block;}
+.form-gray .form-control, .form-gray .checkbox label::before{background-color: #f1f1f1;}
+.modal-no-radius .modal-content{border-radius: 0;}
+.carousel{margin-bottom: 20px; border: 1px solid #000; background-color: #fff;-webkit-box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5); box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);}
+.carousel-inner{text-align: center;}
+.carousel-inner>.item>img, .carousel-inner>.item>a>img{margin: 0 auto;}
+.carousel-caption{position: static; padding-top: 0; padding-bottom: 50px; text-shadow: none; color: #545454;}
+.carousel-caption h3{font-size: 24px; color: #333;}
+.carousel-indicators{bottom: 10px;}
+.carousel-indicators li{border: none; background-color: #7f7f7f; width: 16px; height: 16px; margin: 0 10px;}
+.carousel-indicators li.active{background-color: #37a7a7; width: 16px; height: 16px; margin: 0 10px;}
+
+.upgrade-panel{border:1px solid #000; margin-bottom: 4; background-color: #fff; padding: 10px 20px; margin-bottom: 4px;}
+.upgrade-panel.panel-shadow{-webkit-box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5); box-shadow: -2px 2px 3px 0 rgba(0,0,0,0.5);}
+.upgrade-panel.none-style{background-color: transparent; border: none;}
+.upgrade-panel .mo-num, .plan-info .mo-num{font-size: 90px;
+    line-height: 1;
+    display: inline-block;
+    min-width: 90px;
+    text-align: center;
+    letter-spacing: -10px;
+}
+.upgrade-panel .mo-text, .plan-info .mo-text{font-size: 24px;}
+.upgrade-panel .wrap, .plan-info .wrap{display: inline-block; text-align: left; margin-top: 5px;}
+.upgrade-panel .price, .plan-info .price{font-size: 24px;}
+.upgrade-panel .btn{font-size: 24px; margin-top: 8%; font-family: 'Avenir Next LT Pro Regular'; min-width: 185px; width: 100%;}
+
+.payment-logos{padding: 32px 0;}
+#intro-security-code .btn, .modal-promocode .btn{font-size: 24px;}
+
+.promo-code-box {margin-top:30px;}
+.promo-code-box > label {color: #B5C274;padding-top:15px!important}
+
+.form-control {margin-bottom: 5px}
+
+
+@media (min-width: 768px){
+	.upgrade-panel{padding: 10px 5%;}
+	.text-center-sm{text-align: center;}
+	.text-right-sm{text-align: right;}
+	.border-right-sm{border-right: 1px solid #7f7f7f;}
+	#intro-security-code .modal-body{padding: 80px;}
+
+}
+@media (min-width: 992px){
+	.modal-dialog{width: 885px;}
+	.modal-promocode .modal-body{padding: 120px 100px;}
+}
+
+@media (max-width: 991px){
+.upgrade-panel .btn {font-size:18px;}
+}
