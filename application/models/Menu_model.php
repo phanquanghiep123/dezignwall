@@ -66,7 +66,7 @@ class Menu_model extends CI_Model {
 	   {
 	   	  $cls='';
 	   	  if($parent==0){$cls=$class;}
-	      $html .= "<ul class='".$cls."'>\n";
+	      //$html .= "<ul class='".$cls."'>\n";
 	       foreach ($menu['parents'][$parent] as $itemId)
 	       {
 	          if(!isset($menu['parents'][$itemId]))
@@ -84,7 +84,7 @@ class Menu_model extends CI_Model {
 	             $html .= "</li> \n";
 	          }
 	       }
-	       $html .= "</ul> \n";
+	       //$html .= "</ul> \n";
 	   }
 	   return $html;
 	}

@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css");?>">
     <?php
     	$user_info = $this->session->userdata('user_info');
 		$allow_edit = (isset($member) && isset($user_info) && $user_info['id'] == $member['id'] && !$this->session->userdata('user_sr_info')) ? true : false;
@@ -16,7 +17,7 @@
 		    	array('href' => '#', 'title' => 'Invite team members', 'class' => 'invite_member')
 			);
     	}
-	    $this->load->view("include/banner.php", $data);
+	    $this->load->view("include/banner-wall", $data);
 	?>
     
     <section class="section box-wapper-show-image you-wall">

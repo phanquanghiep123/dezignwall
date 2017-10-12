@@ -635,35 +635,203 @@ class Members_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
-    function get_share_profile($photo_id = 0,$data_old,$order ="DESC",$order_share = "",$count_order = "",$offset = 0,$limit = 3){
-        $sql = "SELECT `cv`.`created_at`,`cv`.`member_id`,`mb`.`first_name`,`mb`.`last_name`,`mb`.`company_name`,`mb`.`avatar`,`mb`.`work_email`, `cm1`.`number_proflie`, `cm1`.`created_at` AS date_click, `cm2`.`number_facebook`, `cm2`.`created_at` AS date_fb, `cm3`.`number_twitter`, `cm3`.`created_at` AS date_tw, `cm4`.`number_linkedin`, `cm4`.`created_at` AS date_li,`cm5`.`number_email`, `cm5`.`created_at` AS date_e FROM common_view AS cv 
+    function get_share_profile($photo_id = 0,$data_old,$order ="DESC",$order_share = "",$count_order = "",$offset = 0,$limit = 3,$type_object="profile"){
+        $sql = "SELECT `cv`.`created_at`,
+               `cv`.`member_id`,
+               `mb`.`first_name`,
+               `mb`.`last_name`,
+               `mb`.`company_name`,
+               `mb`.`avatar`,
+               `mb`.`work_email`,
+               `cm1`.`number_proflie`,
+               `cm1`.`created_at` AS date_click,
+               `cm2`.`number_facebook`,
+               `cm2`.`created_at` AS date_fb,
+               `cm3`.`number_twitter`,
+               `cm3`.`created_at` AS date_tw,
+               `cm4`.`number_linkedin`,
+               `cm4`.`created_at` AS date_li,
+               `cm5`.`number_email`,
+               `cm5`.`created_at` AS date_e,
+               `cm6`.`number_follow`,
+               `cm6`.`created_at` AS date_fl,
+               `cm7`.`number_favorite`,
+               `cm7`.`created_at` AS date_fa
+        FROM common_view AS cv
+        LEFT JOIN
+          (SELECT count(id) AS number_proflie,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'view'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb
+           GROUP BY tb.member_id
+           ORDER BY tb.created_at DESC ) AS cm1 ON cv.member_id = cm1.member_id
+        AND cv.reference_id = cm1.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_facebook,
+                  created_at,
+                  member_id,
+                  reference_id FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'share'
+                AND type_share = 'facebook'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb1
+           GROUP BY tb1.member_id
+           ORDER BY tb1.created_at DESC ) AS cm2 ON cv.member_id = cm2.member_id
+        AND cv.reference_id = cm2.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_twitter,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'share'
+                AND type_share = 'twitter'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb2
+           GROUP BY tb2.member_id
+           ORDER BY tb2.created_at DESC) AS cm3 ON cv.member_id = cm3.member_id
+        AND cv.reference_id = cm3.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_linkedin,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'share'
+                AND type_share = 'linkedin'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb3
+           GROUP BY tb3.member_id
+           ORDER BY tb3.created_at DESC ) AS cm4 ON cv.member_id = cm4.member_id
+        AND cv.reference_id = cm4.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_email,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'share'
+                AND type_share = 'email'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb4
+           GROUP BY tb4.member_id
+           ORDER BY tb4.created_at DESC) AS cm5 ON cv.member_id = cm5.member_id
+        AND cv.reference_id = cm5.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_follow,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_follow
+              WHERE type_object = '$type_object'
+              AND created_at >= '{$data_old}'
+              AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb5
+           GROUP BY tb5.member_id
+           ORDER BY tb5.created_at DESC) AS cm6 ON cv.member_id = cm6.member_id
+        AND cv.reference_id = cm6.reference_id
 
-			LEFT JOIN 
+        LEFT JOIN
+          (SELECT count(id) AS number_favorite,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_favorite
+              WHERE type_object = '$type_object'
+              AND created_at >= '{$data_old}'
+              AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb6
+           GROUP BY tb6.member_id
+           ORDER BY tb6.created_at DESC) AS cm7 ON cv.member_id = cm7.member_id
+        AND cv.reference_id = cm7.reference_id
 
-			(SELECT count(id) AS number_proflie, created_at, member_id, reference_id FROM ( SELECT * FROM common_view WHERE type_object = 'profile' AND type_share_view = 'view' AND created_at >= '{$data_old}' AND reference_id = {$photo_id} ORDER BY created_at DESC) AS tb GROUP BY tb.member_id ORDER BY tb.created_at DESC
-			    ) AS cm1 ON cv.member_id = cm1.member_id AND cv.reference_id = cm1.reference_id 
+        LEFT JOIN
+          (SELECT count(id) AS number_jpg,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'jpg'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb7
+           GROUP BY tb7.member_id
+           ORDER BY tb7.created_at DESC) AS cm8 ON cv.member_id = cm8.member_id
+        AND cv.reference_id = cm8.reference_id
 
-			LEFT JOIN 
 
-			(SELECT count(id) AS number_facebook, created_at, member_id, reference_id FROM( SELECT * FROM common_view WHERE type_object = 'profile' AND type_share_view = 'share' AND type_share = 'facebook' AND created_at >= '{$data_old}' AND reference_id = {$photo_id} ORDER BY created_at DESC ) AS tb1 GROUP BY  tb1.member_id ORDER BY tb1.created_at DESC
-			    ) AS cm2 ON cv.member_id = cm2.member_id AND cv.reference_id = cm2.reference_id 
+        LEFT JOIN
+          (SELECT count(id) AS number_pdf,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'pdf'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb8
+           GROUP BY tb8.member_id
+           ORDER BY tb8.created_at DESC) AS cm9 ON cv.member_id = cm9.member_id
+        AND cv.reference_id = cm9.reference_id
 
-			LEFT JOIN 
+        LEFT JOIN
+          (SELECT count(id) AS number_rfq,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_object'
+                AND type_share_view = 'rfq'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb9
+           GROUP BY tb9.member_id
+           ORDER BY tb9.created_at DESC) AS cm10 ON cv.member_id = cm10.member_id
+        AND cv.reference_id = cm10.reference_id
 
-			(SELECT count(id) AS number_twitter, created_at, member_id, reference_id FROM ( SELECT * FROM common_view WHERE type_object = 'profile' AND type_share_view = 'share' AND type_share = 'twitter' AND created_at >= '{$data_old}' AND reference_id = {$photo_id} ORDER BY created_at DESC) AS tb2 GROUP BY tb2.member_id ORDER BY tb2.created_at DESC ) AS cm3 ON cv.member_id = cm3.member_id AND cv.reference_id = cm3.reference_id 
 
-			LEFT JOIN 
-
-			(SELECT count(id) AS number_linkedin, created_at, member_id, reference_id FROM (SELECT * FROM common_view WHERE type_object = 'profile' AND type_share_view = 'share' AND type_share = 'linkedin' AND created_at >= '{$data_old}' AND reference_id = {$photo_id} ORDER BY created_at DESC) AS tb3 GROUP BY tb3.member_id ORDER BY tb3.created_at DESC
-			    ) AS cm4 ON cv.member_id = cm4.member_id AND cv.reference_id = cm4.reference_id 
-
-			LEFT JOIN 
-
-			(SELECT count(id) AS number_email, created_at, member_id, reference_id FROM (SELECT * FROM common_view WHERE type_object = 'profile' AND type_share_view = 'share' AND type_share = 'email' AND created_at >= '{$data_old}' AND reference_id = {$photo_id} ORDER BY created_at DESC) AS tb4 GROUP BY tb4.member_id ORDER BY tb4.created_at DESC) AS cm5 ON cv.member_id = cm5.member_id AND cv.reference_id = cm5.reference_id 
-
-			JOIN 
-
-			members AS mb ON `mb`.`id` = `cv`.`member_id` WHERE `cv`.`member_owner` = {$photo_id} AND `cv`.`member_id` != 0 AND `cv`.`type_object` = 'profile' AND `cv`.`created_at` >= '{$data_old}' ORDER BY `cv`.`created_at` DESC";
+        JOIN members AS mb ON `mb`.`id` = `cv`.`member_id`
+        WHERE `cv`.`reference_id` = {$photo_id}
+          AND `cv`.`member_id` != 0
+          AND `cv`.`type_object` = '$type_object'
+          AND `cv`.`created_at` >= '{$data_old}'
+        ORDER BY `cv`.`created_at` DESC";
 		
         if($order_share == ""){
 
@@ -680,16 +848,36 @@ class Members_model extends CI_Model {
         if($type =="blog"){
             $join_type = "JOIN article ON article.id = common_view.reference_id";
         }
-        $sql = "SELECT `mb`.`first_name`,`mb`.`last_name`,`mb`.`company_name`,`mb`.`avatar`,`mb`.`work_email`,`cv`.`created_at`,`cv`.`member_id`,`cm1`.`date_click`,`cm1`.`number_proflie` FROM common_view AS cv 
-		
-		JOIN 
-		
-		(SELECT count(id) AS number_proflie, member_id, created_at AS date_click FROM ( SELECT common_view.* FROM common_view {$join_type} WHERE common_view.`type_object` = '{$type}' AND common_view.`type_share_view` = 'view' AND common_view.`created_at` >= '{$data_old}' AND common_view.`member_owner` = {$user_id} ORDER BY common_view.created_at DESC) AS tb GROUP BY tb.member_id ORDER BY tb.created_at DESC
-		) AS cm1 ON `cm1`.`member_id` = `cv`.`member_id` 
-		
-		JOIN 
-
-		members AS mb ON `mb`.`id` = `cv`.`member_id` WHERE `cv`.`member_owner` = {$user_id} AND `cv`.`member_id` != 0 AND `cv`.`type_object` = '{$type}' AND `cv`.`created_at` >= '{$data_old}' ORDER BY `cv`.`created_at` DESC";
+        $sql = "SELECT `mb`.`first_name`,
+               `mb`.`last_name`,
+               `mb`.`company_name`,
+               `mb`.`avatar`,
+               `mb`.`work_email`,
+               `cv`.`created_at`,
+               `cv`.`member_id`,
+               `cm1`.`date_click`,
+               `cm1`.`number_proflie`
+        FROM common_view AS cv
+        JOIN
+          (SELECT count(id) AS number_proflie,
+                  member_id,
+                  created_at AS date_click
+           FROM
+             (SELECT common_view.*
+              FROM common_view {$join_type}
+              WHERE common_view.`type_object` = '{$type}'
+                AND common_view.`type_share_view` = 'view'
+                AND common_view.`created_at` >= '{$data_old}'
+                AND common_view.`member_owner` = {$user_id}
+              ORDER BY common_view.created_at DESC) AS tb
+           GROUP BY tb.member_id
+           ORDER BY tb.created_at DESC ) AS cm1 ON `cm1`.`member_id` = `cv`.`member_id`
+        JOIN members AS mb ON `mb`.`id` = `cv`.`member_id`
+        WHERE `cv`.`member_owner` = {$user_id}
+          AND `cv`.`member_id` != 0
+          AND `cv`.`type_object` = '{$type}'
+          AND `cv`.`created_at` >= '{$data_old}'
+        ORDER BY `cv`.`created_at` DESC";
         if($order_share == ""){
         	$sql = "SELECT * FROM ({$sql}) AS alltbl GROUP BY `alltbl`.`member_id` ORDER BY alltbl.created_at DESC LIMIT {$offset} , {$limit}";
          }else{
@@ -698,13 +886,13 @@ class Members_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-    function get_all_share_profile($user_id = 0,$data_old){
+    function get_all_share_profile($user_id = 0,$data_old,$type_object="profile"){
         $this->db->select("*");
         $this->db->from("common_view");
         $filter = array(
-            "member_owner" => $user_id,
+            "reference_id" => $user_id,
             "created_at>=" => $data_old,
-            "type_object"  => "profile",
+            "type_object"  => "$type_object",
             "type_share_view" => "view",
             "member_id !=" => 0
         );
@@ -736,11 +924,11 @@ class Members_model extends CI_Model {
             "cm.created_at >="  => $data_old
         );
         if($type_photo == "blog"){
-            $this->db->select('cm.*,at.thumbnail AS path_file');
+            $this->db->select('cm.*,at.thumbnail AS path_file, at.title AS name,at.id AS id_conmon');
             $this->db->from("common_view AS cm");
             $this->db->join("article AS at","at.id = cm.reference_id");
         }else{
-            $this->db->select('cm.*,at.path_file');
+            $this->db->select('cm.*,at.path_file,at.name,at.photo_id AS id_conmon');
             $this->db->from("common_view AS cm");
             $this->db->join("photos AS at","at.photo_id = cm.reference_id");
         }
@@ -751,38 +939,209 @@ class Members_model extends CI_Model {
         return $this->db->get()->result_array();
     }
     function get_photo_profile($photo_id = 0,$type_photo = "photo",$data_old,$order ="DESC",$order_share = "",$count_order = "",$offset = 0,$limit = 3){
-        $sql = "SELECT `cv`.`created_at`,`cv`.`member_id`,`mb`.`first_name`,`mb`.`last_name`,`mb`.`company_name`,`mb`.`avatar`,`mb`.`work_email`, `cm1`.`number_proflie`, `cm1`.`created_at` AS date_click, `cm2`.`number_facebook`, `cm2`.`created_at` AS date_fb, `cm3`.`number_twitter`, `cm3`.`created_at` AS date_tw, `cm4`.`number_linkedin`, `cm4`.`created_at` AS date_li,`cm5`.`number_email`, `cm5`.`created_at` AS date_e FROM common_view AS cv 
+        $sql = "SELECT `cv`.`created_at`,
+               `cv`.`member_id`,
+               `mb`.`first_name`,
+               `mb`.`last_name`,
+               `mb`.`company_name`,
+               `mb`.`avatar`,
+               `mb`.`work_email`,
+               `cm1`.`number_proflie`,
+               `cm1`.`created_at` AS date_click,
+               `cm2`.`number_facebook`,
+               `cm2`.`created_at` AS date_fb,
+               `cm3`.`number_twitter`,
+               `cm3`.`created_at` AS date_tw,
+               `cm4`.`number_linkedin`,
+               `cm4`.`created_at` AS date_li,
+               `cm5`.`number_email`,
+               `cm5`.`created_at` AS date_e,
+               `cm6`.`number_like`,
+               `cm6`.`created_at` AS date_like,
+               `cm7`.`number_pin`,
+               `cm7`.`created_at` AS date_pin,
+               `cm8`.`number_jpg`,
+               `cm8`.`created_at` AS date_jpg,
+               `cm9`.`number_pdf`,
+               `cm9`.`created_at` AS date_pdf,
+               `cm10`.`number_rfq`,
+               `cm10`.`created_at` AS date_rfq
+        FROM common_view AS cv
+        LEFT JOIN
+          (SELECT count(id) AS number_proflie,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '{$type_photo}'
+                AND type_share_view = 'view'
+                AND created_at >= '{$data_old}'
+                AND `reference_id` = {$photo_id}
+              ORDER BY created_at DESC) AS tb
+           GROUP BY tb.member_id
+           ORDER BY tb.created_at DESC ) AS cm1 ON cv.member_id = cm1.member_id
+        AND cv.reference_id = cm1.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_facebook,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             ( SELECT *
+              FROM common_view
+              WHERE type_object = '{$type_photo}'
+                AND type_share_view = 'share'
+                AND type_share = 'facebook'
+                AND created_at >= '{$data_old}'
+                AND `reference_id` = {$photo_id}
+              ORDER BY created_at DESC) AS tb1
+           GROUP BY tb1.member_id
+           ORDER BY tb1.created_at DESC) AS cm2 ON cv.member_id = cm2.member_id
+        AND cv.reference_id = cm2.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_twitter,
+                  created_at,
+                  member_id,
+                  reference_id FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '{$type_photo}'
+                AND type_share_view = 'share'
+                AND type_share = 'twitter'
+                AND created_at >= '{$data_old}'
+                AND `reference_id` = {$photo_id}
+              ORDER BY created_at DESC) AS tb2
+           GROUP BY tb2.member_id
+           ORDER BY tb2.created_at DESC ) AS cm3 ON cv.member_id = cm3.member_id
+        AND cv.reference_id = cm3.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_linkedin,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '{$type_photo}'
+                AND type_share_view = 'share'
+                AND type_share = 'linkedin'
+                AND created_at >= '{$data_old}'
+                AND `reference_id` = {$photo_id}
+              ORDER BY created_at DESC) AS tb3
+           GROUP BY tb3.member_id
+           ORDER BY tb3.created_at DESC ) AS cm4 ON cv.member_id = cm4.member_id
+        AND cv.reference_id = cm4.reference_id
+        LEFT JOIN
+          (SELECT count(id) AS number_email,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '{$type_photo}'
+                AND type_share_view = 'share'
+                AND type_share = 'email'
+                AND created_at >= '{$data_old}'
+                AND `reference_id` = {$photo_id}
+              ORDER BY created_at DESC) AS tb4
+           GROUP BY tb4.member_id
+           ORDER BY tb4.created_at DESC) AS cm5 ON cv.member_id = cm5.member_id
+        AND cv.reference_id = cm5.reference_id
 
-		LEFT JOIN 
+        LEFT JOIN
+          (SELECT count(id) AS number_like,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_like
+              WHERE type_object = '$type_photo'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb5
+           GROUP BY tb5.member_id
+           ORDER BY tb5.created_at DESC) AS cm6 ON cv.member_id = cm6.member_id
+        AND cv.reference_id = cm6.reference_id
 
-		(SELECT count(id) AS number_proflie, created_at, member_id, reference_id FROM 
-           ( SELECT * FROM  common_view WHERE type_object = '{$type_photo}' AND type_share_view = 'view' AND created_at >= '{$data_old}' AND `reference_id` = {$photo_id} ORDER BY created_at DESC ) AS tb GROUP BY tb.member_id ORDER BY tb.created_at DESC
-           ) AS cm1 ON cv.member_id = cm1.member_id AND cv.reference_id = cm1.reference_id  
+        LEFT JOIN
+          (SELECT count(id) AS number_pin,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_photo'
+                AND type_share_view = 'pin'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb6
+           GROUP BY tb6.member_id
+           ORDER BY tb6.created_at DESC) AS cm7 ON cv.member_id = cm7.member_id
+        AND cv.reference_id = cm7.reference_id
 
-		LEFT JOIN 
+        LEFT JOIN
+          (SELECT count(id) AS number_jpg,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_photo'
+                AND type_share_view = 'jpg'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb7
+           GROUP BY tb7.member_id
+           ORDER BY tb7.created_at DESC) AS cm8 ON cv.member_id = cm8.member_id
+        AND cv.reference_id = cm8.reference_id
 
-		(SELECT count(id) AS number_facebook, created_at, member_id, reference_id FROM (
-			SELECT * FROM  common_view WHERE type_object = '{$type_photo}' AND type_share_view = 'share' AND type_share = 'facebook' AND created_at >= '{$data_old}' AND `reference_id` = {$photo_id} ORDER BY created_at DESC) AS tb1 GROUP BY tb1.member_id ORDER BY tb1.created_at DESC 
-			) AS cm2 ON cv.member_id = cm2.member_id AND cv.reference_id = cm2.reference_id 
 
-		LEFT JOIN 
+        LEFT JOIN
+          (SELECT count(id) AS number_pdf,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_photo'
+                AND type_share_view = 'pdf'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb8
+           GROUP BY tb8.member_id
+           ORDER BY tb8.created_at DESC) AS cm9 ON cv.member_id = cm9.member_id
+        AND cv.reference_id = cm9.reference_id  
 
-		(SELECT count(id) AS number_twitter, created_at, member_id, reference_id FROM( SELECT * FROM common_view WHERE type_object = '{$type_photo}' AND type_share_view = 'share' AND type_share = 'twitter' AND created_at >= '{$data_old}' AND `reference_id` = {$photo_id} ORDER BY created_at DESC) AS tb2 GROUP BY tb2.member_id ORDER BY tb2.created_at DESC
-		) AS cm3 ON cv.member_id = cm3.member_id AND cv.reference_id = cm3.reference_id 
+        LEFT JOIN
+          (SELECT count(id) AS number_rfq,
+                  created_at,
+                  member_id,
+                  reference_id
+           FROM
+             (SELECT *
+              FROM common_view
+              WHERE type_object = '$type_photo'
+                AND type_share_view = 'rfq'
+                AND created_at >= '{$data_old}'
+                AND reference_id = {$photo_id}
+              ORDER BY created_at DESC) AS tb9
+           GROUP BY tb9.member_id
+           ORDER BY tb9.created_at DESC) AS cm10 ON cv.member_id = cm10.member_id
+        AND cv.reference_id = cm10.reference_id
 
-		LEFT JOIN 
-
-		(SELECT count(id) AS number_linkedin, created_at, member_id, reference_id FROM ( SELECT * FROM common_view WHERE type_object = '{$type_photo}' AND type_share_view = 'share' AND type_share = 'linkedin' AND created_at >= '{$data_old}' AND `reference_id` = {$photo_id} ORDER BY created_at DESC ) AS tb3 GROUP BY tb3.member_id ORDER BY tb3.created_at DESC
-		) AS cm4 ON cv.member_id = cm4.member_id AND cv.reference_id = cm4.reference_id 
-
-		LEFT JOIN 
-
-		(SELECT count(id) AS number_email, created_at, member_id, reference_id FROM ( SELECT * FROM common_view WHERE type_object = '{$type_photo}' AND type_share_view = 'share' AND type_share = 'email' AND created_at >= '{$data_old}' AND `reference_id` = {$photo_id} ORDER BY created_at DESC) AS tb4 GROUP BY tb4.member_id ORDER BY tb4.created_at DESC) AS cm5 ON cv.member_id = cm5.member_id AND cv.reference_id = cm5.reference_id 
-		
-		JOIN 
-
-		members AS mb ON `mb`.`id` = `cv`.`member_id` WHERE `cv`.`reference_id` = {$photo_id} AND `cv`.`member_id` != 0 AND `cv`.`type_object` = '{$type_photo}' AND `cv`.`created_at`>= '{$data_old}' ORDER BY cv.created_at DESC";
-        
+        JOIN members AS mb ON `mb`.`id` = `cv`.`member_id`
+        WHERE `cv`.`reference_id` = {$photo_id}
+          AND `cv`.`member_id` != 0
+          AND `cv`.`type_object` = '{$type_photo}'
+          AND `cv`.`created_at`>= '{$data_old}'
+        ORDER BY cv.created_at DESC";
         if($order_share == ""){
         	$sql = "SELECT * FROM ({$sql}) AS alltbl GROUP BY alltbl.member_id ORDER BY alltbl.created_at DESC LIMIT {$offset} ,{$limit}";
         }else{
@@ -813,6 +1172,18 @@ class Members_model extends CI_Model {
         $this->db->where("me.member_id",$id);
         $query = $this->db->get();
         return $query->row_array();
+    }
+    public function get_all_view_profle($member_id,$items=0,$limit=6,$daybefore = 90){
+        $this->db->select("tbl2.*,tbl1.id AS view_id,tbl3.company_name,tbl1.created_at AS at_day");
+        $this->db->from("common_view AS tbl1");
+        $this->db->join("members AS tbl2","tbl2.id = tbl1.member_id");
+        $this->db->join("company AS tbl3","tbl3.member_id = tbl2.id") ;
+        $this->db->where(["tbl1.reference_id" => $member_id,"tbl1.type_object" => "profile","tbl1.type_share_view" => "view" ,"tbl1.created_at >=" => $daybefore]);
+        $this->db->order_by("tbl1.id","DESC");
+        $this->db->group_by("tbl1.id");
+        $this->db->limit($limit,$items);
+        $results = $this->db->get()->result_array();
+        return $results ;
     }
 }
 

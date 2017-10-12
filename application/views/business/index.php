@@ -1,3 +1,4 @@
+	<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css")?>">
 	<?php
 		$user_info = $this->session->userdata('user_info');
 		$allow_edit = (isset($member) && isset($user_info) && $user_info['id'] == $member['id']) ? true : false;
@@ -10,7 +11,7 @@
             );
     	}
 
-	    $this->load->view("include/banner.php", $data);
+	    $this->load->view("include/banner-wall.php", $data);
 
 	?>
 	<section class="section box-wapper-show-image">
@@ -191,7 +192,7 @@
     	                                    <div class="row">
     	                                		<div class="col-sm-6 slider-left"><img src="<?php echo @$value['thumbnail'] ?>" alt="<?php echo @$value['title'] ?>"></div>
     	                               			<div class="col-sm-6 slider-right">
-    	                               				<p class="text-right"><?php echo date('F j, Y',strtotime($value['date_create'])); ?></p>
+    	                               				<p class="text-right"><?php echo date(DW_FORMAT_DATE,strtotime($value['date_create'])); ?></p>
                                            			<h3 class="text-center" style="margin-bottom:10px;"><strong><?php echo $value['title']; ?></strong></h3>
     		                                        <div class="row" style="margin-bottom:10px;">
     		                                            <div class="col-sm-1 col-xs-4 avatar-slider text-center remove-padding">

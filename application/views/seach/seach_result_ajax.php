@@ -93,7 +93,7 @@ if (isset($photo) && count($photo) > 0):
                 <?php $no_bg = ""; ?>
                 <?php
                 if ($photo['type_member'] == 0) {
-                    //$no_bg = "not_bg";
+                    $no_bg = "";
                 }
                 ?>
                 <div class="impromation-project <?php echo @$no_bg; ?>">
@@ -101,8 +101,8 @@ if (isset($photo) && count($photo) > 0):
                     <?php if (true): ?>
                         <?php if (isset($photo['company_name']) && $photo['company_name'] != "") { ?>
                             <div class="logo-company">
-                                <?php $logo = ($photo['logo'] != "" && file_exists(FCPATH . $photo['logo'])) ? base_url($photo['logo']) : base_url("skins/images/signup.png"); ?>
-                                <a id="login-check" href="<?php echo base_url("profile/index/" . $photo['id']); ?>"><img src="<?php echo $logo; ?>"></a>
+                                <?php $logo = ($photo['logo'] != "" && file_exists(FCPATH . $photo['logo'])) ? base_url($photo['logo']) : base_url("skins/images/logo-company.png"); ?>
+                                <a id="login-check" href="<?php echo base_url("company/view/" . $photo['id']); ?>"><img src="<?php echo $logo; ?>"></a>
                                 <?php
                                 $business_description = (isset($photo['business_description'])) ? trim($photo['business_description']) : "";
                                 $business_description = str_replace(";", "", $business_description);
@@ -112,7 +112,7 @@ if (isset($photo) && count($photo) > 0):
                                     $business_description = substr($business_description, 0, -1);
                                 };
                                 ?>
-                                <p><a id="login-check" href="<?php echo base_url("profile/index/" . $photo['id']); ?>"><strong><?php echo @$photo['company_name']; ?></strong><br><?php echo @$business_description; ?></a></p>
+                                <p><a id="login-check" href="<?php echo base_url("company/view/" . $photo['id']); ?>"><strong><?php echo @$photo['company_name']; ?></strong><br><?php echo @$business_description; ?></a></p>
                             </div>
                         <?php } ?>
                     <?php endif; ?>
@@ -170,72 +170,44 @@ if (isset($photo) && count($photo) > 0):
                         $title_like = "Click here to unlike.";
                     }
                     ?> 
-                    <div class="box-top <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? "custom-columns" : "";?>">
-                        <div class="col-xs-3 col-md-2 text-center"><div id="view-likes" class="likes"><p><span id="number-like"><?php echo ($photo["num_like"] != "") ? $photo["num_like"] : "0"; ?></span> Likes</p></div></div>
+                    <?php $likenew  = ($photo["num_like"] != "" && $photo["num_like"] != 0) ? "red-color" : ""; ?>
+                    <?php $notboder = "no-border";?>
+                    <div class="<?php echo ($notboder);?> box-top <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? "custom-columns" : "";?>">
+                        <div class="col-xs-2 col-md-2 text-center"><div id="view-likes" class="likes"><p><span id="number-like"><?php echo ($photo["num_like"] != "" && $photo["num_like"] != 0) ? $photo["num_like"] . " Likes" : ""; ?></span> </p></div></div>
                         <div class="col-xs-2 col-md-2 text-center"></div>
                         <div class="col-xs-2 col-md-2 text-center"></div>
-                        <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? '<div class="col-xs-2 col-md-2 text-center remove-l-padding"></div>' : "";?>
-                        <div class="col-xs-3 col-md-4 remove-l-padding"><p><span id="num-comment"><?php echo ($photo['num_comment'] != "") ? $photo['num_comment'] : "0"; ?></span> Comments</p></div>
-                    </div>
-                    <div class="conment-show <?php echo ($photo["num_comment"] > 0) ? "block" : ""; ?>">
-                        <div class="col-xs-12">
-                            <?php if (isset($photo['num_comment']) && $photo['num_comment'] > 2): ?>
-                                <p class="view-more-comment" id="view-more" data-type="photo"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> View older comments…</p>
-                            <?php endif; ?>
-                            <div class="uesr-box-impromation" id="scrollbars-dw">
-                                <div class="avatar">
-                                    <?php if (isset($photo['last_comment']) && $photo['last_comment'] != null &&isset($photo['num_comment']) && $photo['num_comment'] > 0) { ?>
-                                            <?php
-                                            $value_comment = json_decode($photo['last_comment'],true);
-                                            $logo_user = ( @$value_comment['avatar'] != "" && file_exists(FCPATH . @$value_comment['avatar']) ) ? base_url(@$value_comment['avatar']) : base_url("skins/images/signup.png");
-                                            ?>
-                                            <div class="row comment-items offset_default">
-                                                <div class="col-xs-2 remove-padding"><a id="login-check" href="<?php echo base_url("profile/index/" . @$value_comment["member_id"]); ?>"><img src="<?php echo $logo_user; ?>" class="left"></a></div>
-                                                <div class="col-xs-10 box-impromation">
-                                                    <?php
-                                                    $company_name = "";
-                                                    if (@$value_comment['company_name'] != null && @$value_comment['company_name'] != "") {
-                                                        $company_name = " | " . @$value_comment['company_name'];
-                                                    }
-                                                    ?>
-                                                    <p><a id="login-check" href="<?php echo base_url("profile/index/" . @$value_comment["member_id"]); ?>"><strong><?php echo @$value_comment['first_name'] . " " . @$value_comment['last_name']; ?><?php echo $company_name; ?> | <?php echo @$value_comment["created_at"]; ?></strong></a></p>
-                                                    <div>
-                                                        <p class="text-comment" data-id="<?php echo @$value_comment['id']; ?>">
-                                                            <?php
-                                                            if (strlen(@$value_comment['comment']) <= 100) {
-                                                                echo "<span>" . @$value_comment['comment'] . "</span>";
-                                                            } else {
-                                                                echo "<span class='comment-item-text default-show block'>" . substr(@$value_comment['comment'], 0, 100) . "<span class='more' id='more-comment'> MORE...</span></span>";
-                                                                echo "<span class='comment-item-text default-hie'>" . @$value_comment['comment'] . "<span class='more' id='more-comment'> LESS</span></span>";
-                                                            }
-                                                            ?>
-                                                        </p>
-                                                        <?php if ($user_id == @$value_comment['member_id']) : ?>
-                                                            <span class="action-comment">
-                                                                <a data-id="<?php echo @$value_comment['id']; ?>" class="edit-comment" href="#"><i class="fa fa-pencil"></i></a>
-                                                                <a data-id="<?php echo @$value_comment['id']; ?>" class="delete-comment" href="#"><i class="fa fa-times"></i></a>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>  
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="col-xs-2 col-md-2 text-center"></div>
+                        <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? '<div class="col-xs-2 col-md-2 text-center"></div>' : "";?>
+                        <div class="col-xs-2 col-md-2 text-center"><p><span id="num-comment"><?php echo ($photo['num_comment'] != "" && $photo['num_comment'] != 0) ? $photo['num_comment']. " Comments" : ""; ?></span> </p></div>
+                    </div>                
                     <div class="box-bottom <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? "custom-columns" : "";?>">
-                        <div class="col-xs-3 col-md-2 text-center"><div class="likes" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><h3 id="like-photo" data-id="<?php echo $photo["photo_id"];?>" ><i class="fa fa-heart <?php echo $images_like; ?>" title="<?php echo $title_like; ?>"></i></h3></div></div>
-                        <div class="col-xs-2 col-md-2"><a id="myphoto_user" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] . '-'. $photo["photo_id"] .'-'. $photo["manufacture"];?>" title="View this catalog" href="<?php echo base_url('profile/myphoto/'.$photo['id']."?catalog=".$photo["manufacture"]);?>" title="Go to catalog"><img src="<?php echo skin_url("images/catalog.png")?>"/></a></div>
-                        <div class="col-xs-2 col-md-2">
+                        <div class="col-xs-2 col-md-2 text-center"><div class="likes" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><h3 id="like-photo" data-id="<?php echo $photo["photo_id"];?>" ><i class="fa fa-heart <?php echo $likenew;?> <?php echo $images_like; ?>" title="<?php echo $title_like; ?>"></i></h3></div></div>
+                        <div class="col-xs-2 col-md-2 text-center"><a id="myphoto_user" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] . '-'. $photo["photo_id"] .'-'. $photo["manufacture"];?>" title="View this catalog" href="<?php echo base_url('profile/myphoto/'.$photo['id']."?catalog=".$photo["manufacture"]);?>" title="Go to catalog"><img src="<?php echo skin_url("images/catalog.png")?>"/></a></div>
+                        <div class="col-xs-2 col-md-2 text-center">
                             <a href="#" id="pins-to" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><img src="<?php echo base_url("skins/images/pushpin-myphoto.png");?>"></a>
                         </div>
-                        <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? '<div class="col-xs-2 col-md-2 text-center remove-l-padding"> <a id ="login-check" href="'.base_url('profile/request_quote/'.$photo["photo_id"]).'" data-id="' .$photo['company_name'] ."-" .$photo["id"] . "-" .$photo["photo_id"] ."-" . $photo["manufacture"] .'" ><img src="'.base_url("skins/images/RFQ.png").'"></a> </div>' : "";?>
-                        <div class="col-xs-3 col-md-4">
-                            <div class="comment"  data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" >
-                                <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span><input type="text" name="add-commemt-input" id="add-commemt-input" disabled ></h3>
+                        <div class="col-xs-2 col-md-2 follow-hover text-center">
+                        <?php 
+                            $follow_title = "Following this company";
+                            $follow_img  = base_url("skins/images/follow.png");
+                            if($photo["follow"] != null){
+                                $follow_title = "Un following this company";
+                                $follow_img  = base_url("skins/images/follow-activer.png");
+                            }
+                        ?>
+                            <a href="#" data-company="<?php echo $photo["company_id"];?>" id="follow-company-now" title="<?php echo $follow_title;?>"><img src="<?php echo $follow_img ;?>"></a>
+                            <div class="follow-box">
+                                <div class="close-box-follow"><a href="#">x</a></div>
+                                <p><strong id="sum-follow">"Follow"</strong> this company to receive notices when they add something new!</p>
                             </div>
                         </div>
+                        <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? '<div class="col-xs-2 col-md-2 text-center"> <a id ="login-check" href="'.base_url('profile/request_quote/'.$photo["photo_id"]).'" data-id="' .$photo['company_name'] ."-" .$photo["id"] . "-" .$photo["photo_id"] ."-" . $photo["manufacture"] .'" ><img src="'.base_url("skins/images/RFQ.png").'"></a> </div>' : "";?>
+                        <div class="col-xs-2 col-md-2 text-center">
+                            <div class="comment text-center"  data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" >
+                                <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span></h3>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 col-md-2 text-center"><div class="share" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><h3 id="share-photo" data-id="<?php echo $photo["photo_id"];?>" ><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></h3></div></div>
                     </div>
                 </div>
                 <div class="row">

@@ -30,7 +30,7 @@ if ($is_login_report) : ?>
                 <li class="initial"><a href="<?php echo base_url("report/keywords") ?>">Keyword</a></li>
                 <li class="initial"><a href="<?php echo base_url("report/comment") ?>">Comment</a></li>
                 <li class="initial"><a href="<?php echo base_url("report/notification") ?>">Notification</a></li>
-                <li class="initial"><a href="<?php echo base_url("report/edit_user_password") ?>">Change password</a></li>
+                <li class="initial"><a href="<?php echo base_url("report/edit_user_password") ?>">Change password email</a></li>
                 <li class="initial"><a href="<?php echo base_url("report/web_setting") ?>">Web Setting</a></li>
             </ul>
             <style>

@@ -16,7 +16,7 @@ if ($allow_edit) {
         array('href' => '#', 'title' => 'Invite team members', 'class' => 'invite_member')
     );
 }
-$this->load->view("include/banner.php", $data);
+$this->load->view("include/banner-wall", $data);
 ?>
 <section id="wrapper">
     <div class="container">

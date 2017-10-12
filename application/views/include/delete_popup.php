@@ -7,7 +7,7 @@
                 <h4 class="modal-title"><div class="logo"><div class="logo-site"></div></div></h4>
             </div>
             <div class="modal-body text-right">
-                <p>Are you sure you want to delete this?</p>
+                <p class="text-left">Are you sure you want to delete this?</p>
             </div>
              <div class="modal-footer text-right">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

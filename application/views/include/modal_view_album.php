@@ -31,9 +31,6 @@
 	#modal_view_album .text-comment{text-align: left; font-size: 12px; margin-top: 10px;}
 </style>
 <script type="text/javascript">
-	function getMediaUrl(url) {
-		return "//media.dezignwall.com" + url.replace("/uploads/", "/");
-	}
 	$(document).on("click","#wrapper-impormant-image .number-same-photo p span",function(){
 		_this = $(this);
 		var base_url_photo = _this.parents("#wrapper-impormant-image").find(".card-image .relative > a").attr("href");
@@ -50,7 +47,7 @@
 					if(response["status"] == "success"){
 						var html = "";
 						$.each(response["response"]["album"],function(key,value){
-							html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url_photo+'?number='+btoa(key)+'"><img src="'+getMediaUrl(value["path"]) +'" title="'+value["title"]+'"></a>';
+							html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url_photo+'?number='+btoa(key)+'"><img src="'+base_url + value["path"] +'" title="'+value["title"]+'"></a>';
 							html += '       <div><p class="text-comment">';
                             var text = value["title"]
                             if (text.length <= 100) {
@@ -90,7 +87,7 @@
 					if(response["status"] == "success"){
 						var html = "";
 						$.each(response["response"]["same"],function(key,value){
-							html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url+'photos/'+value["photo_id"]+'/'+to_slug(value["name"])+'.html"><img src="'+getMediaUrl(value["path_file"]) +'" title="'+value["name"]+'"></a>';
+							html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url+'photos/'+value["photo_id"]+'/'+to_slug(value["name"])+'.html"><img src="'+base_url + value["path_file"] +'" title="'+value["name"]+'"></a>';
 							html += '       <div><p class="text-comment">';
                             var text = value["name"];
                             if (text.length <= 100) {
@@ -136,7 +133,7 @@
 					if(response["status"] == "success"){
 						var html = "";
 						$.each(response["response"]["album"],function(key,value){
-							html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url_photo+'?number='+btoa(key)+'"><img src="'+getMediaUrl(value["path"]) +'" title="'+value["title"]+'"></a>';
+							html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url_photo+'?number='+btoa(key)+'"><img src="'+base_url + value["path"] +'" title="'+value["title"]+'"></a>';
 							html += '       <div><p class="text-comment">';
                             var text = value["title"]
                             if (text.length <= 100) {

@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css");?>">
 <section class="section banner-box">
    <div class="relative">
       <?php
@@ -36,60 +37,58 @@
     <div class="container">
          <div class="row">
             <div class="col-sm-6">
-                <div class="panel panel-default relative">
-                    <div class="row">
-                        <div class="col-sm-2 col-xs-4 avatar-slider">
-                            <?php 
-                                $avatar = skin_url().'/images/avatar-full.png';
-                                if(isset($user_info['avatar']) && $user_info['avatar']!=null && file_exists('.'.$user_info['avatar'])) {
-                                    $avatar = $user_info['avatar'];
-                                }
-                            ?>
-                            <a href="<?php echo base_url("profile/index/". @$article[0]['member_id'])?>"><img width="80" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>"></a>
-                        </div>
-                        <div class="col-sm-10 col-xs-8" >
-                            <p><a href="<?php echo base_url("profile/index/". @$article[0]['member_id'])?>"><strong><?php echo @$user_info['full_name']; ?> | <?php echo @$user_info['company_name']; ?></strong></a></p>
-                            <p><?php echo @$user_info['job_title']; ?></p>
-                            <p><?php echo date('F d, Y', strtotime($article[0]['date_create'])); ?></p>
-                        </div>
-                    </div>
-                </div><!-- end panel -->
+              <div class="panel panel-default relative">
+                <div class="row">
+                  <div class="col-sm-2 col-xs-4 avatar-slider">
+                    <?php 
+                      $avatar = skin_url().'/images/avatar-full.png';
+                      if(isset($user_info['avatar']) && $user_info['avatar']!=null && file_exists('.'.$user_info['avatar'])) {
+                        $avatar = $user_info['avatar'];
+                      }
+                    ?>
+                    <a href="<?php echo base_url().'profile/view/'.@$article[0]['member_id']; ?>"><img width="80" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>"></a>
+                  </div>
+                  <div class="col-sm-10 col-xs-8">
+                    <p><strong><a href="<?php echo base_url().'profile/view/'.@$article[0]['member_id']; ?>"><?php echo @$user_info['full_name']; ?></a> | <?php echo @$user_info['company_name']; ?></strong></p>
+                    <p><?php echo @$user_info['job_title']; ?></p>
+                    <p><?php echo date('F d, Y', strtotime($article[0]['date_create'])); ?></p>
+                  </div>
+                </div>
+              </div><!-- end panel -->
             </div>
             <div class="col-sm-6">
-                <div class="panel panel-default relative social-profile">
+                <div class="panel panel-default relative social-profile card" data-id="<?php echo @$article[0]['id'];?>" data-type="blog">
                   <div class="row">
-                    <div class="col-sm-2 col-xs-3 text-center like-blog remove-padding">
-                          <a class="text-view-article"><span id="number-like"><?php echo isset($tracking['qty_like']) ? $tracking['qty_like'] : '0'; ?></span> Likes</a>
-                          <hr>
-                          <h3 id="like-photo" data-object="blog" data-id="<?php echo @$article[0]['id'];  ?>" style="color:#7f7f7f;">
-                            <i class="fa fa-heart <?php echo isset($like['status']) && $like['status'] == 1 ? 'like' : ''; ?>"></i>
-                          </h3>
-                    </div>
-                    <div class="col-sm-2 col-xs-3 text-center remove-padding">
-                      <a class="text-view-article"><?php echo isset($tracking['qty_view']) ? $tracking['qty_view'] : '0'; ?> Views</a>
-                      <hr>
-                      <h3><img style="margin-top: -10px;" src="<?php echo skin_url(); ?>/images/view-icon.png"></h3>
-                    </div>
-                    <div class="col-sm-2 col-xs-3 text-center remove-padding">
-                      <a class="text-view-article">Share</a>
-                      <hr>
-                      <a href="#" data-toggle="modal" data-target="#share-blog-modal"><h3><i class="fa fa-share-alt"></i></h3></a>
-                    </div>
-                    <div class="col-sm-2 col-xs-3 text-center remove-padding">
-                      <a href="#">&nbsp;&nbsp;</a>
-                      <hr>
-                      <a href="<?php echo base_url().'profile/index/'.@$article[0]['member_id']; ?>"><h3><i class="fa fa-microsite"></i></h3></a>
-                    </div>
-                    <div class="col-sm-4 col-xs-12 remove-padding">
-                      <a class="text-view-article"><span id="number-comment"><?php echo isset($tracking['qty_comment']) ? $tracking['qty_comment'] : '0'; ?></span> Comments</a>
-                      <hr>
-                      <div class="comment row" style="float:none !important;">
-                        <h3 id="comment-show" style="float:none !important;">
-                            <span class="glyphicon glyphicon-comment glyphicon-comment-article"></span>
-                            <input type="text" class="add-commemt-article" name="add-commemt-input" id="add-commemt-input" disabled="">
-                        </h3>
-                    </div>
-                    </div>
+                  	<div class="custom-column-article commen-like">
+	                    <div class="col-xs-2 text-center like-blog remove-padding">
+	                      <a href="javascript:;" class="text-view-article view-all-member-like " id="view-likes"><span id="number-like"><?php echo isset($tracking['qty_like']) && $tracking['qty_like'] != "" && $tracking['qty_like'] != 0 ? $tracking['qty_like']." Likes" : ''; ?></span></a><hr>
+	                      <h3 id="like-photo" data-object="blog" data-id="<?php echo @$article[0]['id'];  ?>" style="color:#7f7f7f;">
+	                        <i class="fa fa-heart <?php echo ($tracking['qty_like'] > 0) ? "red-color" : ""; ?> <?php echo isset($like['status']) && $like['status'] == 1 ? 'like' : ''; ?>"></i>
+	                      </h3>
+	                    </div>
+	                    <div class="col-xs-2 text-center remove-padding">
+	                      <a class="text-view-article"><?php echo isset($tracking['qty_view']) && $tracking['qty_view'] != "" && $tracking['qty_view'] != 0 ? $tracking['qty_view']. " Views" : ''; ?></a>
+	                      <hr>
+	                      <h3><img style="margin-top: -10px;" src="<?php echo skin_url(); ?>/images/view-icon.png"></h3>
+	                    </div>
+	                    <div class="col-xs-2 text-center remove-padding">
+	                      <a class="text-view-article">Share</a>
+	                      <hr>
+	                      <a href="#" data-toggle="modal" data-target="#share-blog-modal"><h3><i class="fa fa-share-alt"></i></h3></a>
+	                    </div>
+	                    <div class="col-xs-2 text-center remove-padding">
+	                      <a href="#">&nbsp;&nbsp;</a>
+	                      <hr>
+	                      <a href="<?php echo base_url().'profile/view/'.@$article[0]['member_id']; ?>"><h3><i class="fa fa-microsite"></i></h3></a>
+	                    </div>
+	                    <div class="col-xs-2 remove-padding">
+	                      <a class="text-view-article"><span id="num-comment"><?php echo isset($tracking['qty_comment']) && $tracking['qty_comment'] != "" && $tracking['qty_comment'] != 0  ? $tracking['qty_comment'] . " Comments" : ''; ?></span></a>
+	                      <hr>
+	                      <div class="comment text-center" data-id="Company-1312-1806-1273385">
+                          <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span></h3>
+                        </div>
+	                    </div>
+	                </div>
                   </div>
                 </div><!-- end panel -->
             </div>
@@ -101,88 +100,16 @@
                 <?php echo @$article[0]['content']; ?>
             </div>
          </div><!-- end panel -->
-
-         <div class="panel panel-default relative">
-            <p><strong>Keywords</strong></p>
-            <?php if(isset($newpost_keyword)):?>
-              <p><?php echo implode(",",$newpost_keyword); ?></p>
+          <?php if(isset($newpost_keyword)): $list_hrf = [];?>
+          <?php foreach ($newpost_keyword AS $value){
+            $list_hrf[] = '<a href="'.base_url("search?keyword=".$value).'">'.$value.'</a>';
+          }?>
+          <div class="panel panel-default relative">
+            <p><strong>Article Tags</strong></p>
+              <p><?php echo implode(", ",$list_hrf); ?></p>
             <?php endif;?>
-         </div><!-- end panel -->
-         <div class="panel panel-default relative comment" id="list-table-comment">
-            <div class="row">
-                <div class="col-md-5"><p><strong>Comments</strong></p></div>
-              
-                <div class="col-md-7 text-right">
-                  <div class="row">
-                     <div class="col-md-6 text-right">
-                       <div class="number-comment"><span id="number-comment"><?php echo isset($tracking['qty_comment']) ? $tracking['qty_comment'] : '0'; ?></span> Comment</div>
-                     </div>
-                     <?php if(isset($count_comment) && $count_comment > 3): ?>
-                     <div class="col-md-6 text-right">
-                        <p>
-                          <a data-id="<?php echo @$article[0]['id']; ?>" id="view-more-comment" href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>View older comments…</a>
-                          <span style="display:none;" class="load-more-comment"><img width="24" src="<?php echo skin_url(); ?>/images/loadding.GIF"></span>
-                        </p>
-                     </div>
-                     <?php endif; ?>
-                  </div>   
-                </div>
-              
-            </div>
-            <div class="comment-wrap">
-              <?php if(isset($comment) && $comment!=null): 
-                      $total_comment = count($comment) - 1;
-                      for ($i = $total_comment; $i >= 0; $i--) { ?>   
-                      <div class="row comment-items" data-object-id="<?php echo @$article[0]['id']; ?>" data-id="<?php echo $comment[$i]['id']; ?>" data-object="blog" style="margin-bottom:15px;">
-                      <?php 
-                            $avatar_comment = skin_url().'/images/avatar-full.png';
-                            if(isset($comment[$i]['avatar']) && $comment[$i]['avatar']!=null && file_exists('.'.$comment[$i]['avatar'])) {
-                                $avatar_comment = $comment[$i]['avatar'];
-                            }
-                        ?>
-                      <div class="col-xs-3 col-sm-2 col-md-1"><img width="100" class="circle" src="<?php echo $avatar_comment; ?>"></div>
-                      <div class="col-xs-9 col-sm-10 col-md-11">
-                        <?php if($user_info['member_id'] == $comment[$i]['member_id']): ?>
-                            <span class="action-comments">
-                              <a class="edit-comment" href="#"><i class="fa fa-pencil"></i></a>
-                              <a class="delete-comment" href="#"><i class="fa fa-times"></i></a>
-                            </span>
-                        <?php endif; ?>
-                          <p><strong><?php echo @$comment[$i]['first_name'].' '.@$comment[$i]['last_name']; ?> | <?php echo @$comment[$i]['company_name']; ?></strong></p>
-                          <p class="text-comment-wrap">
-                              <?php if (strlen($comment[$i]['comment']) >= 250) { ?>
-                              <span class="comment-item-text default-hidden block">
-                                  <?php echo substr(strip_tags(@$comment[$i]['comment']), 0, 250); ?>
-                                  <a href="#" class="more-comments more" id="more-comments"> MORE</a>
-                              </span>
-                              <span class="comment-item-text default-hidden">
-                                 <span class="text-comment"><?php echo strip_tags(@$comment[$i]['comment']);  ?></span>
-                                 <a href="#" class="more-comments more" id="more-comments"> LESS</a>
-                              </span>
-                              <?php } else { ?>
-                              <span class="comment-item-text block">
-                                 <span class="text-comment"><?php echo strip_tags(@$comment[$i]['comment']);  ?></span>
-                              </span> 
-                              <?php } ?>
-                          </p>
-                      </div>
-                  </div>
-                  <?php } ?>
-              <?php endif;?>
-            </div>
-            
-         </div><!-- end panel -->
-
-         <div class="panel panel-default relative commen-like" style="float:none !important;">
-            <div class="comment section-comment row" style="float:none !important;">
-                <h3 id="comment-show" style="float:none !important;">
-                    <span class="glyphicon glyphicon-comment"></span>
-                    <input data-object="blog" maxlength="600" data-id="<?php echo @$article[0]['id']; ?>" style="width: 95%;cursor: initial;" type="text" name="add-commemt-input" id="add-commemt-input">
-                    <span class="load-comment" style="display:none;float:right;"><img width="24" src="<?php echo skin_url(); ?>/images/loadding.GIF"></span>
-                </h3>
-            </div>
-         </div><!-- end panel -->
-
+          </div><!-- end panel -->
+          
          <div class="panel panel-default relative">
             <p class="h2" style="margin-top:0;"><strong>Other Articles</strong></p>
             <?php if (isset($article) && count($article) > 0): ?>
@@ -196,7 +123,7 @@
                                           <div class="row">
                                           <div class="col-sm-6 slider-left"><img src="<?php echo @base_url($value['thumbnail']); ?>" alt="<?php echo @$value['title'] ?>"></div>
                                           <div class="col-sm-6 slider-right">
-                                            <p class="text-right"><?php echo date('F j, Y',strtotime($value['date_create'])); ?></p>
+                                            <p class="text-right"><?php echo date(DW_FORMAT_DATE,strtotime($value['date_create'])); ?></p>
                                                 <h3 class="text-center" style="margin-bottom:10px;"><strong><?php echo $value['title']; ?></strong></h3>
                                                 <div class="row" style="margin-bottom:10px;">
                                                     <div class="col-sm-2 col-xs-4 avatar-slider text-center remove-padding">
@@ -206,7 +133,7 @@
                                                                 $avatar = $value['avatar'];
                                                             }
                                                         ?>
-                                                        <img width="60" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>">
+                                                        <a href="<?php echo base_url().'profile/view/'.@$value['member_id']; ?>"><img width="60" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>"></a>
                                                     </div>
                                                     <div class="col-sm-10 col-xs-8 profile-slider">
                                                     <?php $full_name = @$value['first_name'] . " ". @$value['last_name'];
@@ -215,7 +142,7 @@
                                                                 $user_info_bar.= " | ".$value['company_name'];
                                                             }
                                                         ?>
-                                                        <p><strong><?php echo $user_info_bar; ?></strong></p>
+                                                        <p><strong><a href="<?php echo base_url().'profile/view/'.@$value['member_id']; ?>"><?php echo $user_info_bar; ?></a></strong></p>
                                                         <p><?php echo @$value['job_title']; ?></p>
                                                     </div>
                                                 </div>
@@ -238,7 +165,7 @@
                         <div class="row">
                             <div class="col-sm-12  text-right edit-profile" style="display: block;">
                                 <div class="space-20"></div>
-                                <a href="<?php echo base_url("article");?>" class="btn btn-primary">Click to Edit</a>
+                                <!--<a href="<?php echo base_url('article/edit/' . $article[0]['id']); ?>" class="btn btn-primary">Click to Edit</a>-->
                             </div>
                         </div>
                     <?php endif; ?>
@@ -294,42 +221,20 @@
     var title = $("head title").text();
     var type_post = "<?php echo @$type_post;?>";
     var id_post = "<?php echo @$id_post;?>";
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '996950723730938',
-            xfbml: true,
-            version: 'v2.5'
-        });
-    };
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-            return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    var url_share_social = "<?php echo base_url("article/post/".$id_post);?>";
+
     function share() {
-        tracking_share("facebook",type_post,id_post);
-        img = $("#photo-share").attr("src");     
-        FB.ui({ 
-            method: 'share',
-            href: url,
-            picture: img,
-            title:"<?php echo @$article[0]['title']; ?>",
-            description: "<?php echo @$article[0]['sub_title']; ?>"
-        }, function (response) {});
+       tracking_share("facebook",type_post,id_post);
+      window.open('https://www.facebook.com/sharer/sharer.php?u=' + url_share_social,'_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left)
     }
     function share_tw() {
       tracking_share("twitter",type_post,id_post);
       var title_page = "<?php echo @$article[0]['title'] . " - " . @$article[0]['sub_title']; ?>";
-        window.open("https://twitter.com/share?url=" + url + "&text="+title_page+": ", '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
+        window.open("https://twitter.com/share?url=" + url_share_social + "&text="+title_page+": ", '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
     }
     $(".poup-share-in").click(function () {
         tracking_share("linkedin",type_post,id_post);
-        window.open("https://www.linkedin.com/shareArticle?mini=true&url=" + url, '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
+        window.open("https://www.linkedin.com/shareArticle?mini=true&url=" + url_share_social, '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
         return false;
     });
     $(document).on("click","#sendmail",function(){
@@ -423,11 +328,7 @@
   #bx-pager-edit .slider-top a.active img {
     border: solid #5280DD 1px;
   }
-  #wrapper2 #add-commemt-input{width: 80%;}
-  @media (max-width:768px){
-    .bx-slider-edit .bxsliders_edit li .slider-left img {
-        width: 100%;
-        height: auto;
-    }
-  }
+  body #bx-pager-edit a{margin: 0;}
+  .custom-column-article .col-xs-2{width: 20%; text-align: center;}
+  .text-view-article {min-height: 23px; display: block;}
 </style>

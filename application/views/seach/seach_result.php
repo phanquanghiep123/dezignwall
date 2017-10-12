@@ -20,9 +20,14 @@ if (isset($photo) && count($photo) > 0) :
         if ($step == 1) {
             echo "<div class='col-md-4 grid-column' id='grid-column-" . $colum . "'>";
             $location_article = rand(1,$item_per_column);
+            $location_social = rand(1,$item_per_column);
         }
-        
-        $this->load->view("seach/seach_result_ajax",array("photo" => $value));
+        if($value["is_type_post"] == "photo"){
+            $this->load->view("seach/seach_result_ajax",array("photo" => $value));
+        }
+        if( $value["is_type_post"] == "social" ){
+            $this->load->view("seach/social-post",array("social" => $value));
+        }
         if(isset($article) && count($article) && isset( $article[$offset_article]) > 0 && $step == $location_article){
             $full_name = $article[$offset_article]["first_name"]. " " . $article[$offset_article]["last_name"];
             $company = "Editor/Content Writer";
@@ -57,8 +62,6 @@ if (isset($photo) && count($photo) > 0) :
             </div>';
             $offset_article++;
         }
-        ?>
-        <?php
         if ($step >= $item_per_column) {
             echo "</div>";
             $step = 1;
@@ -72,4 +75,3 @@ if (isset($photo) && count($photo) > 0) :
         }
     }
 endif;
-?>

@@ -10,7 +10,7 @@ if (isset($user) && $user != null) {
 }
 ?>
 <form method="post">
-    <p>New password : <input type="text" name="password"/></p>
+    <p>New password : <input type="text" name="password" min="6" required /></p>
     <p><button type="submit">Save</button></p>
 </form>
 </div>

@@ -42,28 +42,49 @@ class Home extends CI_Controller {
         }
     }
     public function index() {
+        $this->data["is_home"]    = true;
         $this->data["title_page"] = "Home Page";
         $this->data["view_wrapper"] = "home/index";
         $this->data["class_page"] = "search-page";
         $this->load->model("Photo_model");
         $this->load->model("Comment_model");
-        $query_photo = $this->Photo_model->search_index($this->user_id, 30);
-        $recorder = $query_photo;
-        $photo_id = "";
+        $recorder = $this->Photo_model->search_index($this->user_id, 30);
         $this->load->model('Article_model');
         $this->data["article"]  = array();
-        if($this->data["is_login"] && !$this->session->userdata('user_sr_info'))
-            $this->data["article"] = $this->Article_model->get_article(0,2);
-        else
-            $this->data["article"] = $this->Article_model->get_article(0,3);
-
+        $this->data["social_post"]  = array();
+        $member_id = $this->user_id == null ? 0 : $this->user_id; 
+        if($this->data["is_login"] && !$this->session->userdata('user_sr_info')){
+            $this->data["article"] = $this->Article_model->get_article(0,2); 
+            $social_post = $this->Article_model->social_post(0,10,null,null,$member_id);         
+        }
+        else{
+            $this->data["article"] = $this->Article_model->get_article(0,3);   
+            $social_post = $this->Article_model->social_post(0,12,null,null,$member_id);
+        }
+        $n_recorder  = array();
+		try {
+			if($social_post != null || $recorder != null)
+            	$n_recorder = array_merge($social_post, $recorder);
+            if($n_recorder != null){
+                usort($n_recorder, function($a, $b) {
+                  $ad = new DateTime($a['created_at']);
+                  $bd = new DateTime($b['created_at']);
+                  if ($ad == $bd) {
+                    return 0;
+                  }
+                  return $ad > $bd ? -1 : 1;
+                });
+            }
+        }
+        catch (Exception $e){
+            $n_recorder = $recorder;
+        }
         $this->data["photo_count"] = $this->Photo_model->total_page();
-
         $this->data["data_wrapper"]["photo_slider"] = $this->Photo_model->get_photo_slider_image_category("Project", "RANDOM", 10);
         $this->data["class_wrapper"] = "home_page";
         $this->data["is_home"] = "true";
         $this->load->view('block/header', $this->data);
-        $this->data["data_wrapper"]["photo"] = $recorder;
+        $this->data["data_wrapper"]["photo"] = $n_recorder;
         $this->load->view('block/wrapper', $this->data);
         $this->load->view('block/footer');
     }
@@ -222,7 +243,7 @@ class Home extends CI_Controller {
                                 <p>Having trouble viewing the V-Card link? Copy and paste the URL to browser:</p>
                                 <p style ="color:#ff9900">'.base_url($csv_file).'</p>';
                     $table_user = $this->Common_model->get_record("members",array("id" => $user_id));
-                    $logo = ($table_user['logo'] != ""&&file_exists(FCPATH . $table_user['logo'])) ? $table_user['logo'] : "skins/images/logo-company.png";
+                    $logo = ($table_user['avatar'] != ""&&file_exists(FCPATH . $table_user['avatar'])) ? $table_user['avatar'] : "skins/images/logo-company.png";
                     $banner = ($table_user['banner'] != "" && file_exists(FCPATH . $table_user['banner'])) ? $table_user['banner'] : "skins/images/banner-default.png";
                     $message_sent = $this->input->post("message_sent");
                     $mail_subject = $fromFullname . ' shared their Dezignwall Business card with you on, ' . date("m/d/Y");
@@ -731,20 +752,58 @@ class Home extends CI_Controller {
         $data["status"] = "error";
         if($this->input->is_ajax_request()){
             $id = $this->input->post("dataID");
-            $photo = $this->Common_model->get_record("photos",["photo_id" => $id]);
-            if($photo){
+            $postType = $this->input->post("postType");
+            $argTable = [
+                "photo"  => "photos",
+                "blog"   => "article",
+                "social" => "social_posts"
+            ];
+            $key = "id"  ;
+            if($argTable[$postType] == "photos") $key = "photo_id"; 
+            $check  = $this->Common_model->get_record($argTable[$postType],[$key => $id]);
+            if($check){
                 $this->db->select('mb.*,cl.created_at,cl.id AS likeid');
-                $this->db->from("photos AS pt");
-                $this->db->join("common_like AS cl","cl.reference_id = pt.photo_id");
+                $this->db->from("".$argTable[$postType]." AS pt");
+                $this->db->join("common_like AS cl","cl.reference_id = pt.".$key."");
                 $this->db->join("members as mb","mb.id = cl.member_id");
                 $this->db->where("cl.reference_id",$id);
-                $this->db->where("cl.type_object","photo");
+                $this->db->where("cl.type_object",$postType);
+                $this->db->where("cl.status",1);
                 $list = $this->db->get();
                 $data["result"] = $list->result_array(); 
                 $data["status"] = "success";
-            }
+            }  
         }
         echo(json_encode($data));
+        return;
+    }
+
+    public function getcomments(){
+        $data["status"] = "error";
+        if($this->input->is_ajax_request()){
+            $id = $this->input->post("dataID");
+            $postType = $this->input->post("postType");
+            $argTable = [
+                "photo"  => "photos",
+                "blog"   => "article",
+                "social" => "social_posts"
+            ];
+            $key = "id" ;
+            if($argTable[$postType] == "photos") $key = "photo_id"; 
+            $check  = $this->Common_model->get_record($argTable[$postType],[$key => $id]);
+            if($check){
+                $this->db->select('mb.*,cl.created_at,cl.id AS likeid');
+                $this->db->from("common_comment AS cl");
+                $this->db->join("members as mb","mb.id = cl.member_id");
+                $this->db->where("cl.reference_id",$id);
+                $this->db->where(["cl.type_object" => $postType,"cl.pid" => 0]);
+                $list = $this->db->get();
+                $data["result"] = $list->result_array(); 
+                $data["status"] = "success";
+            }  
+        }
+        echo(json_encode($data));
+        return;
     }
  
 }

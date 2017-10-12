@@ -16,7 +16,7 @@
                 array('href' => '#', 'title' => 'Invite team members', 'class' => 'invite_member')
             );
         }
-        $this->load->view("include/banner.php", $data);
+        $this->load->view("include/banner-wall.php", $data);
     ?>
     
      <div class="content_designwalls box-wapper-show-image">
@@ -202,8 +202,9 @@
                 
             </div>
         </div>
-        <?php $this->load->view("include/delete_walls");?>
+        
      </div>
+     <?php $this->load->view("include/delete_walls");?>
 <style type="text/css">
     .pgwSlideshow .ps-current li{
         text-align: center;
@@ -766,4 +767,5 @@ p#add_upgrade{
     z-index: 999;
     position: relative;
 }
+.content_designwalls  strong {color: #fff;}
 </style>

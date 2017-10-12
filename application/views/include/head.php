@@ -3,7 +3,6 @@
 <link href="<?php echo skin_url(); ?>/fonts/AvenirNextLT/fonts.css" rel="stylesheet">
 <link href="<?php echo skin_url(); ?>/css/style.css" rel="stylesheet">
 <link href="<?php echo skin_url(); ?>/css/reponsive.css" rel="stylesheet">
-<link href="<?php echo skin_url(); ?>/css/page/profile.css" rel="stylesheet">
 <link href="<?php echo skin_url(); ?>/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
 <link href="<?php echo skin_url(); ?>/css/bootstrap-select.css" rel="stylesheet">
 <link href="<?php echo skin_url(); ?>/css/bootstrap-checkbox.css" rel="stylesheet">
@@ -28,6 +27,18 @@ if (isset($skins)) {
 <script src="<?php echo skin_url(); ?>/js/pgwslideshow.js"></script>
 <script src="<?php echo skin_url(); ?>/js/jquery.form.js"></script>
 <script src="<?php echo skin_url(); ?>/js/jquery-ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-98255178-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
         var pgw = $('.pgwSlideshow').pgwSlideshow();
@@ -73,6 +84,7 @@ if (isset($skins)) {
 </script>
 <!--variables public-->
 <script type="text/javascript">
+
     <?php $is_business = ($this->session->userdata('user_sr_info')) ? 1 : "";?>
     var base_url = "<?php echo @base_url(); ?>";
     var is_login = "<?php echo @$is_login; ?>";
@@ -87,6 +99,7 @@ if (isset($skins)) {
     var business_type = "<?php echo @$business_type ?>";
     var location_photo = "<?php echo @$location_photo ?>";
     var current_page   = "<?php echo @$data_current; ?>";
+    var post_social    = [<?php echo @$social_post_id_not_show;?>];
     var is_home  = "<?php echo @$is_home;?>";
     var url_reload = window.location.href;
     <?php if($this->input->get("action") && $this->input->get("url") != null && $this->input->get("url") != ""){

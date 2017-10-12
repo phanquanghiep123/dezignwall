@@ -87,8 +87,8 @@ class Search extends CI_Controller {
         }
         if ($location == NULL){
         	$location = $keyword;
-	         $location = explode(",", $this->data['location_photo']);
-            $location = array_diff($location, array(''));
+	        $location = explode(",", $this->data['location_photo']);
+          $location = array_diff($location, array(''));
         }
         
         $this->data["photo_count"] = $this->Photo_model->total_page($location,$keyword,$all_category,$this->data['photo_type'],$catalog,null,$offer_product);
@@ -98,17 +98,40 @@ class Search extends CI_Controller {
             $photo = NULL;
         // get article.
         $this->load->model('Article_model');
-
         if($keyword != NULL) 
             $this->data["article"] = $this->Article_model->get_by_keyword($this->data['keyword'],0,3);
         else 
             $this->data["article"] = $this->Article_model->get_article();
         // !get article.
+        $not_show = [0];
+        $social_post = $n_recorder = array();
+        $member_id = $this->user_id == null ? 0 : $this->user_id; 
+        if($type != "projects" && $type != "products"){
+            if($this->data['keyword'] == null)
+                $social_post = $this->Article_model->social_post(0,12,$not_show,null,$member_id);  
+        }
+        try {
+            if($social_post != null || $photo != null)
+                $n_recorder = array_merge($social_post, $photo);
+            if($n_recorder != null){
+                usort($n_recorder, function($a, $b) {
+                  $ad = new DateTime($a['created_at']);
+                  $bd = new DateTime($b['created_at']);
+                  if ($ad == $bd) {
+                    return 0;
+                  }
+                  return $ad > $bd ? -1 : 1;
+                });
+            }
+        }
+        catch (Exception $e){
+            $n_recorder = $photo;
+        }
         
         //$sb_qry='"' . $location . '|' . $this->user_id .'|' . $keyword .'|' . $all_category.'|' . $this->data['photo_type'] .'|'. '0' .'|' . '30' .'|' .$catalog .'|' . 'null' .'|' .'null' .'|' . $offer_product . '" ---';
         $this->data["title_page"] = "Search Page - " . trim(trim(@$sb_qry) . trim($keyword) . " " . trim($this->data['category_slug']) . " " . trim($this->data['catalog']) . " " . trim($this->data['all_category']) . " " . trim($this->data['location_photo']) . " " . trim($this->data['photo_type'])) ;
         $this->data["view_wrapper"] = "seach/index";
-        $this->data["data_wrapper"]["photo"] = $photo;
+        $this->data["data_wrapper"]["photo"] = $n_recorder;
         $this->data["class_wrapper"] = "seach_page";
         $this->load->view('block/header', $this->data);
         $this->load->view('block/wrapper', $this->data);

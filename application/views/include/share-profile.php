@@ -4,10 +4,11 @@
             <button style="position: relative;top: -5px;" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             <div style="height:20px;"></div>
             <p class="text-center"><strong>Share your profile, as a digital business card!</strong></p>
-            <form method="post" action="<?php echo base_url("home/share_your_profile");?>" enctype="multipart/form-data">
+            <form method="post" id="share_your_profile" action="<?php echo base_url("home/share_your_profile");?>" enctype="multipart/form-data">
                 <div class="row">
+                    <?php $avatar = ( @$member['avatar'] != null ) ? base_url($member['avatar']) :  base_url("/skins/images/avatar-full.png");?>
                     <div class="col-xs-3">
-                        <img style="border-radius:50%;" src="<?php echo @$member['logo']; ?>">
+                        <img style="border-radius:50%;width: 100%;height: auto;border: 1px solid #37a7a7;" class="img-circle" src="<?php echo base_url($avatar); ?>">
                     </div>
                     <div class="col-xs-9">
                         <img id="photo-share" src="<?php echo @$member['banner']; ?>" />
@@ -27,15 +28,15 @@
                             <label class="full-width">
                                 Cell Phone:
                                 <span class="text-contact block-inline" id="cell-phone"><?php echo $member['cellphone']; ?></span>
-                                <input type="text" class="input-contact" data-for="cell_phone" name="cell_phone" value="<?php echo $member['cellphone']; ?>" placeholder="Cell Phone" />
+                                <input type="text" class="input-contact" data-for="cell_phone" name="cell_phone" value="<?php echo $member['cellphone']; ?>" placeholder="(xxx) xxx-xxxx" />
                             </label>
                             <label class="full-width">Work Phone: 
-                                <span class="text-contact block-inline" id="work-phone"><?php echo $company_info['main_business_ph']; ?></span>
-                                <input type="text" class="input-contact" data-for="work_phone" name="work_phone" value="<?php echo $company_info['main_business_ph']; ?>" placeholder="Work Phone" />
+                                <span class="text-contact block-inline" id="work-phone"><?php echo $member['work_ph']; ?></span>
+                                <input type="text" class="input-contact" data-for="work_phone" name="work_ph" value="<?php echo $member['work_ph']; ?>" placeholder="(xxx) xxx-xxxx" />
                             </label>
                             <label class="full-width">Email:
-                                <span class="text-contact block-inline" id="email"><?php echo $company_info['contact_email']; ?></span>
-                                <input type="text" class="input-contact" data-for="email" name="email" value="<?php echo $company_info['contact_email']; ?>" placeholder="Email" />
+                                <span class="text-contact block-inline" id="email"><?php echo $member['email']; ?></span>
+                                <input type="text" class="input-contact" data-for="email" name="email" value="<?php echo $member['email']; ?>" placeholder="Email" />
                             <label>
                             <?php if(!isset($not_edit)):?>
                             <div class="eidt-contact"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></div>
@@ -86,11 +87,11 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="list-social-api">
-                            <li><a href="<?php echo $outlookImportUrl; ?>"><strong>X &nbsp;&nbsp;Outlook</strong></a></li>
+                            <li><a href="<?php echo @$outlookImportUrl; ?>"><strong>X &nbsp;&nbsp;Outlook</strong></a></li>
                             <?php if (!empty($yahooImportUrl)) : ?>
                             <li><a title="Please hit ctrl + F5 again if you see error in yahoo site" href="<?php echo $yahooImportUrl; ?>"><strong>X &nbsp;&nbsp;Yahoo</strong></a></li>
                             <?php endif; ?>
-                            <li><a href="<?php echo $googleImportUrl; ?>"><strong>X &nbsp;&nbsp;Gmail</strong></a></li>
+                            <li><a href="<?php echo @$googleImportUrl; ?>"><strong>X &nbsp;&nbsp;Gmail</strong></a></li>
                         </ul>
                     </div>
                 </div>
@@ -311,7 +312,6 @@
         var filename = $('#attach').val();
         $('.attach_container').html(filename);
     });
-    
     $("#email-tag").tagit({
         allowSpaces: false,
         fieldName: "keyword[]",
@@ -319,9 +319,11 @@
         afterTagAdded : function(e,t){
             if(!isEmail(t.tagLabel)){
                 t.tag.css("border","1px solid red");
+                t.tag.addClass("error-email");
             }
         }
     });  
+
     $(document).on("click",".eidt-contact",function(){
         $(".text-contact").toggleClass("block-inline");
         $(".input-contact").toggleClass("block-inline");
@@ -358,16 +360,18 @@
         }
         $(this).toggleClass("set-all");
     });
-    var i;
-    $(document).on("click","#sent-share",function(){
-        i = 0;
+    $(document).on("submit","#share-modal #share_your_profile",function(){
+        var i = 0;
+        $("#share-modal ul.tagit").css("border","none");
         $.each($("#share-modal .ui-widget-content li .tagit-label"),function(){
             if(!isEmail($(this).text())){
-                $(this).parent().css("border","1px solid red");
                 i++;
+                return false;
             }
         });
         if( i > 0 ){
+            $("#share-modal ul.tagit").css("border","1px solid red");
+            messenger_box("Share profile error!","Please check list email !");
             return false;
         }
     });

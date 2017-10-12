@@ -104,8 +104,6 @@ class Article extends CI_Controller {
             'reference_id' => $article[0]['id'],
             'type_object' => 'blog'
         ));
-
-        
         $this->data["type_post"] = "blog";
         $this->data["id_post"] = $article[0]['id'];
         $data_share = ' <meta name="og:image" content="'.base_url($article[0]['thumbnail']).'">
@@ -547,6 +545,38 @@ class Article extends CI_Controller {
                 }
                 exec('aws s3 sync  /dw_source/dezignwall/uploads/blog/' .  $this->user_id . '/ s3://dwsource/dezignwall/uploads/blog/' .  $this->user_id . '/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');
             }
+        }
+        die(json_encode($data));
+    }
+    function get_all_like($id){
+        $data = array( 'status' => 'error');
+        if ($this->input->is_ajax_request()) {
+            $this->db->select("tbl2.*,tbl3.business_description,tbl1.created_at,tbl1.id AS aID,tbl2.id AS member_id");
+            $this->db->from("common_like AS tbl1");
+            $this->db->join("members AS tbl2","tbl1.member_id = tbl2.id");
+            $this->db->join("company AS tbl3","tbl2.id = tbl3.member_id");
+            $this->db->where(["reference_id" => $id,"type_object" => "blog","status" => 1]);
+            $r = $this->db->get()->result_array();
+            $this->output->enable_profiler(TRUE);
+            $html = "";
+            foreach ($r as $key => $value) {
+                $avatar = ($value["avatar"] != null) ? base_url($value["avatar"]) : skin_url("images/avatar-full.png");
+                $html .= '<div class="user-like">
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <a href ="'.base_url("profile/view/".$value["member_id"]).'"><img class="image-user-like circle" width="60px" height="60px" src="'.$avatar.'"></a>
+                      </div>
+                      <div class="col-sm-7">
+                        <h4 class="name"><a href ="'.base_url("profile/view/".$value["member_id"]).'"><b>'.$value["first_name"].' '.$value["last_name"].'</b></a></h4>
+                        <p class="description">'.$value["business_description"].' | '.$value["created_at"].'</p>
+                      </div>
+                      <div class="col-sm-3">
+                        <button type="button" data-member-id = "'.$value["member_id"].'" data-id="'.$value["aID"].'" class="btn btn-default">Send Message</button>
+                      </div>
+                    </div>
+                  </div>';
+            }
+            $data = array( 'status' => 'success' ,"html" => $html);
         }
         die(json_encode($data));
     }

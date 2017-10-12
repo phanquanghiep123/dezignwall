@@ -901,7 +901,7 @@
                     $("#modal_choose_story").modal("hide");          
                 }
                 if(data["status"] == "success" && add_reset == 1){
-                    location.reload();
+                    //location.reload();
                 }
                 _this.find(".loadding-upload-content").hide();
             },error:function(){

@@ -59,6 +59,7 @@
         position: absolute;
         right: 10px;
         bottom: 13px;
+        float: right;
     }
     @media screen and (max-width: 768px){
         .add-a-story .add-story{position: static;}
@@ -346,6 +347,7 @@
         overflow-x: hidden;
         overflow-y: auto;
     }
+    #upload-batch{position: relative;z-index: 999;}
     @media (min-width: 768px) {
 
         .sm-remove-padding{

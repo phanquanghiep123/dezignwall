@@ -1,12 +1,13 @@
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css");?>">
 <style>
 .uesr-box-impromation {height:auto;}
 .custom-columns .col-xs-2{
     width: 13.5%;
 }
 .wrapper-image .item  .view-story img{
-	width: auto;
-	height: auto;
-	max-height: inherit;
+    width: auto;
+    height: auto;
+    max-height: inherit;
     min-height: inherit;
     object-fit: inherit;
     padding-top: 0;
@@ -23,6 +24,10 @@
     z-index: 1;
     padding-top: 4px;
 }
+.uesr-box-impromation #list-table-comment p {color: #9E9E9E!important;  text-align: left;}
+.uesr-box-impromation #list-table-comment p span {color: #9E9E9E!important;}
+.commen-like p {color: #fff !important;}
+.commen-like p span{color: #fff !important;}
 #wrapper-impormant-image .image-page .impromation-project .logo-company img {
     width: 50px;
     height: 50px;
@@ -96,6 +101,17 @@ body .image-page .dropdown-impromation .dropdown-impromation-menu{
 .show-mobile{display: none;}
 .bx-wrapper{margin: inherit !important; }
 body .image-page .bx-wrapper .bx-controls-direction a{top: 45% !important}
+body .logo-company{
+    width: 55px;
+    float: left;
+    padding-right: 0;
+}
+body .impromation{
+    width: 86%;
+    float: left;
+}
+body .image-page .photo-name{width: 100%;}
+body .image-page .impromation-project .impromation p{width: 100%;}
 body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: relative;}
 @media screen and (max-width: 768px){
     body .image-page .bx-wrapper .bx-controls-direction a{top: 40%;}
@@ -116,10 +132,22 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
         font-size: 15px;
     }
     .show-mobile{display: inline;}
+    body .impromation {
+        width: 66%;
+        float: left;
+    }
 }
-@media screen and (max-width: 350px){
+@media screen and (max-width: 420px){
     .image-page .impromation-project .impromation p {
         width: 71%;
+    }
+    body .image-page .impromation-project .impromation p {
+        width: 100%;
+        font-size: 12px;
+    }
+    body .image-page .photo-name {
+        width: 100%;
+        font-size: 12px;
     }
 }
 </style>
@@ -187,7 +215,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                     <img class="photo-detail" title="<?php echo @$photo["name"];?>" data-w="<?php echo @$size_new[0]; ?>" data-h="<?php echo @$size_new[1]; ?>" src="<?php echo base_url($images); ?>">
                                     <div class="save-dw">
                                         <ul class="memu-save">
-                                            <li style="list-style: none;"><a class="not-report download_photo" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" id="login-check" href="<?php echo base_url($images);?>" download><span class="show-mobile">> </span>Save as jpeg...</a></li>
+                                            <li style="list-style: none;"><a class="not-report download_photo" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" id="login-check" href="<?php echo base_url("photos/savejpg/".$photo['photo_id']);?>" download ="true" ><span class="show-mobile">> </span>Save as jpeg...</a></li>
                                             <li style="list-style: none;"><a class="not-report" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  id="login-check" href="<?php echo base_url("photos/download_pdf/". $photo["photo_id"]);?>"><span class="show-mobile">> </span>SAVE / Print PDF...</a></li>
                                             <li style="list-style: none;"><a id="pins-to" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>"  class="upgrade-account-link not-report" href="#"><span class="show-mobile">> </span>Pin to Wall...</a></li>
                                         </ul>
@@ -208,7 +236,6 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                         </ul>
                                     </div>
                                     <ul id="scrollbars-dw">
-
                                         <?php 
                                             echo '<li><a href="'.base_url("photos/".$photo["photo_id"]."/".gen_slug($photo["name"])).'"><img title="'.$photo["name"].'" src="'.base_url($photo["thumb"]).'"></a></li>';
                                             foreach($album as $key_album => $value_album) {
@@ -225,13 +252,13 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                 <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                                 <div class="dropdown-impromation-menu">
                                     <ul class="dropdown-data">
-                                        <li style="list-style: none;"><a href="<?php echo base_url("profile/index/" . $user["id"]); ?>" class="not-report" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Company profile...</a></li>
+                                        <li style="list-style: none;"><a href="<?php echo base_url("company/view/" . $user["id"]); ?>" class="not-report" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Company profile...</a></li>
                                         <li style="list-style: none;"><a href="#" class="not-report" onclick="$('.memu-save-top').toggleClass('block');return false;" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>"> Save this item...</a></li>
                                         <?php if($photo['image_category'] == "Product"):?><li style="list-style: none;"><a class="upgrade-account-link not-report" id ="login-check" href="<?php echo base_url("profile/request_quote/".$photo["photo_id"]);?>" name="RFQ" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Request a Quote...</a></li><?php endif;?>
                                         <li style="list-style: none;"><a href="#" class="not-report" id="report-image" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Report this image...</a></li>
                                     </ul>
                                     <ul class="memu-save-top">
-                                        <li style="list-style: none;"><a data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" id="login-check" data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" class="not-report" href="<?php echo base_url($images);?>" download><span class="show-mobile">> </span>Save as jpeg...</a></li>
+                                        <li style="list-style: none;"><a data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" id="login-check" data-reload ="<?php echo base_url(uri_string());?>?download_photo=true" class="not-report" href="<?php echo base_url("photos/savejpg/".$photo['photo_id']);?>" download ="true"><span class="show-mobile">> </span>Save as jpeg...</a></li>
                                         <li style="list-style: none;"><a id="login-check" class="not-report" href="<?php echo base_url("photos/download_pdf/". $photo["photo_id"]);?>"><span class="show-mobile">> </span>SAVE / Print PDF...</a></li>
                                         <li style="list-style: none;"><a id="pins-to" class="upgrade-account-link not-report" href="#"><span class="show-mobile">> </span>Pin to Wall...</a></li>
                                     </ul>
@@ -239,126 +266,85 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                             </div>
                             <?php $record_type = 1; ?>
                             <?php if ($record_type != 0): ?>
-                                <?php $logo = ( $user["logo"] != "" && file_exists(FCPATH . "/" . $user["logo"]) ) ? base_url($user["logo"]) : skin_url("images/logo-company.png"); ?>
-                                <div class="logo-company"><a id="login-check" href="<?php echo base_url("profile/index/" . $user["id"]); ?>"><img src="<?php echo $logo; ?>"></a></div>
+                                <?php $logo = ( $company["logo"] != "" && file_exists(FCPATH . "/" . $company["logo"]) ) ? base_url($company["logo"]) : skin_url("images/logo-company.png"); ?>
+                                <div class="logo-company"><a id="login-check" href="<?php echo base_url("profile/view/" . $user["id"]); ?>"><img src="<?php echo $logo; ?>"></a></div>
                                 <div class="impromation">
-                                    <h1 class="photo-name"><a id="login-check" href="<?php echo base_url("profile/index/" . $user["id"]); ?>"><?php echo $company["company_name"]; ?></a></h1>
+                                    <h1 class="photo-name"><a id="login-check" href="<?php echo base_url("company/view/" . $user["id"]); ?>"><?php echo $company["company_name"]; ?></a></h1>
                                     <p><?php echo $company["business_type"] ?> | <?php echo $company["business_description"]?></p>
                                 </div>
                             <?php endif; ?>
                         </div>
                         <div class="commen-like">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="custom-columns">
-                                            <?php
+                            <div class="card" data-id="<?php echo $photo["photo_id"];?>" data-type="photo">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <?php 
+                                            $colums = 5;
+                                            if($photo['type'] == 2) $colums = 7;
+                                            if($photo['image_category'] == "Product") $colums++;
                                             $images_like = "";
                                             $title_like = "Click here to like.";
                                             if (count($user_total_like) == 0) {
                                                 $images_like = "";
                                             } else {
                                                 if ($user_total_like["status"] != 0) {
-
-                                                    $images_like = " like";
+                                                    $images_like = " ";
                                                     $title_like = "Click here to unlike.";
                                                 }
                                             }
-                                            ?>
-                                            <div class="col-xs-2 remove-padding text-center"><div class="likes"><p><span id="number-like"><?php echo count(@$like); ?></span> Like(s)</p><h3  id="like-photo" data-id ="<?php echo $photo["photo_id"]; ?>"><i class="fa fa-heart<?php echo $images_like; ?>" title="<?php echo $title_like; ?>"></i></h3></div></div>
-                                            <div class="col-xs-2 remove-padding text-center">
-                                                <div class="microsite">
-                                                    <p style="height:15px"></p>
-                                                    <a id="goto-microsite" title="Go to microsite." href="<?php echo base_url("profile/index/" . $user["id"]); ?>"><img src="<?php echo base_url("skins/images/i-white.png");?>"></a>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><a id="myphoto_user" href="<?php echo base_url("profile/myphoto/" . $user["id"]."?catalog=".$photo["manufacture"]);?>"><img src="<?php echo skin_url("images/catalog-white.png")?>"></a></div>
-                                            <?php if ($photo['type'] == 2) : ?>
-                                                <div class="col-xs-2 remove-padding text-center"><p><span id="num-pin"><?php echo $record_pin; ?></span> Pins</p><h3 id="pins-to" title="Click here to Save to DEZIGNWALL."><i class="fa fa-thumb-tack"></i></div>
-                                                <div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><h3 id="share-social" title="Click here to share image." data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>"><i class="fa fa-share-alt"></i></h3></div>
-                                                <?php if($photo['image_category'] == "Product"){
-                                                    echo '<div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><h3 title="Click here to RFQ of image."><a id ="login-check" href="'.base_url("profile/request_quote/".$photo["photo_id"]).'" name="RFQ"><img src="'.skin_url("images/RFQ-white.png").'"></a></h3></div> ';
-                                                }?>
-                                                <div class="col-xs-2 remove-padding text-center"><p style="height:15px"></p><h3 id="share-image-email" title="Click here to share image."><i class="fa fa-envelope"></i></h3></div> 
-                                            <?php endif; ?>
-                                            
+                                            $imglikeshow = "heart-white.png";
+                                            if(count(@$like) > 0){
+                                                $imglikeshow = "heart-red.png";
+                                            }
+                                        ?>
+                                        <div class="item-single-image" style="width:<?php echo (100/$colums)?>%">
+                                            <div class="likes">
+                                                <p class="height-set"><span id="number-like"><?php echo count(@$like) != 0 ? count(@$like)." Likes" : ""; ?></span></p>
+                                                <h3 id="like-photo" data-id ="<?php echo $photo["photo_id"]; ?>">
+                                                    <img class="icon" src="<?php echo skin_url("icon/".$imglikeshow."")?>" title="<?php echo $title_like; ?>">
+                                                </h3>
+                                            </div>   
                                         </div>
-                                    </div>
+                                        <div class="item-single-image" style="width:<?php echo (100/$colums)?>%">
+                                            <div class="microsite">
+                                                <p class="height-set"></p>
+                                                <h3>
+                                                    <a id="goto-microsite" title="Go to microsite." href="<?php echo base_url("company/view/" . $user["id"]); ?>">
+                                                        <img class="icon" src="<?php echo skin_url("icon/i-white.png");?>">
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="item-single-image" style="width:<?php echo (100/$colums)?>%">
+                                            <p class="height-set"></p>
+                                            <h3>
+                                                <a id="myphoto_user" href="<?php echo base_url("profile/myphoto/" . $user["id"]."?catalog=".$photo["manufacture"]);?>">
+                                                    <img class="icon" src="<?php echo skin_url("icon/catalog-white.png")?>">
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <?php if ($photo['type'] == 2) : ?>
+                                            <div class="item-single-image" style="width:<?php echo (100/$colums)?>%"><p class="height-set"><span id="num-pin"><?php echo ($record_pin == 0) ? $record_pin." Pins" : ""; ?></span></p><h3 id="pins-to" title="Click here to Save to DEZIGNWALL."><img class="icon" src="<?php echo skin_url("icon/pin-white.png")?>"></h3></div>
+                                            <div class="item-single-image" style="width:<?php echo (100/$colums)?>%"><p class="height-set"></p><h3 id="share-social" title="Click here to share image." data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>"><img class="icon" src="<?php echo skin_url("icon/share-white.png")?>"></h3></div>
+                                            <?php if($photo['image_category'] == "Product"){
+                                                echo '<div class="item-single-image" style="width:'.(100/$colums).'%"><p class="height-set"></p><h3 title="Click here to RFQ of image."><a id ="login-check" href="'.base_url("profile/request_quote/".$photo["photo_id"]).'" name="RFQ"><img class="icon" src="'.skin_url("icon/rfq-white.png").'"></a></h3></div> ';
+                                            }?>
+                                            <div class="item-single-image" style="width:<?php echo (100/$colums)?>%"><p class="height-set"></p><h3 id="share-image-email" title="Click here to share image."><img class="icon" src="<?php echo skin_url("icon/email-white.png")?>"></h3></div> 
+                                        <?php endif; ?>
+                                        <div class="item-single-image" style="width:<?php echo (100/$colums)?>%">
+                                            <p class="height-set"><span id="num-comment"><?php echo (@$comment != 0 && @$comment != "") ? @$comment." Comments" : ""; ?></span></p>
+                                            <div class="comment" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>">
+                                                <h3 id="comment-show">
+                                                    <img class="icon" src="<?php echo skin_url("icon/comment-white.png")?>">
+                                                </h3>
+                                            </div>
+                                        </div>  
+                                    </div>                                
                                 </div>
-                                <div class="col-md-5 remove-padding sm-padding text-sm-center">
-                                    <p class="text-sm-left"><span id="num-comment"><?php echo @$comment; ?></span> Comment(s)</p>
-                                    <div class="comment" data-id="<?php echo $company["company_name"] .'-'. $photo["member_id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>">
-                                        <h3 id="view-all-comment">
-                                            <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span>
-                                            <input type="text" name="comment" id="comment-input" class="left form-control" placeholder="Comment">
-                                        </h3>
-                                    </div>
-                                </div> 
                             </div>
                         </div>
                     </div>
                     <!-- Section for comment -->
-                    <div class="commen-like" id="search-home-show">
-                        <div class="conment-show <?php echo ($comment > 0) ? "block" : ""; ?>">
-                            <div class="col-xs-12">
-                                <div class="uesr-box-impromation" id="scrollbars-dw">
-                                    <div class="avatar">
-                                        <table id="list-table-comment" data-id="<?php echo $photo["photo_id"]; ?>">
-                                            <thead>
-                                                <tr>
-                                                    <td class="left-td">&nbsp;</td>
-                                                    <td class="right-td">
-                                                        <div class="likes-header-box"><p><span id="number-like"><?php echo count(@$like); ?></span> Like(s)</p></div>
-                                                        <div class="comments-header-box"><p><span id="num-comment"><?php echo @$comment; ?></span> Comment(s)</p></div>
-                                                    </td>
-                                                    <td class="right-extra-td" align="right">
-                                                        <?php if ($comment > 3) : ?>
-                                                            <p class="view-more-comment" id="view-more-detail" data-type="photo"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> View older comments…</p>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                if ($comment > 0) {
-                                                    $value_comment = $record_comment;
-                                                    $total_comment = count($record_comment);
-                                                    for ($i = $total_comment; $i > 0; $i--) {
-                                                        $logo_user = ( $value_comment[($i - 1)]['avatar'] != "" && file_exists(FCPATH . $value_comment[($i - 1)]['avatar']) ) ? base_url($value_comment[($i - 1)]['avatar']) : base_url("skins/images/signup.png");
-                                                        ?>
-                                                        <tr class="comment-items single-page-comment offset_default">
-                                                            <td class="left-td"><img src="<?php echo $logo_user; ?>" class="left"></td>
-                                                            <td class="right-td" colspan="2">
-                                                                <?php
-                                                                $company_name = "";
-                                                                if ($value_comment[($i - 1)]['company_name'] != null && $value_comment[($i - 1)]['company_name'] != "") {
-                                                                    $company_name = " | " . $value_comment[($i - 1)]['company_name'];
-                                                                }
-                                                                ?>
-                                                                <p><a id="login-check" href="<?php echo base_url("profile/index/" . $value_comment[($i - 1)]["member_id"]); ?>"><strong><?php echo $value_comment[($i - 1)]['first_name'] . " " . $value_comment[($i - 1)]['last_name']; ?><?php echo $company_name; ?> | <?php echo $value_comment[($i - 1)]['created_at']; ?></strong></a></p>
-                                                                <div>
-                                                                    <p class="text-comment" data-id="<?php echo @$value_comment[($i - 1)]['id']; ?>">
-                                                                        <?php
-                                                                        if (strlen($value_comment[($i - 1)]['comment']) <= 210) {
-                                                                            echo "<span>" . $value_comment[($i - 1)]['comment'] . "</span>";
-                                                                        } else {
-                                                                            echo "<span class='comment-item-text default-show block'>" . substr($value_comment[($i - 1)]['comment'], 0, 200) . "<span class='more' id='more-comment'> MORE...</span></span>";
-                                                                            echo "<span class='comment-item-text default-hide'>" . $value_comment[($i - 1)]['comment'] . "<span class='more' id='more-comment'> LESS</span></span>";
-                                                                        }
-                                                                        ?>
-                                                                    </p>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="col-md-4 colum-right">
@@ -456,9 +442,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                         $text_keyword = substr($text_keyword, 0, -2);
                                     }
                                     ?>
-                                    <p>
-                                        <?php echo $text_keyword; ?>
-                                    </p>
+                                    <p><?php echo $text_keyword; ?></p>
                                 </div>
                             </div>  
                         </div>
@@ -506,7 +490,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
             </div>
         </div>
     </div>
-    <?php $this->load->view("include/share"); ?>
+    
     <?php $this->load->view("include/report-images"); ?>
     <?php $this->load->view("include/view-comment"); ?>
     <script type="text/javascript">

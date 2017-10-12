@@ -418,10 +418,13 @@ class Project_model extends MY_Model
         $this->db->join("packages AS p","p.id = mx.package_id");
         $this->db->where(["mx.member_id"=>$user_id,"type" => "1","mx.status" => "yes"]);
         $query = $this->db->get()->row_array();
+        return 9999999;
+        /*
         if($query == null){
             return 1;
         }
         return ($query["max_files"] + 1);
+        */
     }
     function get_img_cat($id){
         $this->db->select("pt.path_file");
@@ -433,6 +436,59 @@ class Project_model extends MY_Model
             return "/skins/images/default-product.jpg";
         }
         return $query["path_file"];
+    }
+    function get_project_member_on_profile($member_id = null,$offset = 0, $limit = 2)
+    {
+        $sql = "select `tbl4`.* from  (
+                    ( select `tbl1`.`project_id` from `projects` AS tbl1 Where `tbl1`.`member_id` = $member_id )
+                    UNION
+                    ( select `tbl2`.`project_id` from `project_member` AS tbl2 Where `tbl2`.`member_id` = $member_id )
+                ) AS tbl3               
+                join `projects` AS tbl4 on `tbl4`.`project_id` = `tbl3`.`project_id` 
+                order by `tbl4`.`project_id` DESC
+                limit $offset , $limit";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+    
+    function get_all_member_invite($project_id,$offset = 0, $limit = 2){
+        $this->db->select("tbl3.*,tbl2.join_date");
+        $this->db->from("project_member AS tbl2");
+        $this->db->join("company AS tbl3",'tbl3.member_id = tbl2.member_id');
+        $this->db->where("tbl2.project_id",$project_id);
+        $this->db->order_by("tbl2.id","DESC");
+        $this->db->limit($limit, $offset);
+        return $this->db->get()->result_array();
+    }
+    function all_folder_for_project ($project_id,$offset = 0, $limit = 2){
+        $this->db->select("tbl3.*,tbl1.category_id");
+        $this->db->from("project_categories AS tbl1");
+        $this->db->join("products AS tbl2","tbl2.category_id = tbl1.category_id");
+        $this->db->join("photos AS tbl3","tbl3.photo_id = tbl2.photo_id");
+        $this->db->where("tbl1.project_id",$project_id);
+        $this->db->order_by('rand()');
+        $this->db->limit($limit, $offset);
+        return $this->db->get()->result_array();
+
+    }
+    function count_folder_for_project($project_id){
+        $this->db->select("tbl3.id");
+        $this->db->from("project_categories AS tbl1");
+        $this->db->join("products AS tbl2","tbl2.category_id = tbl1.category_id");
+        $this->db->join("photos AS tbl3","tbl3.photo_id = tbl2.photo_id");
+        $this->db->where("tbl1.project_id",$project_id);
+        return $this->db->count_all_results();
+    }
+    function get_last_comment($project_id){
+        $this->db->select("tbl3.*,tbl2.comment,tbl2.created_at AS created_at_comment");
+        $this->db->from("project_categories AS tbl1");
+        $this->db->join("common_comment AS tbl2","tbl2.reference_id = tbl1.category_id AND tbl2.type_object = 'category'");
+        $this->db->join("members AS tbl3","tbl3.id = tbl2.member_id");
+        $this->db->where("tbl1.project_id",$project_id);
+        $this->db->order_by("tbl2.id","DESC");
+        $this->db->limit(1);
+        $query = $this->db->get()->row_array();
+        return $query;
     }
     //======================================!new================================//
     

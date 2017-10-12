@@ -1,3 +1,4 @@
+
     <?php
     	$user_info = $this->session->userdata('user_info');
 		$allow_edit = (isset($member) && isset($user_info) && $user_info['id'] == $member['id'] && !$this->session->userdata('user_sr_info')) ? true : false;
@@ -20,7 +21,7 @@
 		    	array('href' => '#', 'title' => 'Invite team members', 'class' => 'invite_member')
 			);
     	}
-	    $this->load->view("include/banner.php", $data);
+	    $this->load->view("include/banner-wall", $data);
 	?>
     
     <section class="section box-wapper-show-image you-wall">
@@ -880,6 +881,7 @@ function add_comment(obj) {
     END: COMMENT
 */
 </script>
+<link rel="stylesheet" type="text/css" href="<?php echo skin_url("css/page/profile.css")?>">
 <style>
 .ui-state-highlight {
     border: 1px solid #fcefa1!important;
@@ -893,4 +895,5 @@ function add_comment(obj) {
 .border-error{
     border: 1px solid red !important;
 }
+.profile-edit-photo .profile-action-edit{width: 100%; text-align: center;}
 </style>

@@ -56,19 +56,20 @@ class Accounts extends CI_Controller {
                 $recorder_company = $this->Common_model->get_record("company", array("member_id" => $record["id"]));
                 $setting = $this->Common_model->get_record("member_setting", array("member_id" => $record["id"]));
                 $this->session->set_userdata('user_info', array(
-                    'email' => $email,
-                    'id' => $record["id"],
-                    'full_name' => @$record["first_name"] . ' ' . @$record["last_name"],
-                    'company_name' => @$recorder_company["company_name"],
-                    'business_type' => @$record["business_type"],
-                    'type_member' => @$record["type_member"],
-                    'avatar' => @$record["avatar"],
-                    'setting' => $setting,
-                    'first_name' => @$record["first_name"],
-                    'last_name'  =>  @$record["last_name"],
-                    'job_title'  =>  @$record["job_title"],
-                    'company_info'  =>  $recorder_company,
-                    'is_blog' => $record["is_blog"]
+                    'email'          => $email,
+                    'id'             => $record["id"],
+                    'full_name'      => @$record["first_name"] . ' ' . @$record["last_name"],
+                    'company_name'   => @$recorder_company["company_name"],
+                    'business_type'  => @$record["business_type"],
+                    'type_member'    => @$record["type_member"],
+                    'avatar'         => @$record["avatar"],
+                    'setting'        => $setting,
+                    'first_name'     => @$record["first_name"],
+                    'last_name'      =>  @$record["last_name"],
+                    'job_title'      =>  @$record["job_title"],
+                    'company_info'   =>  $recorder_company,
+                    'is_blog'        => $record["is_blog"],
+                    'active_company' => $record["active_company"],
                 ));
                 $data["success"] = "success";
                 $data["reponsive"]["url"] = base_url();
@@ -259,12 +260,10 @@ class Accounts extends CI_Controller {
                         "id" => $user_id
                     );
                     $record = $this->Common_model->get_record("members", $filter);
-
                     $this->session->set_userdata('is_login', TRUE);
                     $this->session->set_userdata('type_member', $record["type_member"]);
                     $recorder_company = $this->Common_model->get_record("company", array("member_id" => $record["id"]));
                     $setting = $this->Common_model->get_record("member_setting", array("member_id" => $record["id"]));
-
                     $this->session->set_userdata('user_info', array(
                         'email' => @$record["email"],
                         'id' => @$record["id"],
@@ -280,7 +279,6 @@ class Accounts extends CI_Controller {
                         'company_info'  =>  $recorder_company,
                         'is_blog' => $record["is_blog"]
                     ));
-
                     // save history
                     $history = array(
                         'member_id' => $record["id"], 
