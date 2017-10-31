@@ -62,6 +62,12 @@
 		right: 0;
 		text-align: center;
 	}
+	#modal-notification #notifications{
+		display: block; 
+		opacity:1;
+		width: auto;
+		position: static;
+	}
 </style>
 
 <div id="notifications" class="dw-event">
@@ -70,37 +76,57 @@
 		<h4>Notifications</h4> <button id="close-form"><b>x</b></button> </div>
 	<div class="dw-event-body">
 		<div class="body-child">
-		    <?php $like_record = get_notifications_by_user(@$id,"like","photo",0,7);?>
+		    <?php 
+		    	$like_record = get_notifications_by_user(@$id,"like","photo",0,7);
+		    ?>
 		    <?php if($like_record  != null) :?>
 				<div class="body-child-main">
 				    <?php 						
 						foreach ($like_record as $key_1 => $value) {
 							if($key_1 < 6){
 								$number_data = $value["number_data"];
-								$list_record = get_notifications_by_type(@$id,$value["reference_id"],"like","photo");
+								$list_record = get_notifications_by_type(@$id,$value["reference_id"],$value["type_object"],$value["type"]);
 								$tow_member = [];
 								$avatar     = "";
 								$created_at = "";
 								$count_like  = "";
 								if($list_record != null){
-									foreach ($list_record as $key => $value) {
-
+									foreach ($list_record as $key => $value_1) {
 										if($key  == 0) {
-											$created_at = date(DW_FORMAT_DATETIME, strtotime($value["created_at"]));
-											$avatar = (isset($value["avatar"]) && $value["avatar"]!= "") ? base_url(@$value["avatar"]) : skin_url("images/avatar-full.png");
+											$created_at = date(DW_FORMAT_DATETIME, strtotime($value_1["created_at"]));
+											if($value_1["typeSuccess"] == "company")
+												$avatar = (isset($value_1["avatar"]) && $value_1["avatar"]!= "") ? base_url(@$value_1["avatar"]) : skin_url("images/avatar-full.png");
+											if($value_1["typeSuccess"] == "photo" || $value_1["typeSuccess"] == "product"){
+												$value["name"] = $value_1["name"];
+												$avatar = (isset($value_1["thumb"]) && $value_1["thumb"]!= "") ? base_url(@$value_1["thumb"]) : base_url(@$value_1["path_file"]);
+											}	
+											if($value_1["typeSuccess"] == "social")
+												$avatar = (isset($value_1["thumb"]) && $value_1["thumb"]!= "") ? base_url(@$value_1["thumb"]) : base_url(@$value_1["path"]);
 											if($number_data > 2){
 												$count_like = "and ".($number_data - 2)." other ";
 											}
+											$value["typeSuccess"] = $value_1["typeSuccess"];
 										}
-										$tow_member [] =  '<a href="'.base_url("profile/view/".$value["member_owner"]."").'">'.$value["first_name"]." " .$value["last_name"] ."</a>";
+										$tow_member [] =  '<a href="'.base_url("profile/view/".$value_1["member_owner"]."").'">'.$value_1["first_name"]." " .$value_1["last_name"] ."</a>";
 									}
+								}
+								$url = "";
+								if($value["type"] == "social"){
+									$url = base_url("socialposts/".$value["reference_id"]);
+								}
+								if($value["type"] == "photo" || $value["type"] == "product" ){
+									if($value["type"] == "product"){
+	                                    $url = base_url("designwalls/view_photos/".$value["reference_id"]."");
+	                                }else{
+	                                    $url = base_url("photos/".$value["reference_id"]."").'/'.gen_slug($value["name"]);
+	                                }
 								}
 								echo '
 								<div class="media">
-									<div class="media-left"> <a href="'.base_url("profile/view/".$value["member_owner"]."").'"><img src="'.$avatar.'" class="img-circle notification-avatar"></a> </div>
+									<div class="media-left"> <a href="'.$url.'"><img src="'.$avatar.'" class="'.$value["type"].' img-circle notification-avatar"></a> </div>
 									<div class="media-body">
 										<h5 class="media-heading remove-margin">'.implode(", ", $tow_member).'</h5>
-										<h5 class="remove-margin">'.$count_like.'people like your photo</h5> <span class="remove-margin color-blue">'.$created_at.'</span> 
+										<h5 class="remove-margin">'.$count_like.'people '.$value["type_object"].' <a href="'.$url.'">your '.$value["type"].'</a></h5> <span class="remove-margin color-blue">'.$created_at.'</span> 
 									</div>
 								</div>';
 							}else{

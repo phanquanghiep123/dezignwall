@@ -53,15 +53,18 @@ class Home extends CI_Controller {
         $this->data["article"]  = array();
         $this->data["social_post"]  = array();
         $member_id = $this->user_id == null ? 0 : $this->user_id; 
-        if($this->data["is_login"] && !$this->session->userdata('user_sr_info'))
-            $this->data["article"] = $this->Article_model->get_article(0,2);          
-        else
+        if($this->data["is_login"] && !$this->session->userdata('user_sr_info')){
+            $this->data["article"] = $this->Article_model->get_article(0,2); 
+            $social_post = $this->Article_model->social_post(0,10,null,null,$member_id);         
+        }
+        else{
             $this->data["article"] = $this->Article_model->get_article(0,3);   
-        $social_post = $this->Article_model->social_post(0,3,null,null,$member_id);
+            $social_post = $this->Article_model->social_post(0,12,null,null,$member_id);
+        }
         $n_recorder  = array();
-		try {
-			if($social_post != null || $recorder != null)
-            	$n_recorder = array_merge($social_post, $recorder);
+        try {
+            if($social_post != null || $recorder != null)
+                $n_recorder = array_merge($social_post, $recorder);
             if($n_recorder != null){
                 usort($n_recorder, function($a, $b) {
                   $ad = new DateTime($a['created_at']);
@@ -563,7 +566,7 @@ class Home extends CI_Controller {
             $data_post["member"] = $this->user_id;
             $ip = "";
             $arg_type = ["email","linkedin","twitter","facebook"];
-            $arg_type_post = ['photo','profile','blog'];
+            $arg_type_post = ['photo','profile','blog','social'];
             if(in_array($type,$arg_type) && in_array($type_post,$arg_type_post)){
                 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
                     $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -587,6 +590,10 @@ class Home extends CI_Controller {
                             break;
                         case 'blog':
                             $record_post = $this->Common_model->get_record("article",array("id" => $id_post));
+                            $owner_member_id = $record_post["member_id"];
+                            break;
+                        case 'social':
+                            $record_post = $this->Common_model->get_record("social_posts",array("id" => $id_post));
                             $owner_member_id = $record_post["member_id"];
                             break;
                         default:

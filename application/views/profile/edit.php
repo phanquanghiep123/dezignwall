@@ -164,13 +164,13 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                             <label class="col-sm-5 control-label">Confirm Password:</label>
                             <div class="col-sm-7">
                                 <p class="form-control-static view-profile">xxxxxx</p>
-                                <p class="edit-profile" style="display:none;"><input type="password" readonly="readonly" class="form-control" id="personal_confirmpassword" id="confirmpassword" name="personal[confirmpassword]" placeholder="Confirm Password"></p>
+                                <p class="edit-profile" style="display:none;"><input type="password" readonly="readonly" class="form-control" id="confirmpassword" id="confirmpassword" name="personal[confirmpassword]" placeholder="Confirm Password"></p>
                             </div>
                         </div>
                         <div class="form-group edit-profile">
                             <div class="col-sm-12  text-right">
                                 <div class="space-20"></div>
-                                <button class="btn btn-gray clear-button">Clear</button>
+                                <button class="btn btn-gray clear-button">Cancel</button>
                                 <button class="btn btn-primary">Save/Update</button>
                             </div>
                         </div>
@@ -364,7 +364,7 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                     </div><!--end group -->
                     <div class="col-sm-12  text-right edit-profile">
                         <div class="space-20"></div>
-                        <button class="btn btn-gray clear-button">Clear</button>
+                        <button class="btn btn-gray clear-button">Cancel</button>
                         <button class="btn btn-primary">Save/Update</button>
                     </div>
                 </form>
@@ -480,7 +480,13 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Website:</label>
                             <div class="col-sm-8">
-                                <p class="form-control-static view-profile"><a href="<?php echo @$company_info['web_address']; ?>" target="_blank"><?php echo @$company_info['web_address']; ?></a></p>
+                                <p class="form-control-static view-profile">
+                                	<?php 
+	                                	if (!isset($company_info['web_address']) || strpos($company_info['web_address'], "http://") === FALSE) :
+	                                		$company_info['web_address'] = "http://" . $company_info['web_address'];
+	                                	endif;
+                                	?>
+                                	<a href="<?php echo @$company_info['web_address']; ?>" target="_blank"><?php echo @$company_info['web_address']; ?></a></p>
                                 <p class="edit-profile" style="display:none;"><input type="text"  value="<?php echo @$company_info['web_address']; ?>" class="form-control required format-url" placeholder="Website" name="contact[web_address]"></p>
                             </div>
                         </div>
@@ -546,7 +552,7 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                         <div class="form-group">
                             <div class="col-sm-12  text-right edit-profile">
                                 <div class="space-20"></div>
-                                <button class="btn btn-gray clear-button">Clear</button>
+                                <button class="btn btn-gray clear-button">Cancel</button>
                                 <button class="btn btn-primary">Save/Update</button>
                             </div>
                         </div>
@@ -566,7 +572,7 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                         </div>
                         <div class="form-group text-right edit-profile">
                             <div class="space-20"></div>
-                            <button class="btn btn-gray clear-button">Clear</button>
+                            <button class="btn btn-gray clear-button">Cancel</button>
                             <button class="btn btn-primary">Save/Update</button>
                         </div>
                     </form>
@@ -605,7 +611,7 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                     <?php endif; ?>
                     <div class="space-20"></div>
                     <!--<div class="text-right edit-profile">
-                      <button class="btn btn-gray clear-button">Clear</button>
+                      <button class="btn btn-gray clear-button">Cancel</button>
                       <button class="btn btn-primary">Click to Edit</button>
                     </div>-->
                 </div>
@@ -661,7 +667,7 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                         </div>
                         <div class="form-group text-right edit-profile">
                             <div class="space-20"></div>
-                            <button class="btn btn-gray clear-button">Clear</button>
+                            <button class="btn btn-gray clear-button">Cancel</button>
                             <button class="btn btn-primary">Save/Update</button>
                         </div>
                     </form>
@@ -738,7 +744,7 @@ $bg_top = ($type_member == 1) ? "yellow" : "";
                     <?php endif; ?>
                     <div class="space-20"></div>
                     <!--<div class="text-right edit-profile">
-                      <button class="btn btn-gray clear-button">Clear</button>
+                      <button class="btn btn-gray clear-button">Cancel</button>
                       <button class="btn btn-primary">Click to Edit</button>
                     </div>-->
                 </div>

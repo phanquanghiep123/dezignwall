@@ -32,7 +32,7 @@
                     if (isset($user["job_title"]) && $user["job_title"] != "") {
                         echo '<p class="job-title ">' . $user["job_title"] . '</p>';
                     } else {
-                        echo '<a href="' . base_url('profile/edit') . '"><p class="number" >Update your job title</p></a>';
+                        echo '<a href="' . base_url('company/edit') . '"><p class="number" >Update your job title</p></a>';
                     }
                     ?>
 

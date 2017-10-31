@@ -1,3 +1,13 @@
+<?php
+	$user = $this->session->userdata('user_info');
+	if($this->session->userdata('user_sr_info') != null){
+		$user = $this->session->userdata('user_sr_info');
+	}
+	$avatar = skin_url("images/signup.png");
+	if($user["avatar"] != null && $user["avatar"] != ""){
+		$avatar = base_url($user["avatar"]);
+	}
+?>
 <div id="modal-comments" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 	    <!-- Modal content-->
@@ -25,7 +35,7 @@
 				         	<div class="media remove-padding">
 					            <div class="media-left">
 					                <input type="file" accept="image/*" id="media-comment" class="none hidden hide" name="media">
-					               	<a href="#" onclick="$('#modal-comments #post_comment #media-comment').trigger('click');return false;"><img width="40px;" class="media-object" src="<?php echo base_url("skins/icon/camera.png");?>"></a>
+					               	<a href="#" onclick="$('#modal-comments #post_comment #media-comment').trigger('click');return false;"><img width="50px;" height="50px;" style="border-radius: 100% " class="media-object" src="<?php echo $avatar ;?>" \></a>
 					            </div>
 					            <div class="media-body">
 					               	<div class="form-group">
@@ -132,7 +142,7 @@
 	    						}else if(res["dataComment"]["numberComment"] == 0){
 	    							$("#modal-comments #title-comment-top").html(" "+res["dataComment"]["full_name"]+"");
 	    						}else{
-	    							$("#modal-comments #title-comment-top").html(" no comments");
+	    							$("#modal-comments #title-comment-top").html(" no like");
 	    						}
 	    						$("#modal-comments .list-comment").html(res["response"]);	
 	    					}	
@@ -327,14 +337,16 @@
     			success:function(res){
     				console.log(res);
     				if(res["status"] == "success"){
-    					if(res["response"]["status"] == true){
+    					if(res["response"]["status"] == true || res["response"]["status"] == "1"){
     						_this.addClass("allow-follow");
     						_this.attr("title","Unfollow comment");
     						_this.removeClass("not-follow");
+    						_this.html('<i class="fa fa-circle icon-xs"></i> Unfollow');
     					}else{
     						_this.removeClass("allow-follow");
     						_this.attr("title","Follow comment");
     						_this.addClass("not-follow");
+    						_this.html('<i class="fa fa-circle icon-xs"></i> Follow');
     					}
     				}else{
     					alert("Error!");

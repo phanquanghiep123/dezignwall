@@ -193,7 +193,7 @@
                            <div class="form-group hide edit-profile">
                               <div class="col-sm-12 text-right">
                                  <div class="space-20"></div>
-                                 <a class="btn btn-gray clear-button-sr">Clear</a>
+                                 <a class="btn btn-gray clear-button-sr">Canel</a>
                                  <button class="btn btn-primary">Save/Update</button>
                               </div>
                            </div>
@@ -391,9 +391,8 @@
             return false;
         });
         $(document).on('click', '.rep-item .clear-button-sr', function() {
-            $(this).parents('form').find("ul.tagit li:not(.tagit-new)").remove();
-            $(this).parents('form').find('input:not(.disabled)').val('');
-            $(this).parents('form').find('textarea').val('');
+            $(this).parents(".form-horizontal").find("#edit-item").trigger("click");
+            $(this).parents(".form-horizontal").find("#edit-item").parents(".impromation-project-dropdown").find(".glyphicon-menu-down").trigger("click");
             return false;
         });
         var reset_click = 0;

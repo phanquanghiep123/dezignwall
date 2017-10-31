@@ -131,8 +131,7 @@
 	#form-post-upload .list-btn li{margin-right: 4px;}
 	#comment-popup-box,
 	#work-education .modal-dialog{width: auto !important;}
-	#work-education .media-body{width: calc(100% - 90px) !important;}
-	#work-education .media-left{width: 90px !important;}
+	#work-education .media-body{width: 100% !important;}
 	.box-profile .between-center{display: none;}
 	.box-profile .item-profile  .panel{padding-bottom: 10px !important;}
 	.box-profile .item-profile #box-bottom-more{position: static !important;}

@@ -1,6 +1,6 @@
 <div class="top-story">
     <div class="col-md-4"><p><a id="add-story-now" data-type ="profile">+ Add a Profile Slide</a></p></div>
-    <div class="col-md-4"><p><a id="add-story-now" data-type ="editorial">+ Add a Editorinal Slide</a></p></div>
+    <div class="col-md-4"><p><a id="add-story-now" data-type ="editorial">+ Add a Editorial Slide</a></p></div>
     <div class="col-md-4"><p><a id="add-story-now" data-type ="images-video">+ Add a Image/Video Slide</a></p></div>
 </div>
 <div class="content-story">
@@ -69,7 +69,7 @@
                                         </div>
                                         <!-- element to edit -->
                                         <input class="title-input" value="'.$value["title"].'" type="text" name="story['.$box_item.'][title]" placeholder="Add a Title">
-                                        <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorinal text here..." style="width: 810px; height: 400px">'.$value["story_content"].'</textarea>
+                                        <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorial text here..." style="width: 810px; height: 400px">'.$value["story_content"].'</textarea>
                                         <input type="hidden" value="1" id="story_type" name="story['.$box_item.'][story_type]">
                                         <input type="hidden" id="story-id" value="'.$value["id"].'" name="story['.$box_item.'][id]">
                                         <input type="hidden" value="'.$value["sort"].'" id="sort" name="story['.$box_item.'][sort]">
@@ -169,7 +169,7 @@
                                         </div>
                                         <!-- element to edit -->
                                         <input class="title-input" value="'.$value["title"].'" type="text" name="story['.$box_item.'][title]" placeholder="Add a Title">
-                                        <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorinal text here..." style="width: 810px; height: 400px">'.$value["story_content"].'</textarea>
+                                        <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorial text here..." style="width: 810px; height: 400px">'.$value["story_content"].'</textarea>
                                         <input type="hidden" value="1" id="story_type" name="story['.$box_item.'][story_type]">
                                         <input type="hidden" id="story-id" value="'.$value["id"].'" name="story['.$box_item.'][id]">
                                         <input type="hidden" value="'.$value["sort"].'" id="sort" name="story['.$box_item.'][sort]">
@@ -273,7 +273,7 @@
                                     </div>
                                     <!-- element to edit -->
                                     <input class="title-input" type="text" name="story['.$box_item.'][title]" placeholder="Add a Title">
-                                    <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorinal text here..." style="width: 810px; height: 400px"></textarea>
+                                    <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorial text here..." style="width: 810px; height: 400px"></textarea>
                                     <input type="hidden" value="1" id="story_type" name="story['.$box_item.'][story_type]">
                                     <input type="hidden" value="0" id="story-id" name="story['.$box_item.'][id]">
                                     <input type="hidden" value="1" id="sort" name="story['.$box_item.'][sort]">
@@ -365,7 +365,7 @@
                                         </div>
                                         <!-- element to edit -->
                                         <input class="title-input" type="text" name="story['.$box_item.'][title]" placeholder="Add a Title">
-                                        <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorinal text here..." style="width: 810px; height: 400px"></textarea>
+                                        <textarea id="editorial-'.$editorial.'" name="story['.$box_item.'][story_content]" placeholder="Add editorial text here..." style="width: 810px; height: 400px"></textarea>
                                         <input type="hidden" value="1" id="story_type" name="story['.$box_item.'][story_type]">
                                         <input type="hidden" value="0" id="story-id" name="story['.$box_item.'][id]">
                                         <input type="hidden" value="4" id="sort" name="story['.$box_item.'][sort]">

@@ -6,8 +6,8 @@
 	    <div class="modal-content">
 	        <div class="modal-header">
 	          	<button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-	          	<h4 class="modal-title"><b>Who's view're your profile</b></h4>
-	          	<p class="number-view"><b id="number-view">444</b> <span> Profile views in the last 90 days</span></p>
+	          	<h4 class="modal-title"><b>Who's viewed your profile</b></h4>
+	          	<p class="number-view"><b id="number-view">0</b> <span> Profile views in the last 90 days</span></p>
 	        </div>
 	        <div class="modal-body">
 	          	<div class="list">

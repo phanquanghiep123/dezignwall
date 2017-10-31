@@ -17,9 +17,13 @@
 	                    </div>
 	                </div>
 				</div>
+				<?php 
+					$arg = [trim($member_company["business_description"]),trim($member_company["company_name"])];
+					$arg = array_diff($arg,array(""));
+				?>
 				<h2 class="text-center"><?php echo $member["first_name"];?> <?php echo $member["last_name"];?></h2>
-				<h2 class="text-center"><i class="upgrade-account-link">"Post all message"</i></h2>
-				<h2 class="text-center"><?php echo $member_company["business_description"];?> | <?php echo $member_company["company_name"];?></h2>
+				<h2 class="text-center"><i class="upgrade-account-link">"Post a message"</i></h2>
+				<h2 class="text-center"><?php implode($arg ," | ")?></h2>
 				<?php
 				    $arglist_education = [];
 					if(@$list_education){
@@ -29,10 +33,15 @@
 						}
 					}
 				?>
-				<h4 class="text-center text-color-green"><?php echo $arglist_education == null ? " - " : implode(" - ", $arglist_education);?></h4>
-				<h4 class="text-center text-color-green">Orange Country California area 500+</h4>
-				<h4 class="text-center">Brief description of what you or company does...</h4>
-				<div class="banner-button-share"> <a class="btn btn-gray" href="<?php echo base_url();?>/profile/download_impormation" download="">Download Contacts</a> <button class="btn btn-gray clear-button" data-title="abc company" onclick="document.location.href='<?php echo base_url();?>/profile/reports';" data-type="profile" data-id="1072">Reports</button> <button class="btn share_click" data-toggle="modal" data-target="#share-modal" data-title="abc company" data-type="profile" data-id="1072">Share Profile</button> </div>
+				<h4 class="text-center text-color-green"><?php echo $arglist_education == null ? "" : implode(" - ", $arglist_education);?></h4>
+				<?php 
+					$argAddress = (@$member['city'] != null) ? @$member['city'] . " &#8226; " : "";
+					$argAddress .= (@$member['state'] != null) ? @$member['state'] . " &#8226; " : "";
+					$argAddress .= (@$member['country'] != null) ? @$member['country'] : "";
+				?>
+				<h4 class="text-center text-color-green" id="set-address-data"><?php echo $argAddress;?></h4>
+				<h4 class="text-center"><a href="javascript:;" style="color: #000;" id="Personal_Message_Popup_show" data-type="company"><?php echo ($member_company["post_messeger"] != null) ? $member_company["post_messeger"] : "Brief descripton of what you or your company does..." ?></a></h4>
+				 
 			</div>
 		</div>
 	</div>

@@ -46,10 +46,10 @@
                         $avatar = $user_info['avatar'];
                       }
                     ?>
-                    <img width="80" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>">
+                    <a href="<?php echo base_url().'profile/view/'.@$article[0]['member_id']; ?>"><img width="80" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>"></a>
                   </div>
                   <div class="col-sm-10 col-xs-8">
-                    <p><strong><?php echo @$user_info['full_name']; ?> | <?php echo @$user_info['company_name']; ?></strong></p>
+                    <p><strong><a href="<?php echo base_url().'profile/view/'.@$article[0]['member_id']; ?>"><?php echo @$user_info['full_name']; ?></a> | <?php echo @$user_info['company_name']; ?></strong></p>
                     <p><?php echo @$user_info['job_title']; ?></p>
                     <p><?php echo date('F d, Y', strtotime($article[0]['date_create'])); ?></p>
                   </div>
@@ -106,7 +106,7 @@
           }?>
           <div class="panel panel-default relative">
             <p><strong>Article Tags</strong></p>
-              <p><?php echo implode(",",$list_hrf); ?></p>
+              <p><?php echo implode(", ",$list_hrf); ?></p>
             <?php endif;?>
           </div><!-- end panel -->
           
@@ -133,7 +133,7 @@
                                                                 $avatar = $value['avatar'];
                                                             }
                                                         ?>
-                                                        <img width="60" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>">
+                                                        <a href="<?php echo base_url().'profile/view/'.@$value['member_id']; ?>"><img width="60" style="display:inline-block;" class="circle" src="<?php echo $avatar; ?>"></a>
                                                     </div>
                                                     <div class="col-sm-10 col-xs-8 profile-slider">
                                                     <?php $full_name = @$value['first_name'] . " ". @$value['last_name'];
@@ -142,7 +142,7 @@
                                                                 $user_info_bar.= " | ".$value['company_name'];
                                                             }
                                                         ?>
-                                                        <p><strong><?php echo $user_info_bar; ?></strong></p>
+                                                        <p><strong><a href="<?php echo base_url().'profile/view/'.@$value['member_id']; ?>"><?php echo $user_info_bar; ?></a></strong></p>
                                                         <p><?php echo @$value['job_title']; ?></p>
                                                     </div>
                                                 </div>

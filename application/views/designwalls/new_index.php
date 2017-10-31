@@ -29,17 +29,7 @@
                         <div class="header-add-new">
                             <a href="<?php echo base_url("designwalls/add")?>"><p style="position: relative;z-index: 9; "><strong>Create a New Wall</strong></p></a>
                             <p>Manage multiple projects</p>
-                            <div class="impromation-project ">
-                                <div class="impromation-project-dropdown">
-                                    <div class="dropdown-impromation relative">
-                                        <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                                        <ul class="dropdown-impromation-menu">
-                                            <li><a class="not-report" href="<?php echo base_url("designwalls/add");?>">Create New Wall...</a></li>
-                                            <li><a class="not-report" href="<?php echo base_url("designwalls/upgrade");?>">Upgrade Your Wall...</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                           
                         </div>
                         <div class="content-add-new">
                             <div class="box-add">
@@ -94,7 +84,6 @@
                                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                                         <ul class="dropdown-impromation-menu">
                                             <li><a class="not-report" href="<?php echo base_url("designwalls/add");?>">Create New Wall...</a></li>
-                                            <li><a class="not-report" href="<?php echo base_url("designwalls/upgrade");?>">Upgrade Your Wall...</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -164,7 +153,6 @@
                                                     <li><a class="not-report" id="delete_wall" data-id="<?php echo $value["project_id"]?>" href="#">Delete Wall...</a></li>
                                                 <?php endif;?>
                                                     <li><a class="not-report" href="<?php echo base_url("designwalls/add");?>">Create New Wall...</a></li>
-                                                    <li><a class="not-report" href="<?php echo base_url("designwalls/upgrade");?>">Upgrade Your Wall...</a></li>
                                                 </ul>
                                             </div>
                                         </div>

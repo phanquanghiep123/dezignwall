@@ -207,7 +207,7 @@ class Photo_model extends CI_Model {
     }
 
     public function search_index($member_id = 0, $count_record,$type = NULL,$cat_id="") {
-    	return $this->seach_photo(NULL, $member_id, NULL, NULL, $type, 0, 30, NULL);
+        return $this->seach_photo(NULL, $member_id, NULL, NULL, $type, 0, 30, NULL);
     }
     public function total_page($location = NULL, $keyword = NULL, $categories = NULL, $type = NULL,$catalog = null,$owner = null,$offer_product = null) {
         $where = " WHERE (`pt`.`type`= 2) AND (pt.status_photo > 0) AND (`pt`.`name` IS NOT NULL) ";
@@ -215,7 +215,15 @@ class Photo_model extends CI_Model {
         $join_table_keyword = "";
         $keyword = trim($keyword);
         if($keyword != null || $keyword != ""){
-            $where.=" AND (pt.keywords LIKE '%{$keyword}%' OR pt.name LIKE '%{$keyword}%')";
+            //$where.=" AND ( mb.company_name LIKE '%{$keyword}%' OR pt.name LIKE '%{$keyword}%' OR pt.description LIKE '%{$keyword}%' OR pt.keywords LIKE '%{$keyword}%' )"; //OR mb.company_about LIKE '%{$keyword}%' 
+
+            if (substr($keyword, -1) == 's'){
+               $keyword_s = rtrim($keyword, 's') . '(s?)'; 
+               $where.=" AND ( mb.company_name REGEXP '{$keyword_s}' OR pt.name REGEXP '{$keyword_s}' OR pt.keywords REGEXP '{$keyword_s}' OR pt.description REGEXP '%{$keyword_s}%' ) ";  //OR mb.company_about REGEXP '{$keyword_s}' 
+            }else{
+                $where.=" AND ( mb.company_name LIKE '%{$keyword}%' OR pt.name LIKE '%{$keyword}%' OR pt.description LIKE '%{$keyword}%' OR pt.keywords LIKE '%{$keyword}%' )";  // OR mb.company_about LIKE '%{$keyword}%'
+            }       
+
         }
         if($categories != NULL && count($categories) > 0){
             $i = 0;
@@ -240,7 +248,11 @@ class Photo_model extends CI_Model {
             $where.= ")";
         }
         if($catalog != null && $catalog != ""){
-             $where.= " AND (pt.manufacture = {$catalog})";
+            if(is_numeric($catalog)){
+                $where.= " AND (pt.manufacture = {$catalog})";
+            }else{
+                $where.= " AND (mtabl.name like '{$catalog}')";
+            }
         }
         if ($type != "") {
             $where.= " AND (`pt`.`image_category` = '{$type}' OR `pt`.`image_category` = 'Projects,Products' OR `pt`.`image_category` = '')";
@@ -251,11 +263,14 @@ class Photo_model extends CI_Model {
         if($offer_product != null){
             $where.=" AND pt.offer_product = '{$offer_product}'";
         }
-        $sql = "SELECT COUNT(`pt`.`photo_id`) AS Number_Photo FROM `photos` AS pt INNER JOIN `members` AS `mb` ON `mb`.`id` = `pt`.`member_id` {$where} ";           
+        $sql = "SELECT COUNT(`pt`.`photo_id`) AS Number_Photo FROM `photos` AS pt 
+        INNER JOIN `members` AS `mb` ON `mb`.`id` = `pt`.`member_id` 
+        LEFT JOIN manufacturers AS mtabl ON mtabl.id = pt.manufacture {$where} ";           
         $query = $this->db->query($sql,true);
         $query = $query->row_array();
         return $query["Number_Photo"];
     }
+
     public function seach_photo($location = NULL, $member_id = NULL, $keyword = NULL, $categories = NULL, $type = NULL, $offset = 0, $limit = 21,$catalog = NULL,$owner = null, $myphoto = false,$offer_product=null) {
         $CI =& get_instance();
         $user_info = $CI->session->userdata('user_info');
@@ -271,7 +286,15 @@ class Photo_model extends CI_Model {
         }
         $keyword = trim($keyword);
         if($keyword != null || $keyword != ""){
-            $where.=" AND (pt.keywords LIKE '%{$keyword}%' OR pt.name LIKE '%{$keyword}%')";
+           // $where.=" AND ( mb.company_name LIKE '%{$keyword}%' OR pt.name LIKE '%{$keyword}%' OR pt.keywords LIKE '%{$keyword}%' OR pt.description LIKE '%{$keyword}%' ) "; //OR mb.company_about LIKE '%{$keyword}%' 
+           
+           if (substr($keyword, -1) == 's'){
+               $keyword_s = rtrim($keyword, 's') . '(s?)'; 
+                $where.=" AND ( mb.company_name REGEXP '{$keyword_s}' OR pt.name REGEXP '{$keyword_s}' OR pt.keywords REGEXP '{$keyword_s}' OR pt.description REGEXP '%{$keyword_s}%' ) "; //OR mb.company_about REGEXP '{$keyword_s}' 
+            }else{
+               $where.=" AND ( mb.company_name LIKE '%{$keyword}%' OR pt.name LIKE '%{$keyword}%' OR pt.keywords LIKE '%{$keyword}%' OR pt.description LIKE '%{$keyword}%'  ) ";  //OR mb.company_about LIKE '%{$keyword}%'
+            }
+           
         }
         if($categories != null && count($categories) > 0){
             $i = 0;
@@ -296,7 +319,11 @@ class Photo_model extends CI_Model {
             $where.= ")";
         }
         if($catalog != null && $catalog != ""){
-             $where.= " AND (pt.manufacture = '{$catalog}')";
+            if(is_numeric($catalog)){
+                $where.= " AND (pt.manufacture = {$catalog})";
+            }else{
+                $where.= " AND (mtabl.name like '%{$catalog}%')";
+            }    
         }
         if ($type != "") {
             $where.= " AND (`pt`.`image_category` = '{$type}' OR `pt`.`image_category` = 'Projects,Products' OR `pt`.`image_category` = '')";
@@ -307,19 +334,25 @@ class Photo_model extends CI_Model {
         if($offer_product != null){
             $where.=" AND pt.offer_product = '{$offer_product}'";
         }
-        $sql = "SELECT `cp`.`id` AS company_id, `cf`.`member_id` AS follow, `ptl`.`id` AS member_total,`pt2`.`album`, `tk`.`qty_like` AS num_like, `tk`.`qty_comment` AS num_comment, 
+        $sql = "SELECT `cp`.`id` AS company_id,`pt2`.`manufacture_name`, `cf`.`member_id` AS follow, `ptl`.`id` AS member_total,`pt2`.`album`, `tk`.`qty_like` AS num_like, `tk`.`qty_comment` AS num_comment, 
                 `pt2`.`photo_id`,`pt2`.`same_photo`,`pt2`.`status_photo`, `pt2`.`description`,`pt2`.`name`,`pt2`.`image_category`,`pt2`.`path_file`,
                 `pt2`.`thumb`,`pt2`.`last_comment`, `pt2`.`member_id` AS id,`cp`.`logo`,`pt2`.`type_member`,`cp`.`business_type`,`pt2`.`is_type_post`,
                 `cp`.`company_name`,`cp`.`business_description`,`pt2`.`created_at`,`pt2`.`manufacture`,`pt2`.`is_story`
-                FROM (SELECT pt.*,mb.* FROM `photos` AS pt INNER JOIN `members` AS `mb` ON `mb`.`id` = `pt`.`member_id` {$where} ORDER BY `pt`.`priority_display` ASC,`pt`.`photo_id` DESC LIMIT $offset, $limit) AS `pt2` 
+                FROM (SELECT pt.*,mb.*,`mtabl`.`name` AS manufacture_name FROM `photos` AS pt INNER JOIN `members` AS `mb` ON `mb`.`id` = `pt`.`member_id` 
+                    LEFT JOIN manufacturers AS mtabl ON mtabl.id = pt.manufacture   
+                {$where} ORDER BY `pt`.`priority_display` ASC,`pt`.`photo_id` DESC LIMIT $offset, $limit
+
+                ) AS `pt2` 
                 LEFT JOIN common_tracking AS tk ON tk.reference_id = pt2.photo_id AND `tk`.`type_object`= 'photo' 
-                LEFT JOIN common_like AS ptl ON ptl.reference_id = pt2.photo_id AND `ptl`.`member_id` = '{$member_current_id}' AND `ptl`.`type_object` = 'photo' AND `ptl`.`status` = 1                        
+                LEFT JOIN common_like AS ptl ON ptl.reference_id = pt2.photo_id AND `ptl`.`member_id` = '{$member_current_id}' AND `ptl`.`type_object` = 'photo' AND `ptl`.`status` = 1      
+                              
                 LEFT JOIN `company` AS `cp` ON `cp`.`member_id`=`pt2`.`id`
                 LEFT JOIN common_follow AS cf on cf.reference_id =`pt2`.`photo_id` AND cf.member_id ='{$member_current_id}' AND `cf`.`status` = 1  AND `cf`.`type_object` = 'photo' AND `cf`.`allow` < 2
                 GROUP BY `pt2`.`photo_id` ORDER BY `pt2`.`priority_display` ASC,`pt2`.`photo_id` DESC";
         $query = $this->db->query($sql,true);
         return $query->result_array();
     }
+     
     
     public function search_photo($location = "", $member_id = 0, $keyword = "", $categories = "", $type = "", $offset = 0, $limit = 21, $id_photo_show = "", $slug = "", $cat_id = "") {
         $where_main = " WHERE (`pt`.`type`= 2) AND (pt.status_photo > 0) AND (`pt`.`name` is not null) ";
@@ -448,6 +481,9 @@ class Photo_model extends CI_Model {
         $this->db->where(array("pt.type" => 2,"pt.status_photo > " => 0));
         $this->db->like("pt.name", $keyword);
         $this->db->or_like("pt.keywords", $keyword);
+        $this->db->or_like("pt.description", $keyword);
+        $this->db->or_like("mb.company_name", $keyword);
+        $this->db->or_like("mb.company_about", $keyword);
         $this->db->group_by("pt.name");
         $this->db->order_by("pt.created_at","DESC");
         $this->db->limit(10);
@@ -562,5 +598,21 @@ class Photo_model extends CI_Model {
         $this->db->order_by("photo_id", "RANDOM");
         return $this->db->get()->result_array();
     }
-
+    function get_new_images ($id,$current,$offset,$limit){
+        $sql = "SELECT `cp`.`id` AS company_id, `cf`.`member_id` AS follow, `ptl`.`id` AS member_total,`pt2`.`album`, `tk`.`qty_like` AS num_like, `tk`.`qty_comment` AS num_comment, 
+                `pt2`.`photo_id`,`pt2`.`same_photo`,`pt2`.`status_photo`, `pt2`.`description`,`pt2`.`name`,`pt2`.`image_category`,`pt2`.`path_file`,
+                `pt2`.`thumb`,`pt2`.`last_comment`, `pt2`.`member_id` AS id,`cp`.`logo`,`pt2`.`type_member`,`cp`.`business_type`,`pt2`.`is_type_post`,
+                `cp`.`company_name`,`cp`.`business_description`,`pt2`.`created_at`,`pt2`.`manufacture`,`pt2`.`is_story`
+                FROM (SELECT pt.*,mb.* FROM `photos` AS pt INNER JOIN `members` AS `mb` ON `mb`.`id` = `pt`.`member_id`ORDER BY `pt`.`priority_display` ASC,`pt`.`photo_id` DESC LIMIT $offset, $limit) AS `pt2` 
+                LEFT JOIN common_tracking AS tk ON tk.reference_id = pt2.photo_id AND `tk`.`type_object`= 'photo' 
+                LEFT JOIN common_like AS ptl ON ptl.reference_id = pt2.photo_id AND `ptl`.`member_id` = '{$current}' AND `ptl`.`type_object` = 'photo' AND `ptl`.`status` = 1                        
+                LEFT JOIN `company` AS `cp` ON `cp`.`member_id`=`pt2`.`id`
+                LEFT JOIN common_follow AS cf on cf.reference_id =`pt2`.`photo_id` AND cf.member_id ='{$current}' AND `cf`.`status` = 1  AND `cf`.`type_object` = 'photo' AND `cf`.`allow` < 2
+                JOIN tracking_upload_by_member AS tubm ON tubm.reference_id = pt2.photo_id
+                WHERE tubm.member_id = $current AND tubm.owner_id = $id AND tubm.status = 0
+                GROUP BY `pt2`.`photo_id` 
+                ORDER BY `pt2`.`priority_display` ASC,`pt2`.`created_at` DESC limit $offset , $limit";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 }

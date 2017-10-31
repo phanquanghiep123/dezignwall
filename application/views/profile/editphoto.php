@@ -31,16 +31,7 @@
         left: 41%;
         width: 240px;
     }
-    @media screen and ( max-width: 768px ){
-        .box-button-upload{
-            left: 0;
-            right: 0;
-            width: 100%;
-        }
-        .action-image ul {
-            text-align: right !important;
-        }
-    }
+    
     .action-image button{background-color: transparent; float: right; border: none; width: auto; min-width: inherit;}
     .cropper-crop{display: none;}
     .cropper-crop-box{display: none;}
@@ -74,7 +65,24 @@
         .product_dimensions{width: 100%;}
         .product_dimensions li{width:  100%; display:  block; padding-left: 0;margin-left: 0;margin-bottom: 10px;}
         .product_dimensions li span{width:  100%; display:  block; margin-bottom: 10px;}
+        .box-button-upload{
+            left: 0;
+            right: 0;
+            width: 100%;
+        }
+        .action-image ul {
+            text-align: right !important;
+        }
+        .add-a-story .add-story {
+            border: 3px solid #37a7a7;
+            border-radius: 5px;
+            font-size: 16px;
+            position: static;
+            text-align: right;
+            float: right;
+        }
     }
+
 </style>
 <div id="wrapper" class="structural-block">
     <form action="<?php echo base_url('/profile/save_edit_photo/'); ?>" method="POST" enctype="multipart/form-data" id="edit-form">

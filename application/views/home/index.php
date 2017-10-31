@@ -73,55 +73,43 @@
                             <div class="space-30"></div>
                             <a href="#" class="btn btn-gray" id="just-browse">Just browse</a>
                             <a href="#" id="show_box_login" class="btn btn-primary">Sign in</a>
-                            <a href="#" id="get-started" class="btn btn-secondary">Join now</a>
+                            <a href="#" id="get-started" class="btn btn-secondary">Join Today</a>
                         </div> 
                     </div>
                 </div>
             </div>
         <?php endif;?>
         <?php if (!isset($is_login) || $is_login != true) : ?>
-            <div id="slider-home-page">
-                <a href="#" id="how_it_works" onclick="how_it_works();return false;" id="">How It Works</a>
-                <div class="slider-home-img">
-                    <img src="<?php echo skin_url("images/Dezignwall-Index-Page-Gif.gif");?>">
+            <div id="dw-slider-home">	
+               <a href="#" id="how_it_works" onclick="how_it_works();return false;" id="">How It Works</a>
+               <video  autoplay muted loop webkit-playsinline src="<?php echo  skin_url("/media/Dezignwall-Index-Page-Video-12.mp4");?>" id="video1" class="video"  poster ="<?php echo skin_url("images/video_bg.jpg");?>" width="100%"></video>
+				<div class="video-poster-mobile hidden-md hidden-lg" style="background-image: url('<?php echo skin_url("images/Dezignwall-Index-Page-Gif.gif");?>')"></div>
+                
+                <div class="slider-content-holder">
+                	<div class="container">
+						<div class="div-table">
+							<div class="div-cell">
+								<div class="slider-head">
+									<img class="wordmark-image" src="<?php echo skin_url("images/Dezignwall-Icon-with-Wordmark.png");?>" title="Dezignwall-Icon-with-Wordmark">
+									<h2 class="slider-title">The Fastest Growing Network for Design Professionals</h2>
+								</div>
+								<h4 class="slider-subtitle">The world's largest design and architecture virtual tradeshow</h4> 
+								<form id="dw-seach-home-photo" method="get" action="<?php echo base_url("search") ?>">
+									<input type="text" class="seach-input-slider form-control" name="keyword" id="input-seach" placeholder="Find your design inspiration..." autocomplete="off">
+									<button type="submit"><img src="<?php echo skin_url(); ?>/images/search-icon-1.png"></button>
+								</form>
+							</div>
+						</div>
+						<p class="slider-text-bottom">Free to join. Free to use. Free to grow your business.</p>
+					</div>
                 </div>
-                <div class="slider-home-video">
-                <!--<iframe id="frame-slide" src="//giphy.com/embed/2sz9QzFB9RrHy" width="100%" height="513px" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>-->
-                <video  autoplay muted loop webkit-playsinline src="<?php echo  skin_url("/media/Dezignwall-Index-Page-Video-12.mp4");?>" id="video1" class="video"  poster ="<?php echo skin_url("images/bg-slider.png")?>" width="100%"></video></div>
-                <div id="home-bg-slider">
-                    <div class="seach-in-slider">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12 content-cented"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-10 content-cented">
-                                <div class="row">
-                                    <div class="col-xs-3 col-md-2 text-right">
-                                        <img class="wordmark-image" src="<?php echo skin_url("images/Dezignwall-Icon-with-Wordmark.png");?>" title="Dezignwall-Icon-with-Wordmark">
-                                    </div>
-                                    <div class="col-xs-9 col-md-10 custom-colum-fastest">
-                                        <h2 class="prodemiCn color-white text-left">The Fastest Growing Network for Design Professionals</h2>
-                                    </div>
-                                </div>                              
-                            </div>                        
-                        </div>
-                        <h4>A virtual marketplace connecting a global design .</h4>
-                        <form id="seach-home-photo" method="get" action="<?php echo base_url("search") ?>" class="relative fom-seach-slider content-cented">
-                            <input type="text" class="seach-input-slider form-control" name="keyword" id="input-seach" placeholder="Find your design inspiration..." autocomplete="off">
-                            <button class="seach-sumit"><img src="<?php echo skin_url(); ?>/images/search-icon-1.png"></button>
-                        </form>
-                    </div>  
-                    <h2 class="free-join">Free to join. Free to use. Free to grow your business.</h2>
-                </div>
-            </div>
+			</div>
         <?php endif;?>
     </div>
     <?php if (!isset($is_login) || $is_login != true) : ?>
         <div class="section section-2 section-intro text-center">
             <div class="container">
-                <h3><strong>A social platform for us. The Design.</strong></h3>
+                <h3><strong>A social platform for us. The Design Community.</strong></h3>
                 <div class="row">
                      <div class="col-sm-3">
                         <div class="box-intro">
@@ -159,7 +147,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-sm-center">
-                            <h1 class="is_dezignwall"><span>Is Dezignwall a fit for you? Yes, it is.</span> <a class="btn singup" name="singup-now" id="get-started" href="#">Join Now</a></h1>
+                            <h1 class="is_dezignwall"><span>Is Dezignwall a fit for you? Yes, it is.</span> <a class="btn singup" name="singup-now" id="get-started" href="#">Join Today</a></h1>
                         </div>                       
                     </div>
                 </div>

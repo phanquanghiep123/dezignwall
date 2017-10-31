@@ -1,4 +1,40 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+if ( ! function_exists('genera_calendar'))
+{
+    function genera_calendar($name, $class="", $default_value="")
+    { 
+    	$day = 0;
+    	$month = 0;
+    	$year = 0;
+    	if (!empty($default_value)) {
+    		$day = date("d",strtotime($default_value));
+    		$month = date("m",strtotime($default_value));
+    		$year = date("Y",strtotime($default_value));
+    	}
+        $return  = '';
+        $return .= '<select name="'.$name.'[month]" class="form-control '.$class.'"><option>mm</option>';
+        for ($i = 1; $i <= 12; $i++) {
+        	$selected = ($i == $month) ? " selected " : "";
+        	$return .= '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+        }
+        $return .= '</select>';
+        $return .= '<select name="'.$name.'[day]" class="form-control '.$class.'"><option>dd</option>';
+        for ($i = 1; $i <= 31; $i++) {
+        	$selected = ($i == $day) ? " selected " : "";
+        	$return .= '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+        }
+        $return .= '</select>';
+        $return .= '<select name="'.$name.'[year]" class="form-control '.$class.'"><option>yyyy</option>';
+        for ($i = intval(date("Y")); $i >= intval(date("Y")) - 80; $i--) {
+        	$selected = ($i == $year) ? " selected " : "";
+        	$return .= '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+        }
+        $return .= '</select>';
+        
+        return $return;
+    }
+}
+
 if ( ! function_exists('slugify'))
 {
     function slugify($text)
@@ -269,13 +305,11 @@ if ( ! function_exists('paging')) {
         $CI = get_instance();
         $CI->db->select("tbl1.*,count(tbl1.id) AS number_data");
         $CI->db->from("notifications_common AS tbl1");
-        
-        $CI->db->where([
-            "tbl1.member_id" => $user_id,
-            "tbl1.type_object" => $type_object,
-            "tbl1.type" => $type
-        ]);
-        $CI->db->group_by("tbl1.reference_id");
+        $CI->db->join("members AS tbl2","tbl2.id = tbl1.member_owner");
+        $CI->db->where("tbl1.member_id",$user_id);
+        $CI->db->where_in("tbl1.type",["photo","social","product"]);
+        $CI->db->where_not_in('tbl1.type_object',["follow","favorite"]);
+        $CI->db->group_by(["tbl1.reference_id","tbl1.type_object","tbl1.type"]);
         $CI->db->order_by("tbl1.id","DESC");
         $CI->db->limit($limit,$offset);
         $data = $CI->db->get();
@@ -283,8 +317,20 @@ if ( ! function_exists('paging')) {
     }
     function get_notifications_by_type ($user_id,$reference_id,$type_object,$type,$offset = 0,$limit = 2){
         $CI = get_instance();
-        $CI->db->select("tbl1.*, tbl2.avatar,tbl2.first_name,tbl2.last_name,tbl2.job_title,tbl3.company_name");
+        $CI->db->select("tbl1.id AS notifications_id,tbl1.type AS typeSuccess,tbl1.member_owner,tbl1.reference_id,tbl1.type_object,tbl1.type,tbl2.avatar,tbl2.first_name,tbl2.last_name,tbl2.job_title,tbl3.company_name,tblcmm1.*");
         $CI->db->from("notifications_common AS tbl1");
+        if($type_object == "like")
+            $CI->db->join("common_like AS tblcmm","tblcmm.reference_id = tbl1.reference_id"); 
+        if($type_object == "comment")
+            $CI->db->join("common_comment AS tblcmm","tblcmm.reference_id = tbl1.reference_id");      
+        if($type == "photo")
+            $CI->db->join("photos AS tblcmm1","tblcmm1.photo_id = tbl1.reference_id");
+        if($type == "social")
+            $CI->db->join("social_posts AS tblcmm1","tblcmm1.id = tbl1.reference_id");
+        if($type == "product"){
+            $CI->db->join("products AS prt","prt.product_id = tbl1.reference_id");
+            $CI->db->join("photos AS tblcmm1","tblcmm1.photo_id = prt.photo_id");
+        }
         $CI->db->join("members AS tbl2","tbl2.id = tbl1.member_owner");
         $CI->db->join("company AS tbl3","tbl3.member_id = tbl2.id","LEFT");
         $CI->db->where([
@@ -302,9 +348,11 @@ if ( ! function_exists('paging')) {
     }
     function get_company_top_follow ($user_id){
         $CI = get_instance();
-        $sql = "select tbl1.*,tbl2.numberUpload AS number_follow  
-        from (select count(id) AS numberUpload , owner_id from tracking_upload_by_member where member_id = $user_id and status = 0 group by owner_id) AS tbl2
-        join company AS tbl1 on tbl1.member_id = tbl2.owner_id ORDER BY number_follow DESC LIMIT 8";
+        $sql = "select tbl3.numberUpload AS number_follow,tbl2.* from common_follow AS tbl1 
+        join company as tbl2 on tbl2.id = tbl1.reference_id and tbl1.type_object = 'company'
+        join (select count(id) AS numberUpload , member_id,owner_id from tracking_upload_by_member where member_id = $user_id and status = 0 group by owner_id) AS tbl3 on tbl3.owner_id = tbl1.owner_id  
+        where tbl1.member_id = $user_id
+        group by tbl2.id ORDER BY number_follow DESC LIMIT 8";
         $query = $CI->db->query($sql);
         return $query->result_array();
 
@@ -320,7 +368,7 @@ if ( ! function_exists('paging')) {
             "tbl1.member_id" => $user_id,
             "tbl1.type_object" => $type_object,
             "tbl1.type" => $type,
-            "tbl1.allow <"   => 2
+            "tbl1.allow"   => 0
         ]);
 
         $CI->db->order_by("tbl1.id","DESC");
@@ -350,4 +398,12 @@ if ( ! function_exists('paging')) {
         }
     }
 
+}
+if ( ! function_exists('make_links_blank')) {
+    function make_links_blank($text)
+    {
+        $find=array('`((?:https?|ftp)://\S+[[:alnum:]]/?)`si','`((?<!//)(www\.\S+[[:alnum:]]/?))`si');
+        $replace=array('<a href="$1" target="_blank">$1</a>', '<a href="http://$1" target="_blank">$1</a>');
+        return preg_replace($find,$replace,$text);
+    }
 }

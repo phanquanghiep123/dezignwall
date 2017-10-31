@@ -29,7 +29,11 @@
 				</div>
 				<h2 class="text-center"><?php echo $member["first_name"];?> <?php echo $member["last_name"];?></h2>
 				<h2 class="text-center"><a href="javascript:;"><i class="upgrade-account-link" id="Personal_Message_Popup_show" data-type="profile"><?php echo $member['post_messeger'] != null ? '"'.$member['post_messeger'].'"' : '"Post a message"'?></i></a></h2>
-				<h2 class="text-center"><?php echo $member_company["business_description"];?> | <?php echo $member_company["company_name"];?></h2>
+				<?php 
+					$arg = [trim($member_company["business_description"]),trim($member_company["company_name"])];
+					$arg = array_diff($arg,array(""));
+				?>
+				<h2 class="text-center"><?php implode($arg ," | ")?></h2>
 				<?php
 				    $arglist_education = [];
 					if(@$list_education){
@@ -68,8 +72,8 @@
 							<div class="col-md-6"><h3 class="upgrade-account-link"><a id="show_number_viewed_profile" href="javascript:;"><strong><?php echo $number_view_profile;?></strong></a></h3><p class="remove-margin">Who's viewed your profile</p></div>
 							<div class="col-md-6">
 							    <div class="row">
-							    	<div class="col-md-6"><h3 class="upgrade-account-link text-center"><a id="show_number_follower_profile" href="javascript:;"><strong><?php echo $number_follow_profile ;?></strong></a></h3><p class="remove-margin text-center">Followers</p></div>
-							    	<div class="col-md-6"><h3 class="upgrade-account-link text-center"><a id="show_number_following_profile" href="javascript:;"><strong><?php echo $number_my_follow_profile;?></strong></a></h3><p class="remove-margin text-center">Following</p></div>							    	
+							    	<div class="col-md-6"><h3 class="upgrade-account-link text-center mobile-left"><a id="show_number_follower_profile" href="javascript:;"><strong><?php echo $number_follow_profile ;?></strong></a></h3><p class="remove-margin text-center mobile-left">Followers</p></div>
+							    	<div class="col-md-6"><h3 class="upgrade-account-link text-center mobile-left"><a id="show_number_following_profile" href="javascript:;"><strong><?php echo $number_my_follow_profile;?></strong></a></h3><p class="remove-margin text-center mobile-left">Following</p></div>							    	
 							    </div>	
 							</div>
 						</div>	
@@ -299,7 +303,7 @@
 			            	<?php endforeach;?>
 			        	<?php endif;?>
 			        	<?php if ($show_more_walls != 0 && isset($list_project)) : ?>
-			            	<p class="text-center" id="box-bottom-more"><a href="">MORE PROJECTS <?php echo $show_more_walls?></a></p>
+			            	<p class="text-center" id="box-bottom-more"><a href="">MORE PROJECTS <?php // echo $show_more_walls; ?></a></p>
 						<?php endif;?>
 					</div>
 				</div>
@@ -384,14 +388,20 @@
 			                		}else{
 			                			$current_admin = "";
 			                		}
+			                		$value["company_name"] = $value["company_name"] != null ? " | ".$value["company_name"] : "";
 			                		echo '
 			                		<div class="col-sm-12 item-experience">
 			                		    <div class="row">
 					            		<div class="col-sm-2"><a class="text-white" href="#"><div class="img-circle" style="background-image:url('.$logo.')"></div></a></div>
 					            		<div class="col-sm-10">
-					            			<p><b>'.$value["job_title"].' | '.$value["company_name"].'</b>'.$current_admin.'</p>
-					            			<p>'.date('F Y', strtotime($value["start_day"])) .' - '.date('F Y', strtotime($value["end_day"])). get_diff_year($value["start_day"],$value["end_day"]).'</p>
-					            			<p class="text-comment">'.$description.'</p>
+					            			<p><b>'.$value["job_title"].$value["company_name"].'</b>'.$current_admin.'</p>';
+					            			if($value["present"] == 1){
+					            				echo '<p>'.date('F Y', strtotime($value["start_day"])) .' - Present '. get_diff_year($value["start_day"],$value["end_day"]).'</p>';
+					            			}else{
+					            				echo '<p>'.date('F Y', strtotime($value["start_day"])) .' - '.date('F Y', strtotime($value["end_day"])). get_diff_year($value["start_day"],$value["end_day"]).'</p>';
+					            			}
+					            			
+					            	echo '<p class="text-comment">'.$description.'</p>
 					            		</div>
 					            		</div>
 					            	</div>';
@@ -525,16 +535,16 @@
 		                        <div class="form-group disable">
 		                            <label class="col-sm-4 control-label"><small>Password*:</small></label>
 		                            <div class="col-sm-8 remove-padding">
-		                                <input validate data-validate="onchangepassword|min:6" type="password" class="passwork form-control " disabled="true" name="password" placeholder="Your password...">
+		                                <input validate data-validate="onchangepassword|min:6" type="password" class="passwork form-control " name="password" placeholder="Your password...">
 		                            </div>
 		                        </div>
 		                        <div class="form-group">
 		                            <label for="work-company" class="col-sm-4 control-label"><small>Confirm Password*:</small></label>
 		                            <div class="col-sm-8 remove-padding">
-		                                <input type="password" validate data-validate="cfpassword|min:6" class="passwork form-control" disabled="true" name="confirm_password" placeholder="Confirm your password...">
-		                                <div class="checkbox">
-		                                	<span>Need to change your password? </span>
-					                        <a href="<?php echo base_url("accounts/forgot");?>" id="validate-show-check" for="check" class="btn-link"> Click Here</a>
+		                                <input type="password" validate data-validate="cfpassword|min:6" class="passwork form-control" name="confirm_password" placeholder="Confirm your password...">
+		                                <div class="hide">
+		                                	<label><input type="checkbox" name="checkbox" checked="checked" /><span>Need to change your password? </span></label>
+					                        <!--<a href="<?php echo base_url("accounts/forgot");?>" id="validate-show-check" for="check" class="btn-link"> Click Here</a>-->
 					                    </div>
 		                            </div>
 		                        </div>
@@ -628,6 +638,74 @@
 	<?php $this->load->view("include/modal_messeger_post");?>
 	<?php $this->load->view("include/getting-started-popup"); ?> 
 </section>
+<div class="modal fade popup" id="sent_image_reports" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><div class="logo"><div class="logo-site"></div></div></h4>
+      </div>
+      <div class="modal-body">
+        <h3 class="title_box">Send a Message</h3>
+        <div>
+          <p class="title-input">To (enter recipient emails, separated by commas):</p>
+          <input type="hidden" name ="email" id="email" class="form-control" data-valid="true"/>
+          <p><input type="email" name ="name" id="name" class="form-control" data-valid="true"/></p>
+          <p  class="title-input">Subject:</p>
+          <p><input type="text" name="subject" id="subject" class="form-control" data-valid="true"/></p>
+          <p>Message:</p>
+          <p><textarea id="message" class="form-control" name="message" data-valid="true">Take a look at this great space that I found on Dezignwall, and let me know what you think.</textarea></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id ="sendmail-reports">Send</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $(document).on("click","body #reports-email",function(){
+        var email = $(this).attr("data-email");
+        var name = $(this).attr("data-name");
+        $("#sent_image_reports #email").val(email);
+        $("#sent_image_reports #name").val(name);
+        $('#sent_image_reports').modal();
+        return false;
+    });
+    $(document).on("click","#sent_image_reports #sendmail-reports",function(event){
+       var check_form = valid_form($(this).parents("#sent_image_reports"), "warning", true);
+        if (check_form == true) {
+            var email = $("#sent_image_reports #email").val();
+            var subject = $("#sent_image_reports #subject").val();
+            var message = $("#sent_image_reports #message").val();
+            $.ajax({
+                url: base_url + 'home/sent_reports',
+                type: 'post',
+                data: {
+                    'email': email,
+                    'subject': subject,
+                    'message': message
+                },
+                success: function (data) {
+                    if (data.trim() == 'success') {
+                        $('#sent_image').modal('hide');
+                        messenger_box("Message", "Email sent successfully.");
+
+                    } else {
+                        $('#sent_image').modal('hide');
+                        messenger_box("Message", "Email sent unsuccessful.");
+                    }
+                },
+                error: function () {
+                    $('#sent_image').modal('hide');
+                    messenger_box("Message", "Email sent unsuccessful.");
+                }
+            });
+        }
+        return false;
+    });
+</script>
 <style type="text/css">
 	#Personal_Contact_Info .modal-dialog{width: 670px;max-width: 100%;margin: 10px auto;}
 	#Personal_Contact_Info .modal-header{background-color: #fff}
@@ -785,6 +863,10 @@
 		body #more-follow a.btn{
 	        font-size: 13px;
 	    }
+	    body .mobile-left{text-align: left;}
+	    body .modal-dialog .work-item .media-left{width: 100% !important}
+	    body .modal-dialog .work-item .media-right{width: 100% !important}
+
 	}
 	.modal-body .media .media-heading{
 		color: #333;

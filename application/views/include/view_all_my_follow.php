@@ -4,14 +4,14 @@
 	    <div class="modal-content">
 	        <div class="modal-header">
 	          	<button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-	          	<h4 class="modal-title"><b>Who's follow profile</b></h4>
+	          	<h4 class="modal-title"><b>Who followed your profile:</b></h4>
 	          	<p class="number-view"><b id="number-view"></b> <span> Profile views in the last 90 days</span></p>
 	        </div>
 	        <div class="modal-body">
 	          	<div class="list">
 	          	</div>
 	          	<div class="row">
-	          		<div id="more-followers" class="col-sm-12 text-right"><a href="javascript:;" class="btn btn-link btn-lg">MORE</a></div>
+	          		<div id="more-followers" class="col-sm-12 text-right"><a href="javascript:;" class="btn btn-link btn-lg upgrade-account-link">MORE</a></div>
 	          	</div>
 	        </div>
 	        

@@ -9,7 +9,6 @@
 				array('href' => '#', 'title' => 'Hide background', 'class' => 'show_hide_background'),
 		    	array('href' => '#', 'title' => 'Invite team members', 'class' => 'invite_member'),
 		    	array('href' => '#', 'title' => 'Delete your Wall', 'class' => 'delete_wall'),
-		    	array('href' => base_url('/profile/upgrade/'), 'title' => 'Upgrade Account', 'class' => '')
 			);
     	} else {
     		$data['menu_banner'] = array(

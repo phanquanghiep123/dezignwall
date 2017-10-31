@@ -23,6 +23,7 @@
 	    		</div>
 	    	</div>
 	    </div>
+	    <?php $this->load->view("include/share"); ?>
 	    <?php $this->load->view("include/messenger-box");?>
 	    <?php $this->load->view("include/reporting-image");?>
 	    <?php $this->load->view("include/delete_popup");?>

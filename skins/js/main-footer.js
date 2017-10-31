@@ -256,14 +256,14 @@ $(document).ready(function () {
                                 if(url_reload != window.location.href){
                                     window.location.href = url_reload;
                                 }else{
-                                    window.location.href = base_url + "profile/edit";
+                                    window.location.href = base_url + "company/edit";
                                 }
                             }, 4000);
                         } else {
                             if(url_reload != window.location.href){
                                 window.location.href = url_reload;
                             }else{
-                                window.location.href = base_url + "profile/edit";
+                                window.location.href = base_url + "company/edit";
                             }
                         }
                     } else {

@@ -124,16 +124,16 @@
 
                                                     <div class="col-xs-9 col-md-7">
                                                         <div class="row">
-                                                            <div id="reports-email" data-email ="<?php echo $value["work_email"];?>">
+                                                            <div>
                                                                 <div class="col-lg-2 text-center"><div class="logo-user"><img src="<?php echo $logo;?>"></div></div>
                                                                 <div class="col-lg-6">
-                                                                    <p><?php echo $value["first_name"]. " ".$value["last_name"] ;?> | <?php echo $value["company_name"] ;?></p>
+                                                                    <p><?php echo $value["first_name"]. " ".$value["last_name"] ;?><?php echo $value["company_name"] != null ? " | ".$value["company_name"] : "" ;?></p>
                                                                     <p><?php echo  date('F j \a\t h:i A', $timestamp);?></p>
                                                                 </div>
                                                                 <div class="col-sm-4">
                                                                     <ul class="list-inline action-img">
                                                                         <li><a href="javascript:;"><img src="<?php echo skin_url("icon/icon-user.png");?>"></a></li>
-                                                                        <li><a href="javascript:;"><img src="<?php echo skin_url("/icon/icon-message.png");?>"></a></li>
+                                                                        <li><a id="reports-email" data-name ="<?php echo $value["first_name"]. " ".$value["last_name"] ;?>" data-email ="<?php echo $value["work_email"];?>" href="javascript:;"><img src="<?php echo skin_url("/icon/icon-message.png");?>"></a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -235,16 +235,16 @@
                                             <div class="row items">
                                                 <div class="col-xs-9 col-md-7">
                                                     <div class="row">
-                                                        <div id="reports-email" data-email ="<?php echo $value["work_email"];?>">
+                                                        <div>
                                                             <div class="col-lg-2 text-center"><div class="logo-user"><img src="<?php echo $logo;?>"></div></div>
                                                             <div class="col-lg-6">
-                                                                <p><?php echo $value["first_name"]. " ".$value["last_name"] ;?> | <?php echo $value["company_name"] ;?></p>
+                                                                <p><?php echo $value["first_name"]. " ".$value["last_name"] ;?><?php echo $value["company_name"] != null ? " | ".$value["company_name"] : "" ;?></p>
                                                                 <p><?php echo  date('F j \a\t h:i A', $timestamp);?></p>
                                                             </div>
                                                             <div class="col-sm-4">
                                                                 <ul class="list-inline action-img">
                                                                     <li><a href="javascript:;"><img src="<?php echo skin_url("icon/icon-user.png");?>"></a></li>
-                                                                    <li><a href="javascript:;"><img src="<?php echo skin_url("/icon/icon-message.png");?>"></a></li>
+                                                                    <li><a id="reports-email" data-name ="<?php echo $value["first_name"]. " ".$value["last_name"] ;?>" data-email ="<?php echo $value["work_email"];?>" href="javascript:;"><img src="<?php echo skin_url("/icon/icon-message.png");?>"></a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -459,16 +459,16 @@
                                                     <div class="row items">
                                                         <div class="col-xs-9 col-md-7">
                                                             <div class="row">
-                                                                <div id="reports-email" data-email ="<?php echo $value_items["work_email"];?>">
+                                                                <div>
                                                                     <div class="col-lg-2 text-center"><div class="logo-user"><img src="<?php echo $logo;?>"></div></div>
                                                                     <div class="col-lg-6">
-                                                                        <p><?php echo $value_items["first_name"]. " ".$value_items["last_name"] ;?> | <?php echo $value_items["company_name"] ;?></p>
+                                                                        <p><?php echo $value_items["first_name"]. " ".$value_items["last_name"] ;?><?php echo $value_items["company_name"] != null ? " | ".$value_items["company_name"] : "" ;?></p>
                                                                         <p><?php echo  date('F j \a\t h:i A', $timestamp);?></p>
                                                                     </div>
                                                                     <div class="col-sm-4">
                                                                         <ul class="list-inline action-img">
                                                                             <li><a href="javascript:;"><img src="<?php echo skin_url("icon/icon-user.png");?>"></a></li>
-                                                                            <li><a href="javascript:;"><img src="<?php echo skin_url("/icon/icon-message.png");?>"></a></li>
+                                                                            <li><a id="reports-email" data-name ="<?php echo $value_items["first_name"]. " ".$value_items["last_name"] ;?>" data-email ="<?php echo $value_items["work_email"];?>" href="javascript:;"><img src="<?php echo skin_url("/icon/icon-message.png");?>"></a></li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -548,7 +548,8 @@
         <h3 class="title_box">Send a Message</h3>
         <div>
           <p class="title-input">To (enter recipient emails, separated by commas):</p>
-          <p><input type="email" name ="email" id="email" class="form-control" data-valid="true"/></p>
+          <input type="hidden" name ="email" id="email" class="form-control" data-valid="true"/>
+          <p><input type="email" name ="name" id="name" class="form-control" data-valid="true"/></p>
           <p  class="title-input">Subject:</p>
           <p><input type="text" name="subject" id="subject" class="form-control" data-valid="true"/></p>
           <p>Message:</p>
@@ -566,8 +567,10 @@
 <script>
     var reports_total = "<?php echo $total_photo;?>";
     $(document).on("click","#list-items #reports-email",function(){
-        var email = $(this).data("email");
+        var email = $(this).attr("data-email");
+        var name = $(this).attr("data-name");
         $("#sent_image_reports #email").val(email);
+        $("#sent_image_reports #name").val(name);
         $('#sent_image_reports').modal();
         return false;
     });
@@ -586,7 +589,6 @@
                     'message': message
                 },
                 success: function (data) {
-                    console.log(data);
                     if (data.trim() == 'success') {
                         $('#sent_image').modal('hide');
                         messenger_box("Message", "Email sent successfully.");

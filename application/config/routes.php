@@ -61,3 +61,4 @@ $route['services/(:any)/(:any)'] = "services/index/$1/$2";
 $route['services/(:any)/(:any)/(:any)'] = "services/index/$1/$2/$3";
 $route['photographer/(:any)'] = "photographer/index/$1";
 $route['page/(:any)'] = "pages/index/$1";
+$route['socialposts/(:num)'] = "socialposts/index/$1";

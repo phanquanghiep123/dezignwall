@@ -95,6 +95,9 @@ $(document).on("click",".card #view-likes",function(e){
 });
 
 $(document).on("click",".card #num-comment",function(e){
+	$(this).closest(".commen-like").find("#comment-show").trigger("click");
+	return false;
+	/*
     e.stopPropagation();
     photoId = $(this).parents(".card").attr("data-id");
     _this = $(this);
@@ -137,6 +140,7 @@ $(document).on("click",".card #num-comment",function(e){
         
     });
     return false;
+    */
 });
 $(document).on("click","#modal_sendmessenger_like #more-like",function(){
     $.each($("#modal_sendmessenger_like .comment-items.none"),function(key,value){

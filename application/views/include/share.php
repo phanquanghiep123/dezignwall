@@ -42,6 +42,31 @@ var img = $("#photo-share").attr("src");
 var title = $("head title").text();
 var type_post = "<?php echo @$type_post;?>";
 var id_post = "<?php echo @$id_post;?>";
+var title_page = $("meta#titleshare").attr("content");
+$(document).on("click",".card #share-photo",function(){
+    type_post = $(this).parents(".card").attr("data-type");
+    var id    = $(this).parents(".card").attr("data-id") ;
+    id_post   = id;
+    $("#share-modal .text-share-tip").text("What a great find! Share it with your friends and colleagues!");
+    $("#share-modal #share-image-email").attr("data-id",id);
+    $.ajax({
+        url : base_url + "photos/info",
+        type : "post",
+        data :{id : id,type_post:type_post},
+        dataType : "json",
+        success : function(res){
+            if(res["status"] == "success"){
+                url_share_social = res["response"]["url"];
+                title = res["response"]["name"];
+                title_page = res["response"]["content"];
+                $("#share-modal #photo-share").attr("src",base_url + res["response"]["thumb"]);
+                $("#share-modal").modal();
+            }
+        },error : function(d,res){
+            console.log(res);
+        }
+    })
+})
 window.fbAsyncInit = function () {
     FB.init({
         appId: '1728376397375375',
@@ -65,7 +90,6 @@ function share() {
 }
 function share_tw() {
     tracking_share("twitter",type_post,id_post);
-    var title_page = $("meta#titleshare").attr("content");
     window.open("https://twitter.com/share?url=" + url_share_social + "&text="+title_page+": ", '_blank','width=' + w + ', height=' + h + ', top=' + 150 + ', left=' + left);
 }
 

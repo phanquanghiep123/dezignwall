@@ -32,7 +32,7 @@
 				</div>
 				<!--! list content -->
 				<div class="row">
-					<div class="col-sm-12 text-right"><a href="#" id="more-your-follow" class="btn btn-link">MORE</a></div>
+					<div class="col-sm-12 text-right"><a href="#" id="more-your-follow" class="btn btn-link upgrade-account-link">MORE</a></div>
 				</div>
          	</div>
 

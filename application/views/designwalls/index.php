@@ -13,7 +13,6 @@
 				array('href' => '#', 'title' => 'Hide background...', 'class' => 'show_hide_background'),
 		    	array('href' => '#', 'title' => 'Invite team members...', 'class' => 'invite_member'),
 		    	$type_project_arg,
-		    	array('href' => base_url('/profile/upgrade/'), 'title' => 'Upgrade Account...', 'class' => 'upgrade-account-link')
 			);
     	} else {
     		$data['menu_banner'] = array(
@@ -165,7 +164,6 @@
                                                 <li><a href="#" data-toggle="modal" data-target="#category_dialog" class="rename-category" data-title="<?php echo $category_item['title']; ?>" data-description="<?php echo $category_item['specs']; ?>" data-id="<?php echo $category_item['category_id']; ?>" >Rename folder...</a></li>
                                                 <li class="copy-category"><a href="<?php echo base_url(); ?>designwalls/copy_category/<?php echo $project_id; ?>/<?php echo $category_item['category_id']; ?>/">Copy folder...</a></li>
                                                 <li><a href="#" data-toggle="modal" data-target="#category_dialog" class="add-category">Create NEW folder...</a></li>
-                                                <li><a href="#" class="upgrade-account-link" onclick="document.location.href='<?php echo base_url();?>profile/upgrade/'">Upgrade Account..</a></li>
                                                 <?php if ($allow_delete_category) : ?>
                                                     <li class="delete-category"><a href="<?php echo base_url(); ?>/designwalls/delete_category/<?php echo $project_id; ?>/<?php echo $category_item['category_id']; ?>/">Delete folder...</a></li>
                                                 <?php endif; ?>
@@ -178,7 +176,7 @@
                                     <?php $index = 0;?>
                                     <?php $index_gallery = 0; foreach ($category_item['photos'] as $key => $value) : $index_gallery++; ?>
                                     <li class="photo-item" data-index-photo="<?php echo $index_gallery; ?>" id="photo-item-<?php echo $value["photo_id"]; ?>" data-thumb="<?php echo base_url($value['path_file']); ?>">
-                                        <a id="view-list-slider" data-id = "<?php echo $category_item['category_id']; ?>" href="#"><img data-index="<?php echo $index;?>" class="draggable" category-id="<?php echo $category_item['category_id']; ?>" id="<?php echo $value["photo_id"]; ?>"  src="<?php echo base_url($value['path_file']); ?>"></a>
+                                        <a id="view-list-slider" data-id = "<?php echo $category_item['category_id']; ?>" href="<?php echo base_url("designwalls/view_photos/".$value["product_id"])?>"><img data-index="<?php echo $index;?>" class="draggable" category-id="<?php echo $category_item['category_id']; ?>" id="<?php echo $value["photo_id"]; ?>"  src="<?php echo base_url($value['path_file']); ?>"></a>
                                     </li>
                                     <?php $index++;?>
                                     <?php endforeach; ?>
@@ -273,7 +271,6 @@
                 <div class="modal-footer">
                     <span class="load" style="display:none;"><p class="load-send_invite"><img src="<?php echo skin_url(); ?>/images/loading.gif" ></p></span><button type="submit" class="btn btn-primary btn-custom" id="add_invite">Add more</button>
                     <button type="submit" class="btn btn-primary btn-custom" id="send_invite">Send invite</button><br clear="all" />
-                    <p class="text-right">Need more room? <a href="<?php echo base_url();?>/page/dezignwall-price/">Upgrade</a></p>
                     <p class="message-invitation-member"></p>
                     <input type="hidden" value="0" id="photo_id_invite">
                     <input type="hidden" value="0" id="category_id_invite">
@@ -344,7 +341,7 @@ $(document).on("click","#view-list-slider img",function(){
                 if(data["status"] == "success"){
                     var html = "";
                     $.each(data["response"],function(key,value){
-                        html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url +'"designwalls/view_photos/"'+value["product_id"]+'"><img src="'+base_url + value["path"] +'" title="'+value["title"]+'"></a>';
+                        html += '<div class="col-md-12 items-data" id="number-scroll-'+key+'"><div class="single-image"><a href="'+base_url +'designwalls/view_photos/'+value["product_id"]+'"><img src="'+base_url + value["path"] +'" title="'+value["title"]+'"></a>';
                         html += '<div><p class="text-comment">';
                         var text = value["name"];
                         if (text.length <= 100) {

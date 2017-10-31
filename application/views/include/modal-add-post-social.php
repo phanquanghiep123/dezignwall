@@ -123,6 +123,7 @@
 	    right: -5px;
 	    font-size: 20px;
 	}
+    #add-social-popup-box .input-group{display: block;}
     #form-post-upload .thumbnail.error{border:1px solid red;}
     #add-social-popup-box  .loadding{position: absolute; width: 100%;cursor: wait;right: 0;top: 0;bottom: 0; text-align: center;}
     #add-social-popup-box  .loadding img {max-height: 100%;max-width: 100%; margin: 0 auto;}

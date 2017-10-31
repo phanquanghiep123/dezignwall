@@ -87,11 +87,11 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="list-social-api">
-                            <li><a href="<?php echo $outlookImportUrl; ?>"><strong>X &nbsp;&nbsp;Outlook</strong></a></li>
+                            <li><a href="<?php echo @$outlookImportUrl; ?>"><strong>X &nbsp;&nbsp;Outlook</strong></a></li>
                             <?php if (!empty($yahooImportUrl)) : ?>
                             <li><a title="Please hit ctrl + F5 again if you see error in yahoo site" href="<?php echo $yahooImportUrl; ?>"><strong>X &nbsp;&nbsp;Yahoo</strong></a></li>
                             <?php endif; ?>
-                            <li><a href="<?php echo $googleImportUrl; ?>"><strong>X &nbsp;&nbsp;Gmail</strong></a></li>
+                            <li><a href="<?php echo @$googleImportUrl; ?>"><strong>X &nbsp;&nbsp;Gmail</strong></a></li>
                         </ul>
                     </div>
                 </div>

@@ -5,14 +5,14 @@
 	    <div class="modal-content">
 	        <div class="modal-header">
 	          	<button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-	          	<h4 class="modal-title"><b>These are the poeple you are following</b></h4>
-	          	<span>You begin <b class="number-view" id="number-view">60</b> following more the people in the last 30 days</span>
+	          	<h4 class="modal-title"><b>These are the people you are following</b></h4>
+	          	<span>You begin following <b class="number-view" id="number-view">0</b> more the people in the last 30 days</span>
 	        </div>
 	        <div class="modal-body">
 	          	<div class="list">
 	          	</div>
 	          	<div class="row">
-	          		<div class="col-sm-12 text-right"><button class="btn btn-link btn-lg">MORE</button></div>
+	          		<div class="col-sm-12 text-right"><button class="btn btn-link btn-lg upgrade-account-link">MORE</button></div>
 	          	</div>
 	        </div>
 	        

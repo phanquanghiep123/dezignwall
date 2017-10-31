@@ -504,19 +504,20 @@ class Company extends MY_Controller {
                         $number_proflie = ($value["number_proflie"] != "") ? $value["number_proflie"] : 0; 
                         $timestamp = strtotime($value["created_at"]);
                         $logo = ($value['avatar'] != "" && file_exists(FCPATH . $value['avatar'])) ? base_url($value['avatar']) : base_url("skins/images/avatar-full.png"); 
+                        $value["company_name"] = $value["company_name"] != null ? " | ".$value["company_name"] : "";
                         $html.='<div class="row items">';
                             $html.='<div class="col-xs-9 col-md-7">';
                                 $html.='<div class="row">
-								    <div id="reports-email" data-email ="'.$value["work_email"].'">
+								    <div>
 								        <div class="col-lg-2 text-center"><div class="logo-user"><img src="'.$logo.'"></div></div>
 								        <div class="col-lg-6">
-								            <p>'.$value["first_name"]. " ".$value["last_name"] .' | '.$value["company_name"] .'</p>
+								            <p>'.$value["first_name"]. " ".$value["last_name"].$value["company_name"] .'</p>
 								            <p>'. date('F j \a\t h:i A', $timestamp).'</p>
 								        </div>
 								        <div class="col-sm-4">
 								            <ul class="list-inline action-img">
 								                <li><a href="javascript:;"><img src="'.skin_url("icon/icon-user.png").'"></a></li>
-								                <li><a href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+								                <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
 								            </ul>
 								        </div>
 								    </div>
@@ -725,19 +726,20 @@ class Company extends MY_Controller {
                     $number_proflie = ($value["number_proflie"] != "") ? $value["number_proflie"] : 0; 
                     $timestamp = strtotime($value["created_at"]);
                     $logo = ($value['avatar'] != "" && file_exists(FCPATH . $value['avatar'])) ? base_url($value['avatar']) : base_url("skins/images/avatar-full.png"); 
+                    $value["company_name"] = $value["company_name"] != null ? " | ".$value["company_name"] : "";
                     $html.='<div class="row items">';
                         $html.='<div class="col-xs-9 col-md-7">';
                             $html.='<div class="row">
-							    <div id="reports-email" data-email ="'.$value["work_email"].'">
+							    <div>
 							        <div class="col-lg-2 text-center"><div class="logo-user"><img src="'.$logo.'"></div></div>
 							        <div class="col-lg-6">
-							            <p>'.$value["first_name"]. " ".$value["last_name"] .' | '.$value["company_name"] .'</p>
+							            <p>'.$value["first_name"]. " ".$value["last_name"] .$value["company_name"] .'</p>
 							            <p>'. date('F j \a\t h:i A', $timestamp).'</p>
 							        </div>
 							        <div class="col-sm-4">
 							            <ul class="list-inline action-img">
 							                <li><a href="javascript:;"><img src="'.skin_url("icon/icon-user.png").'"></a></li>
-							                <li><a href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+							                <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
 							            </ul>
 							        </div>
 							    </div>
@@ -1046,19 +1048,20 @@ class Company extends MY_Controller {
                                                     $number_rfq= ($value_items["number_rfq"] != null) ? $value_items["number_rfq"] : 0;
                                                     $timestamp = strtotime($value_items["created_at"]);
                                                     $logo = ($value_items['avatar'] != "" && file_exists(FCPATH . $value_items['avatar'])) ? base_url($value_items['avatar']) : base_url("skins/images/avatar-full.png");                         
+                                                    $value_items["company_name"] = $value_items["company_name"] != null ? " | ".$value_items["company_name"] : "";
                                                     $html.='<div class="row items">
                                                                 <div class="col-xs-9 col-md-7">
                                                                     <div class="row">
-																	    <div id="reports-email" data-email ="'.$value_items["work_email"].'">
+																	    <div>
 																	        <div class="col-lg-2 text-center"><div class="logo-user"><img src="'.$logo.'"></div></div>
 																	        <div class="col-lg-6">
-																	            <p>'.$value_items["first_name"]. " ".$value_items["last_name"] .' | '.$value_items["company_name"] .'</p>
+																	            <p>'.$value_items["first_name"]. " ".$value_items["last_name"] .$value_items["company_name"] .'</p>
 																	            <p>'. date('F j \a\t h:i A', $timestamp).'</p>
 																	        </div>
 																	        <div class="col-sm-4">
 																	            <ul class="list-inline action-img">
 																	                <li><a href="javascript:;"><img src="'.skin_url("icon/icon-user.png").'"></a></li>
-																	                <li><a href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+																	                <li><a id="reports-email" data-name ="'.$value_items["first_name"].' '.$value_items["last_name"].'" data-email="'.$value_items["work_email"].'" href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
 																	            </ul>
 																	        </div>
 																	    </div>

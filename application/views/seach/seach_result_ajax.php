@@ -182,7 +182,7 @@ if (isset($photo) && count($photo) > 0):
                     </div>                
                     <div class="box-bottom <?php echo ( $photo["image_category"] == "Product" ||  $photo["image_category"] == "Projects,Products") ? "custom-columns" : "";?>">
                         <div class="col-xs-2 col-md-2 text-center"><div class="likes" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><h3 id="like-photo" data-id="<?php echo $photo["photo_id"];?>" ><i class="fa fa-heart <?php echo $likenew;?> <?php echo $images_like; ?>" title="<?php echo $title_like; ?>"></i></h3></div></div>
-                        <div class="col-xs-2 col-md-2 text-center"><a id="myphoto_user" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] . '-'. $photo["photo_id"] .'-'. $photo["manufacture"];?>" title="View this catalog" href="<?php echo base_url('profile/myphoto/'.$photo['id']."?catalog=".$photo["manufacture"]);?>" title="Go to catalog"><img src="<?php echo skin_url("images/catalog.png")?>"/></a></div>
+                        <div class="col-xs-2 col-md-2 text-center"><a id="myphoto_user" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] . '-'. $photo["photo_id"] .'-'. $photo["manufacture"];?>" title="View this catalog" href="<?php echo base_url('profile/catalog/'.$photo["manufacture"]. "/" .gen_slug($photo["manufacture_name"]));?>" title="Go to catalog"><img src="<?php echo skin_url("images/catalog.png")?>"/></a></div>
                         <div class="col-xs-2 col-md-2 text-center">
                             <a href="#" id="pins-to" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><img src="<?php echo base_url("skins/images/pushpin-myphoto.png");?>"></a>
                         </div>
@@ -207,7 +207,7 @@ if (isset($photo) && count($photo) > 0):
                                 <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span></h3>
                             </div>
                         </div>
-                        <div class="col-xs-2 col-md-2 text-center"><div class="likes" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><h3 id="like-photo" data-id="<?php echo $photo["photo_id"];?>" ><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></h3></div></div>
+                        <div class="col-xs-2 col-md-2 text-center"><div class="share" data-id="<?php echo $photo['company_name'] .'-'. $photo["id"] .'-'. $photo["manufacture"] . '-'. $photo["photo_id"];?>" ><h3 id="share-photo" data-id="<?php echo $photo["photo_id"];?>" ><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></h3></div></div>
                     </div>
                 </div>
                 <div class="row">

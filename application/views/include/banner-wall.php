@@ -266,14 +266,20 @@
         @media screen and ( max-width: 768px ){
             .impromation h5 strong{font-size: 12px;}
             .impromation p span,.impromation p {font-size: 10px;}
-            .impromation-project .logo-company img{width: 30px ;height:30px;}
+            .impromation-project .logo-company img{width: 40px ;height:40px; margin-top: 0}
+            .profile-edit-photo.custom-logo{width: 40px ;height:40px; margin-top: 0}
             .impromation {
                 padding-bottom: 0px;
                 padding-top: 0px;
             }
             body .btn {
+                padding: 5px;
+                font-size: 15px;
+            }
+            body .btn#btn-add-more{
                 padding: 3px;
-                font-size: 11px;
+                font-size: 17px;
+                padding: 5px 10px;
             }
         }
     </style>

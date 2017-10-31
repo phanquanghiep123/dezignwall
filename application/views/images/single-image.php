@@ -252,7 +252,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                 <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                                 <div class="dropdown-impromation-menu">
                                     <ul class="dropdown-data">
-                                        <li style="list-style: none;"><a href="<?php echo base_url("profile/index/" . $user["id"]); ?>" class="not-report" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Company profile...</a></li>
+                                        <li style="list-style: none;"><a href="<?php echo base_url("company/view/" . $user["id"]); ?>" class="not-report" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Company profile...</a></li>
                                         <li style="list-style: none;"><a href="#" class="not-report" onclick="$('.memu-save-top').toggleClass('block');return false;" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>"> Save this item...</a></li>
                                         <?php if($photo['image_category'] == "Product"):?><li style="list-style: none;"><a class="upgrade-account-link not-report" id ="login-check" href="<?php echo base_url("profile/request_quote/".$photo["photo_id"]);?>" name="RFQ" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Request a Quote...</a></li><?php endif;?>
                                         <li style="list-style: none;"><a href="#" class="not-report" id="report-image" data-title ="<?php echo $photo["name"]; ?>" data-type ="image" data-id ="<?php echo $photo["photo_id"]; ?>">Report this image...</a></li>
@@ -267,9 +267,9 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                             <?php $record_type = 1; ?>
                             <?php if ($record_type != 0): ?>
                                 <?php $logo = ( $company["logo"] != "" && file_exists(FCPATH . "/" . $company["logo"]) ) ? base_url($company["logo"]) : skin_url("images/logo-company.png"); ?>
-                                <div class="logo-company"><a id="login-check" href="<?php echo base_url("profile/view/" . $user["id"]); ?>"><img src="<?php echo $logo; ?>"></a></div>
+                                <div class="logo-company"><a id="login-check" href="<?php echo base_url("company/view/" . $user["id"]); ?>"><img src="<?php echo $logo; ?>"></a></div>
                                 <div class="impromation">
-                                    <h1 class="photo-name"><a id="login-check" href="<?php echo base_url("profile/view/" . $user["id"]); ?>"><?php echo $company["company_name"]; ?></a></h1>
+                                    <h1 class="photo-name"><a id="login-check" href="<?php echo base_url("company/view/" . $user["id"]); ?>"><?php echo $company["company_name"]; ?></a></h1>
                                     <p><?php echo $company["business_type"] ?> | <?php echo $company["business_description"]?></p>
                                 </div>
                             <?php endif; ?>
@@ -354,7 +354,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                     <p class="lable-text"><?php echo @$photo["description"];?></p>
                     <div class="box-data custom">  
                         <div class="checkbox check-yelow checkbox-circle">                  
-                            <p style="padding-top: 3px;"><img style=" margin: -5px 10px 0px 0px; " src="<?php echo base_url('skins/images/check_allow.png')?>"><?php echo ($photo['image_category'] == "Product")? "Product from" : "Project from"?> <a id="login-check" href="<?php echo base_url("search?catalog=".$photo["manufacture"]."");?>"><?php echo @$manufacturers["name"];?></a> by <a href="<?php echo base_url("profile/index/".$photo["member_id"]);?>"><?php echo $company["company_name"];?></a></p>
+                            <p style="padding-top: 3px;"><img style=" margin: -5px 10px 0px 0px; " src="<?php echo base_url('skins/images/check_allow.png')?>"><?php echo ($photo['image_category'] == "Product")? "Product from" : "Project from"?> <a id="login-check" href="<?php echo base_url("search?catalog=".$manufacturers["name"]."");?>"><?php echo @$manufacturers["name"];?></a> by <a href="<?php echo base_url("company/view/".$photo["member_id"]);?>"><?php echo $company["company_name"];?></a></p>
                         </div>
                         <div class="row">
                             <div class="col-md-6"><p class="lable-text">Product is available in:</p></div>
@@ -407,7 +407,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                         if($count_photo_catalog > 0):
                     ?>
                     <div class="box-data custom">
-                        <h4>More Images in this <a id="login-check" href="<?php echo base_url("profile/myphoto/".$photo["member_id"]."?catalog=".$photo["manufacture"]."");?>"><?php echo (@$manufacturers["name"] != null && trim(@$manufacturers["name"])) ? @$manufacturers["name"] : "Catalog default"; ?></a></h4>                      
+                        <h4>More Images in this <a id="login-check" href="<?php echo base_url("profile/catalog/".$catalog["id"]."/".gen_slug($catalog["name"]));?>"><?php echo (@$manufacturers["name"] != null && trim(@$manufacturers["name"])) ? @$manufacturers["name"] : "Catalog default"; ?></a></h4>                      
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="item-slider-same">
@@ -418,7 +418,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                             echo '<li><a href ="'.base_url("photos/" . $value_photo_catalog['photo_id'] . "/" . gen_slug($value_photo_catalog["name"])).'"><img src="'.base_url($images_same).'"></a></li>';
                                         }
                                     echo "</ul>";
-                                    echo ($photo_count_catalog > 3) ? '<div class="number-same-photo"><p><a id="login-check" href="'.base_url("profile/myphoto/".$photo["member_id"]."?catalog=".$photo["manufacture"]."").'"><span>+'.($photo_count_catalog - 3).'</span></a></p></div>' : "" ;
+                                    echo ($photo_count_catalog > 3) ? '<div class="number-same-photo"><p><a id="login-check" href="'.base_url("profile/catalog/".$catalog["id"]."/".gen_slug($catalog["name"])).'"><span>+'.($photo_count_catalog - 3).'</span></a></p></div>' : "" ;
                                 ?>
                                 </div> 
                             </div>
@@ -457,7 +457,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
                                     echo '<ul class="list-all-catalog">';
                                         foreach ($all_catalog as $key_all_catalog => $value_all_catalog) {
                                             if($value_all_catalog['logo'] != "" && file_exists(FCPATH . $value_all_catalog['logo']) ) 
-                                                echo '<li><a id="login-check" href="'.base_url("profile/myphoto/".$photo["member_id"]."?catalog=".$value_all_catalog["id"]."").'"><img src="'.base_url($value_all_catalog['logo']).'"></a></li>';
+                                                echo '<li><a id="login-check" href="'.base_url("profile/catalog/".$value_all_catalog["id"]."/".gen_slug($value_all_catalog["name"])).'"><img src="'.base_url($value_all_catalog['logo']).'"></a></li>';
                                         }
                                     echo "</ul>";   
                                 ?>
@@ -490,7 +490,7 @@ body .image-page  .dropdown-impromation .dropdown-impromation-menu{position: rel
             </div>
         </div>
     </div>
-    <?php $this->load->view("include/share"); ?>
+    
     <?php $this->load->view("include/report-images"); ?>
     <?php $this->load->view("include/view-comment"); ?>
     <script type="text/javascript">

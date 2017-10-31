@@ -35,10 +35,10 @@ class Profile extends MY_Controller {
 	    $this->load->model("Company_model");
 	    $this->data["follow_record"] = $this->Company_model->get_company_follow_company(@$user_id,0,999999999999999999);
 	    $this->data["count_follow_company"] = $this->Company_model->count_company_follow_company(@$user_id);
-	    $this->data["count_follow_company"] = $this->data["count_follow_company"] - 8 ;
+	    $this->data["count_follow_company"] = $this->data["count_follow_company"] - 15;
 	    $this->data["my_follow_company"] = $this->Company_model->get_my_follow_company(@$user_id,0,999999999999999999);
 	    $this->data["count_my_follow_company"] = $this->Company_model->count_my_follow_company(@$user_id);
-	    $this->data["count_my_follow_company"] = $this->data["count_my_follow_company"] - 8;
+	    $this->data["count_my_follow_company"] = $this->data["count_my_follow_company"] - 15;
 	    $this->data["title_page"] = "Edit Profile";
 	    $this->data['member'] = $record;
         $this->data['member_id'] = $record["id"];
@@ -67,7 +67,7 @@ class Profile extends MY_Controller {
 	    $this->data["active_show_more"] = ($this->Company_model->get_active( $user_id ,4,1)) != null ? true : false;
 	    //get Education
 
-	    $daybefore = date( 'Y-m-d', strtotime("-30 days") );
+	    $daybefore = date( 'Y-m-d', strtotime("-90 days") );
 	    $this->data["number_view_profile"] = $this->Common_model->count_table("common_view",["reference_id" => $user_id,"type_object" => "profile","type_share_view" => "view" ,"created_at >=" => $daybefore]);
 	    $this->data["number_view_post"] = $this->Common_model->count_table("common_view",["member_owner" => $user_id,"type_object" => "photo","type_share_view" => "view" ,"created_at >=" => $daybefore]);
         $this->data["number_follow_profile"] = $this->Common_model->count_table("common_follow",["owner_id" => $recorder_company["member_id"],"type_object" => "company"]);
@@ -113,10 +113,10 @@ class Profile extends MY_Controller {
 	    $this->load->model("Company_model");
 	    $this->data["follow_record"] = $this->Company_model->get_company_follow_company(@$user_id);
 	    $this->data["count_follow_company"] = $this->Company_model->count_company_follow_company(@$user_id);
-	    $this->data["count_follow_company"] = $this->data["count_follow_company"] - 8 ;
+	    $this->data["count_follow_company"] = $this->data["count_follow_company"] - 15 ;
 	    $this->data["my_follow_company"] = $this->Company_model->get_my_follow_company(@$user_id);
 	    $this->data["count_my_follow_company"] = $this->Company_model->count_my_follow_company(@$user_id);
-	    $this->data["count_my_follow_company"] = $this->data["count_my_follow_company"] - 8;
+	    $this->data["count_my_follow_company"] = $this->data["count_my_follow_company"] - 15;
 	    $this->data["title_page"] = "Edit Profile";
 	    $this->data['member'] = $record;
         $this->data['member_id'] = $record["id"];
@@ -145,7 +145,7 @@ class Profile extends MY_Controller {
 	    $this->data["get_active"] = $this->Company_model->get_active( $user_id ,0,4);
 	    $this->data["active_show_more"] = ($this->Company_model->get_active( $user_id ,4,1)) != null ? true : false;
 	    //get Education
-	    $daybefore = date( 'Y-m-d', strtotime("-30 days") );
+	    $daybefore = date( 'Y-m-d', strtotime("-90 days") );
 	    $this->data["number_view_profile"] = $this->Common_model->count_table("common_view",["reference_id" => $user_id,"type_object" => "profile","type_share_view" => "view" ,"created_at >=" => $daybefore]);
 	    $this->data["number_view_post"] = $this->Common_model->count_table("common_view",["member_owner" => $user_id,"type_object" => "photo","type_share_view" => "view" ,"created_at >=" => $daybefore]);
 	    $this->data["list_education"] = $this->Common_model->get_result("education",["member_id" => $user_id],0,2,[["field" => "present","sort" => "DESC"],["field" => "id","sort" => "DESC",""]]);
@@ -170,7 +170,7 @@ class Profile extends MY_Controller {
 	    $this->load->view('block/footer', $this->data);
 
     }
-    public function update (){
+    public function update(){
 
         if(!$this->is_login) redirect(base_url());
         $data = array("status" => "error","message" => null,"response" => null);
@@ -192,7 +192,7 @@ class Profile extends MY_Controller {
                     }  
                 }                 
             }
-            if(@$this->input->post("checkbox") == "on"){
+            if(@$this->input->post("checkbox") == "on" && trim($this->input->post("password")) != ""){
                 $member = $this->Common_model->get_record("members",['id' => $this->user_id]);
                 $pwd = md5(strtolower($member["email"]) . ":" . md5(trim($this->input->post("password"))));
                 $data_update["pwd"] = $pwd;
@@ -1463,7 +1463,9 @@ class Profile extends MY_Controller {
                     $record = $this->Common_model->get_record("members", array("id" => $user_id));
                     $recorder_company = $this->Common_model->get_record("company", array("member_id" => $user_id));
                     $setting = $this->Common_model->get_record("member_setting", array("member_id" => $user_id));
-                    $this->session->set_userdata('user_info', array(
+                    $oldsecsion = $this->user_info;
+
+                    $oldsecsion = array_merge($oldsecsion,array(
                         'email' => $record["email"],
                         'id' => $record["id"],
                         'full_name' => @$record["first_name"] . ' ' . @$record["last_name"],
@@ -1478,6 +1480,7 @@ class Profile extends MY_Controller {
                         'company_info'  =>  $recorder_company,
                         'is_blog' => $record["is_blog"]
                     ));
+                    $this->session->set_userdata('user_info', $oldsecsion);
                     // Update all status photo from 0 to 1
                     $this->Common_model->update('photos', array('status_photo' => 1), array(
                         'member_id' => $user_id
@@ -1526,7 +1529,7 @@ class Profile extends MY_Controller {
                     $this->load->library('upload');
                     $config = array();
                     $config['upload_path'] = '.' . $folder;
-                    $config['allowed_types'] = 'jpg|png|gif';
+                    $config['allowed_types'] = 'jpg|png|gif|jpeg';
                     $config['max_size'] = '500';
                     $config['max_width'] = '1028';
                     $config['max_height'] = '1028';
@@ -2009,6 +2012,8 @@ class Profile extends MY_Controller {
             $description = $this->input->post('description');
             $manufacture = @$this->input->post('manufacturers');
             $file_name = $this->input->post('file_name');
+            $file_name = explode(".", $file_name);
+            $file_name = ".".$file_name[count($file_name) - 1];
             $file_name = time().trim($file_name);
             //new input.
             $number_code_input = @$this->input->post('number_code');
@@ -2042,19 +2047,7 @@ class Profile extends MY_Controller {
                     $this->load->library('image_lib');
                     $size = getimagesize($file);
                     $w_current = $size[0];
-                    $h_current = $size[1];
-                    /*if ($w_current > 1020) {
-                        // resize
-                        $config['source_image'] = $file;
-                        $config['maintain_ratio'] = FALSE;
-                        $config['width'] = 1020;
-                        $size_ratio = $this->ratio_image($w_current, $h_current, $config['width']);
-                        $config['height'] = $size_ratio['height'];
-                        $config['quality'] = 100;
-                        $this->image_lib->clear();
-                        $this->image_lib->initialize($config);
-                        $this->image_lib->resize();
-                    }*/
+                    $h_current = $size[1];               
                     $config['source_image'] = $file;
                     $config['new_image'] = $path . "/thumbs_" . $file_name;
                     $config['maintain_ratio'] = FALSE;
@@ -2067,7 +2060,6 @@ class Profile extends MY_Controller {
                     $this->image_lib->resize();
                     $thumb = "/uploads/member/".$this->user_id."/thumbs_".$file_name;
                     $path = "/uploads/member/".$this->user_id."/".$file_name;
-                    exec('aws s3 sync /dw_source/dezignwall' . $pathsync . '/ s3://dwsource/dezignwall' . $pathsync . '/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');    
                     $type = 2;
                     if (isset($project_id) && is_numeric($project_id) && isset($category_id) && is_numeric($category_id)) {
                         $this->load->model('Project_model');
@@ -2211,7 +2203,7 @@ class Profile extends MY_Controller {
                                         if (!is_dir($path)) {
                                             mkdir($path, 0777, TRUE);
                                         }
-                                        $allowed_types = "jpg|png";
+                                        $allowed_types = "jpg|png|jpeg|gif";
                                         $upload = upload_flie($path, $allowed_types, $file_data);
                                         if($upload["success"] == "success"){
                                             $file_name = $upload["message"]["upload_data"]["file_name"];
@@ -2220,18 +2212,6 @@ class Profile extends MY_Controller {
                                             $size = getimagesize($file);
                                             $w_current = $size[0];
                                             $h_current = $size[1];
-                                            /*if ($w_current > 1020) {
-                                                // resize
-                                                $config['source_image'] = $file;
-                                                $config['maintain_ratio'] = FALSE;
-                                                $config['width'] = 1020;
-                                                $size_ratio = $this->ratio_image($w_current, $h_current, $config['width']);
-                                                $config['height'] = $size_ratio['height'];
-                                                $config['quality'] = 100;
-                                                $this->image_lib->clear();
-                                                $this->image_lib->initialize($config);
-                                                $this->image_lib->resize();
-                                            }*/
                                             $config['source_image'] = $file;
                                             $config['new_image'] = $path . "/thumbs_" . $file_name;
                                             $config['maintain_ratio'] = FALSE;
@@ -2253,7 +2233,6 @@ class Profile extends MY_Controller {
                                         }   
                                     }                                    
                                 }
-                                exec('aws s3 sync /dw_source/dezignwall/uploads/member/'.$this->user_id.'/ s3://dwsource/dezignwall/uploads/member/'.$this->user_id.'/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');
                                 $data_album = json_encode($data_album);
                                 $this->Common_model->update("photos",["album" => $data_album],["photo_id" => $photo_id]);
                             }
@@ -2348,7 +2327,6 @@ class Profile extends MY_Controller {
                                     ));
                                 }
                             }//end tag image
-                            exec('aws s3 sync /dw_source/dezignwall' . $pathsync . '/ s3://dwsource/dezignwall' . $pathsync . '/ —-acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');                         
                             $data_result['status'] = 'success';
                             $data_result['message'] = 'Image uploaded successfully.';
                             $data_result['photo_id'] = $photo_id;
@@ -2414,6 +2392,7 @@ class Profile extends MY_Controller {
                 } 
             } 
         }
+        exec('aws s3 sync /dw_source/dezignwall/uploads/member/'.$this->user_id.'/ s3://dwsource/dezignwall/uploads/member/'.$this->user_id.'/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');
         die(json_encode($data_result));
     }
     public function editphoto($id, $category_id = null, $project_id = null) {
@@ -2874,7 +2853,7 @@ class Profile extends MY_Controller {
                 $user_id   = $user_info["member_owner"];
             }
             $get_company_up = $this->Common_model->get_record("members",array("id"=>$user_id));
-            if(!empty($get_company_up) && @$get_company_up["type_member"]=="1"){
+            if(!empty($get_company_up) && @$get_company_up["type_member"]=="1" || true == true){
                 $this->data["is_login"] = $this->is_login;
                 $this->data["title_page"] = "Your Reports";
                 $web_setting = $this->Common_model->get_web_setting('setting_report','c.title');
@@ -2893,7 +2872,7 @@ class Profile extends MY_Controller {
                 //$date_old  = date( "Y-m-d", strtotime( "".date('Y-m-d')." - ".$days[$month]." day" ));
 
                 //SB: last 30 days
-                $date_old = date('c', strtotime('-30 days'));
+                $date_old = date('c', strtotime('-90 days'));
                 
                 $this->data["number_view_profile"] = $this->Common_model->get_result_distinct($user_id,"profile",$date_old,"createdat_profile");
                 $type_photo = "photo";
@@ -3001,7 +2980,7 @@ class Profile extends MY_Controller {
                 if ($type_date != 'w') {
                     $date_old = date('Y-m-d',strtotime($type_date));
                 }
-                $date_old = date('c', strtotime('-30 days'));
+                $date_old = date('c', strtotime('-90 days'));
                 $colums_left = 6;
                 $colums_left_parent = 4;
                 switch ($data_type) {
@@ -3040,19 +3019,20 @@ class Profile extends MY_Controller {
                         $number_proflie = ($value["number_proflie"] != "") ? $value["number_proflie"] : 0; 
                         $timestamp = strtotime($value["created_at"]);
                         $logo = ($value['avatar'] != "" && file_exists(FCPATH . $value['avatar'])) ? base_url($value['avatar']) : base_url("skins/images/avatar-full.png"); 
+                        $value["company_name"] = $value["company_name"] != null ? " | ".$value["company_name"] : "";
                         $html.='<div class="row items">';
                             $html.='<div class="col-xs-9 col-md-7">';
                                 $html.='<div class="row">
-                                    <div id="reports-email" data-email ="'.$value["work_email"].'">
+                                    <div>
                                         <div class="col-lg-2 text-center"><div class="logo-user"><img src="'.$logo.'"></div></div>
                                         <div class="col-lg-6">
-                                            <p>'.$value["first_name"]. " ".$value["last_name"] .' | '.$value["company_name"] .'</p>
+                                            <p>'.$value["first_name"]. " ".$value["last_name"] .$value["company_name"] .'</p>
                                             <p>'. date('F j \a\t h:i A', $timestamp).'</p>
                                         </div>
                                         <div class="col-sm-4">
                                             <ul class="list-inline action-img">
                                                 <li><a href="javascript:;"><img src="'.skin_url("icon/icon-user.png").'"></a></li>
-                                                <li><a href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+                                                <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -3148,7 +3128,7 @@ class Profile extends MY_Controller {
             if ($type_date != 'w') {
                 $date_old = date('Y-m-d',strtotime($type_date));
             }
-            $date_old = date('c', strtotime('-30 days'));
+            $date_old = date('c', strtotime('-90 days'));
             $this->load->model("Members_model");
             $type_photo = "photo";
             if($this->user_info["is_blog"] == "yes" || @$user_info["is_blog"] == "yes")
@@ -3256,19 +3236,20 @@ class Profile extends MY_Controller {
                     $number_proflie = ($value["number_proflie"] != "") ? $value["number_proflie"] : 0; 
                     $timestamp = strtotime($value["created_at"]);
                     $logo = ($value['avatar'] != "" && file_exists(FCPATH . $value['avatar'])) ? base_url($value['avatar']) : base_url("skins/images/avatar-full.png"); 
+                    $value["company_name"] = $value["company_name"] != null ? " | ".$value["company_name"] : "";
                     $html.='<div class="row items">';
                         $html.='<div class="col-xs-9 col-md-7">';
                             $html.='<div class="row">
-                                <div id="reports-email" data-email ="'.$value["work_email"].'">
+                                <div>
                                     <div class="col-lg-2 text-center"><div class="logo-user"><img src="'.$logo.'"></div></div>
                                     <div class="col-lg-6">
-                                        <p>'.$value["first_name"]. " ".$value["last_name"] .' | '.$value["company_name"] .'</p>
+                                        <p>'.$value["first_name"]. " ".$value["last_name"] .$value["company_name"] .'</p>
                                         <p>'. date('F j \a\t h:i A', $timestamp).'</p>
                                     </div>
                                     <div class="col-sm-4">
                                         <ul class="list-inline action-img">
                                             <li><a href="javascript:;"><img src="'.skin_url("icon/icon-user.png").'"></a></li>
-                                            <li><a href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+                                            <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -3362,7 +3343,7 @@ class Profile extends MY_Controller {
             }
             
             //SB: last 30 days
-            $date_old = date('c', strtotime('-30 days'));
+            $date_old = date('c', strtotime('-90 days'));
             
             $type_photo = "photo";
             if($this->user_info["is_blog"] == "yes" || @$user_info["is_blog"] == "yes")
@@ -3572,19 +3553,20 @@ class Profile extends MY_Controller {
                                                     $number_rfq= ($value_items["number_rfq"] != null) ? $value_items["number_rfq"] : 0;
                                                     $timestamp = strtotime($value_items["created_at"]);
                                                     $logo = ($value_items['avatar'] != "" && file_exists(FCPATH . $value_items['avatar'])) ? base_url($value_items['avatar']) : base_url("skins/images/avatar-full.png");                         
+                                                    $value_items["company_name"] = $value_items["company_name"] != null ? " | ".$value_items["company_name"] : "";
                                                     $html.='<div class="row items">
                                                                 <div class="col-xs-9 col-md-7">
                                                                     <div class="row">
-                                                                        <div id="reports-email" data-email ="'.$value_items["work_email"].'">
+                                                                        <div>
                                                                             <div class="col-lg-2 text-center"><div class="logo-user"><img src="'.$logo.'"></div></div>
                                                                             <div class="col-lg-6">
-                                                                                <p>'.$value_items["first_name"]. " ".$value_items["last_name"] .' | '.$value_items["company_name"] .'</p>
+                                                                                <p>'.$value_items["first_name"]. " ".$value_items["last_name"] .$value_items["company_name"] .'</p>
                                                                                 <p>'. date('F j \a\t h:i A', $timestamp).'</p>
                                                                             </div>
                                                                             <div class="col-sm-4">
                                                                                 <ul class="list-inline action-img">
                                                                                     <li><a href="javascript:;"><img src="'.skin_url("icon/icon-user.png").'"></a></li>
-                                                                                    <li><a href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+                                                                                    <li><a id="reports-email" data-name ="'.$value_items["first_name"].' '.$value_items["last_name"].'" data-email="'.$value_items["work_email"].'" href="javascript:;"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -3831,7 +3813,7 @@ class Profile extends MY_Controller {
                     }
                     $name = explode(".", $_FILES["logo"]["name"]);
                     $config['upload_path'] = $upload_path;
-                    $config['allowed_types'] = 'gif|jpg|png';
+                    $config['allowed_types'] = 'gif|jpg|png|jpeg';
                     $config['max_size'] = (10*1024); // Byte
                     $config['file_name'] = $this->gen_slug($name[0] .'-'. time());
                     $this->load->library('upload', $config);
@@ -3995,7 +3977,7 @@ class Profile extends MY_Controller {
                                             }
                                             if($img){
                                                 $basename = get_extension_url($value_1['image URL '.$i.'']);
-                                                $name = uniqid().'_'.gen_slug_st($album_title).$basename;
+                                                $name = uniqid().'_'.gen_slug_st($album_title).gen_slug_st($basename);
                                                 $data_reponse = $this->upload_file_from_url($img,$name); 
                                                 if($data_reponse["status"] == "success"){
                                                     $data_album [] = array(
@@ -4451,7 +4433,7 @@ class Profile extends MY_Controller {
                 if($value !== null){
                     if($value["title"] != null){
                         if(@$value["id"] != null && @$value["id"] != 0){
-                            $story = $this->Common_model->get_record("stories",["id" => $value["id"]]);
+                            $story = $this->Common_model->get_record("stories",["id" => $value["id"],"member_id" => $this->user_id]);
                             if($story != null){
                                 $photo_id = $story["photo_id"];
                                 $data_update = [];
@@ -4480,11 +4462,12 @@ class Profile extends MY_Controller {
                                                     $folder = "/uploads/member/". $this->user_id."/";
                                                     $allowed_types = "gif|jpg|png|jpeg";
                                                     if($value["story_type"] == "2"){
-                                                        $allowed_types = "gif|jpg|png|mp4|3gp|flv|mp3";
+                                                        $allowed_types = "gif|jpg|png|mp4|3gp|flv|mp3|mpv|m4a|m4b";
                                                     }
                                                     $upload = upload_flie($path,$allowed_types,$media_url);
                                                     if($upload["success"] == "success"){
                                                         $data_update[$key_1] = $folder.$upload["reponse"]["name"];  
+                                                        exec('aws s3 sync  /dw_source/dezignwall/uploads/member/' .  $this->user_id . '/ s3://dwsource/dezignwall/uploads/member/' .  $this->user_id . '/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');
                                                         $data_update["type"] = $media_url["type"];
                                                     }
                                                 } 
@@ -4526,13 +4509,14 @@ class Profile extends MY_Controller {
                                                     mkdir($path, 0777, TRUE);
                                                 }
                                                 $folder = "/uploads/member/". $this->user_id."/";
-                                                $allowed_types = "gif|jpg|png";
+                                                $allowed_types = "gif|jpg|png|jpeg";
                                                 if($value["story_type"] == "2"){
-                                                    $allowed_types = "gif|jpg|png|mp4|3gp|flv|mp3";
+                                                    $allowed_types = "gif|jpg|png|mp4|3gp|flv|mp3|mpv";
                                                 }
                                                 $upload = upload_flie($path,$allowed_types,$media_url);
                                                 if($upload["success"] == "success"){
                                                     $data_insert[$key_1] = $folder.$upload["reponse"]["name"];  
+                                                    exec('aws s3 sync  /dw_source/dezignwall/uploads/member/' .  $this->user_id . '/ s3://dwsource/dezignwall/uploads/member/' .  $this->user_id . '/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');
                                                     $data_insert["type"] = $media_url["type"];
                                                 }
                                             } 
@@ -4573,7 +4557,7 @@ class Profile extends MY_Controller {
                 $data["status"] = "success";   
             }
             if($data["response"] != null ){
-                $this->Common_model->update("photos",["is_story" => "1"],["photo_id" => $photo_id_post,"member_id" => $this->user_id ]);
+                $this->Common_model->update("photos",["is_story" => "1"],["photo_id" => $photo_id_post,"member_id" => $this->user_id]);
             }
         }
         $data["post"] = $this->input->post();
@@ -4583,6 +4567,9 @@ class Profile extends MY_Controller {
     public function upload_file_content(){
         $data = array( 'status' => 'error' ,'src' => "");
         if ($this->input->is_ajax_request()) {
+            ini_set('upload_max_filesize','300M');
+            ini_set('post_max_size','300M'); 
+            ini_set('max_input_vars','500M');
             $data["post"] = ($_FILES["file"]);
             if(isset($_FILES["file"])){
                 $path = FCPATH . "/uploads/member";
@@ -4599,6 +4586,7 @@ class Profile extends MY_Controller {
                 if($upload["success"] == "success"){
                     $src = base_url($folder.$upload["reponse"]["name"]);
                     $data = array( 'status' => 'success' ,'src' => $src);
+                    exec('aws s3 sync /dw_source/dezignwall/uploads/member/' .  $this->user_id . '/ s3://dwsource/dezignwall/uploads/member/' .  $this->user_id . '/ --acl public-read --cache-control max-age=86400,public --expires 2034-01-01T00:00:00Z');
                 } 
                 $data ["upload"] = $upload;         
             }
@@ -5101,13 +5089,14 @@ class Profile extends MY_Controller {
                 $type_object   = str_replace("ee", "e", $data_text );
                 $type_object   = str_replace("pined", "pinned", $type_object );
                 $value["type"] = str_replace("photo","image",$value["type"]) ;
+                $value["business_description"] = $value["business_description"] != null ? " | ".$value["business_description"] : "";
                 $html .= '<div class="media">
                         <div class="media-left">
                             <a href="'.base_url("company/view/".$value["member_id"]).'"><div style="background-image:url('.$avatar.')" class="img-circle media-object"></div></a>
                         </div>
                         <div class="media-body">
                             '.$title.'
-                            <p>by <a href="'.base_url("company/view/".$value["member_id"]).'"><b>'.$value["company_name"].'</b></a> | '.$value["business_description"].' on '.date(DW_FORMAT_DATE, strtotime($created_at_object)).'</p>
+                            <p>by <a href="'.base_url("company/view/".$value["member_id"]).'"><b>'.$value["company_name"].'</b></a>'.$value["business_description"].' on '.date(DW_FORMAT_DATE, strtotime($created_at_object)).'</p>
                             <p class="date-time">'.$type_object.' '.$value["type"].' on Date - '.date('F d\, Y \a\t g:ia', strtotime($value["enter_active"])).'</p>
                         </div>
                     </div>';
@@ -5118,14 +5107,12 @@ class Profile extends MY_Controller {
         die(json_encode($data));
     }
     public function save_experience(){
+
         $data = array("status" => "error","message" => null,"response" => null ,"post" => $this->input->post());
     	if($this->is_login && $this->input->is_ajax_request()){
-    		$ex = $this->input->post("Experience");  
+    		$ex = $this->input->post("Experience");
     		if($ex != null){
     			foreach ($ex as $key => $value) {
-    				if(@$value["present"] == 1){
-    					$this->Common_model->update("experience",["is_admin" => 0,"present" => 0],["member_id" => $this->user_id]);
-    				}
                     $logo = "";
                     if(isset($_FILES["Logo-".$key])){
                         $path = FCPATH . "/uploads/member";
@@ -5162,8 +5149,19 @@ class Profile extends MY_Controller {
                         $record_experience = $this->Common_model->get_record("experience",["id" => @$value["id"]]);
                         if($record_experience != null) $logo = $record_experience["logo"];
                     }
-                    $start_day =  date("Y-m-d",strtotime($value["start_day"]));
-                    $end_day   =  date("Y-m-d",strtotime($value["end_day"]));
+                    if (!is_numeric($value["start_day"]["month"]) || !is_numeric($value["start_day"]["day"]) || !is_numeric($value["start_day"]["year"])) {
+                    	$start_day = date("Y-m-d");
+                    } else {
+                    	$start_day = $value["start_day"]["year"] . "-" . $value["start_day"]["month"] . "-" . $value["start_day"]["day"];
+                    }
+                    if (!is_numeric($value["end_day"]["month"]) || !is_numeric($value["end_day"]["day"]) || !is_numeric($value["end_day"]["year"])) {
+                    	$end_day = date("Y-m-d");
+                    } else {
+                    	$end_day = $value["end_day"]["year"] . "-" . $value["end_day"]["month"] . "-" . $value["end_day"]["day"];
+                    }
+                    
+                    // $start_day = date("Y-m-d",strtotime($value["start_day"]));
+                    // $end_day   = date("Y-m-d",strtotime($value["end_day"]));
     				$data_insert = [
 						"member_id"       => $this->user_id,
 						"company_name" 	  => @$value["company_name"],
@@ -5236,18 +5234,20 @@ class Profile extends MY_Controller {
                             </div>
                             <div class="form-group date-range">
                                 <label for="work-start-date-'.$value["id"].'" class="col-sm-3 control-label">Start Date:</label>
-                                <div class="col-sm-3">
-                                    <input type="text" id="work-start-date-'.$value["id"].'" class="form-control start_day new" value="'.$start_day.'" name="Experience['.$items.'][start_day]" placeholder="mm/dd/yyyy">
+                                <div class="col-sm-9">
+                        			'.genera_calendar("Experience[$items][start_day]", "auto new", $value["start_day"]).'
                                 </div>
-                                <label for="work-end-date-'.$value["id"].'" class="col-sm-3 control-label text-center">End Date:</label>
-                                <div class="col-sm-3">
-                                    <input type="text" id="work-end-date-'.$value["id"].'" class="form-control end_day new" value="'.$end_day.'" name="Experience['.$items.'][end_day]" placeholder="mm/dd/yyyy">
+                            </div>
+                        	<div class="form-group date-range">
+                                <label for="work-end-date-'.$value["id"].'" class="col-sm-3 control-label">End Date:</label>
+                                <div class="col-sm-9" id="box-endday">
+                        			'.genera_calendar("Experience[$items][end_day]", "auto new", $value["end_day"]).'
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-12 custom">
                                     <div class="checkbox check-yelow checkbox-circle">
-                                        <input '.$present.' class="is_present_check" type="checkbox" id="work-present-'.$value['id'].'" name="Experience['.$items.'][present]" value="'.$value['present'].'"> 
+                                        <input '.$present.' class="is_present_check" type="checkbox" id="work-present-'.$value['id'].'" name="Experience['.$items.'][present]" value="1"> 
                                         <label for="work-present-'.$value['id'].'">
                                             Present
                                         </label>   
@@ -5326,7 +5326,6 @@ class Profile extends MY_Controller {
             $education = $this->input->post("education");
             $volunteer  = $this->input->post("volunteer");
             if($education){
-                $this->Common_model->update("education",["present" => 0],["member_id" => $this->user_id]);
                 foreach ($education as $key => $value) {
                     $logo = "";
                     if(isset($_FILES["educationlogo-".$key])){
@@ -5364,8 +5363,18 @@ class Profile extends MY_Controller {
                         $record_education = $this->Common_model->get_record("education",["id" => @$value["id"],"member_id" => $this->user_id]);
                         if($record_education != null) $logo = @$record_education["logo"];
                     }
-                    $start_day =  date("Y-m-d",strtotime(@$value["start_day"]));
-                    $end_day   =  date("Y-m-d",strtotime(@$value["end_day"]));
+                    if (!is_numeric($value["start_day"]["month"]) || !is_numeric($value["start_day"]["day"]) || !is_numeric($value["start_day"]["year"])) {
+                    	$start_day = date("Y-m-d");
+                    } else {
+                    	$start_day = $value["start_day"]["year"] . "-" . $value["start_day"]["month"] . "-" . $value["start_day"]["day"];
+                    }
+                    if (!is_numeric($value["end_day"]["month"]) || !is_numeric($value["end_day"]["day"]) || !is_numeric($value["end_day"]["year"])) {
+                    	$end_day = date("Y-m-d");
+                    } else {
+                    	$end_day = $value["end_day"]["year"] . "-" . $value["end_day"]["month"] . "-" . $value["end_day"]["day"];
+                    }
+                    //$start_day =  date("Y-m-d",strtotime(@$value["start_day"]));
+                    //$end_day   =  date("Y-m-d",strtotime(@$value["end_day"]));
                     $data_common = [
                         "member_id"    => $this->user_id,
                         "school_name"  =>  $value["school_name"],
@@ -5384,8 +5393,7 @@ class Profile extends MY_Controller {
                     }
                 }
             }
-            if($volunteer){
-                $this->Common_model->update("volunteer",["present" => 0],["member_id" => $this->user_id]);
+            if($volunteer){       
                 foreach ($volunteer as $key => $value) {
                     $logo = "";
                     if(isset($_FILES["volunteerlogo-".$key])){
@@ -5424,8 +5432,18 @@ class Profile extends MY_Controller {
                         $record_education = $this->Common_model->get_record("volunteer",["id" => @$value["id"],"member_id" => $this->user_id]);
                         if($record_education != null) $logo = @$record_education["logo"];
                     }
-                    $start_day =  date("Y-m-d",strtotime(@$value["start_day"]));
-                    $end_day   =  date("Y-m-d",strtotime(@$value["end_day"]));
+                    if (!is_numeric($value["start_day"]["month"]) || !is_numeric($value["start_day"]["day"]) || !is_numeric($value["start_day"]["year"])) {
+                    	$start_day = date("Y-m-d");
+                    } else {
+                    	$start_day = $value["start_day"]["year"] . "-" . $value["start_day"]["month"] . "-" . $value["start_day"]["day"];
+                    }
+                    if (!is_numeric($value["end_day"]["month"]) || !is_numeric($value["end_day"]["day"]) || !is_numeric($value["end_day"]["year"])) {
+                    	$end_day = date("Y-m-d");
+                    } else {
+                    	$end_day = $value["end_day"]["year"] . "-" . $value["end_day"]["month"] . "-" . $value["end_day"]["day"];
+                    }
+                    //$start_day =  date("Y-m-d",strtotime(@$value["start_day"]));
+                    //$end_day   =  date("Y-m-d",strtotime(@$value["end_day"]));
                     $data_common = [
                         "member_id"    => $this->user_id,
                         "organization" =>  $value["organization"],
@@ -5481,10 +5499,18 @@ class Profile extends MY_Controller {
     							<div class="form-group"> <label for="major_degeer" class="col-sm-3 control-label"><small>Major Degeer:</small></label>
     								<div class="col-sm-9"> <input type="text" value="'.$value["major_degeer"].'" class="form-control" name="education['.$items.'][major_degeer]" placeholder="What was your major/degree..."> </div>
     							</div>
-    							<div class="form-group date-range"> <label for="work-start-date-'.$items.'" class="col-sm-3 control-label">Start Date:</label>
-    								<div class="col-sm-3"> <input type="text" id="work-start-date-'.$items.'" class="form-control start_day new" value="'.$start_day.'" name="education['.$items.'][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="work-end-date-'.$items.'" class="col-sm-3 control-label text-center">End Date:</label>
-    								<div class="col-sm-3"> <input type="text" id="work-end-date-'.$items.'" class="form-control end_day new" value="'.$end_day.'" name="education['.$items.'][end_day]" placeholder="mm/dd/yyyy"> </div>
-    							</div>
+    							<div class="form-group date-range">
+	                                <label for="work-start-date-'.$value["id"].'" class="col-sm-3 control-label">Start Date:</label>
+	                                <div class="col-sm-9">
+	                        			'.genera_calendar("education[$items][start_day]", "auto new", $value["start_day"]).'
+	                                </div>
+	                            </div>
+	                        	<div class="form-group date-range">
+	                                <label for="work-end-date-'.$value["id"].'" class="col-sm-3 control-label">End Date:</label>
+	                                <div class="col-sm-9" id="box-endday">
+	                        			'.genera_calendar("education[$items][end_day]", "auto new", $value["end_day"]).'
+	                                </div>
+	                            </div>
     							<div class="form-group">
     								<div class="col-sm-12 custom">
     									<div class="checkbox check-yelow checkbox-circle"> <input '.$present.' class="is_present_check" type="checkbox" id="education-present-'.$items.'" name="education['.$items.'][present]" value="1" '.$present.'> <label for="education-present-'.$items.'">
@@ -5520,9 +5546,17 @@ class Profile extends MY_Controller {
                             <div class="form-group"> <label for="major_degeer" class="col-sm-3 control-label"><small>Major Degeer:</small></label>
                                 <div class="col-sm-9"> <input type="text" value="" class="form-control" name="education[0][major_degeer]" placeholder="What was your major/degree..."> </div>
                             </div>
-                            <div class="form-group date-range"> <label for="work-start-date-0" class="col-sm-3 control-label">Start Date:</label>
-                                <div class="col-sm-3"> <input type="text" id="work-start-date-0" class="form-control start_day new" value="" name="education[0][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="work-end-date-0" class="col-sm-3 control-label text-center">End Date:</label>
-                                <div class="col-sm-3"> <input type="text" id="work-end-date-0" class="form-control end_day new" value="" name="education[0][end_day]" placeholder="mm/dd/yyyy"> </div>
+                    		<div class="form-group date-range">
+                                <label for="work-start-date-0" class="col-sm-3 control-label">Start Date:</label>
+                                <div class="col-sm-9">
+                        			'.genera_calendar("education[$items][start_day]", "auto new",null).'
+                                </div>
+                            </div>
+                        	<div class="form-group date-range">
+                                <label for="work-end-date-0" class="col-sm-3 control-label">End Date:</label>
+                                <div class="col-sm-9" id="box-endday">
+                        			'.genera_calendar("education[$items][end_day]", "auto new", null).'
+                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-12 custom">
@@ -5568,10 +5602,18 @@ class Profile extends MY_Controller {
                                 <div class="form-group"> <label class="col-sm-3 control-label"><small>Role:</small></label>
                                     <div class="col-sm-9"> <input type="text" value="'.$value["role"].'" class="form-control" name="volunteer['.$items1.'][role]" placeholder="What was your role..."> </div>
                                 </div>
-                                <div class="form-group date-range"> <label for="work-start-date-'.$items1.'" class="col-sm-3 control-label">Start Date:</label>
-                                    <div class="col-sm-3"> <input type="text" id="work-start-date-'.$items1.'" class="form-control start_day new" value="'.$start_day.'" name="volunteer['.$items1.'][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="work-end-date-'.$items1.'" class="col-sm-3 control-label text-center">End Date:</label>
-                                    <div class="col-sm-3"> <input type="text" id="work-end-date-'.$items1.'" class="form-control end_day new" value="'.$end_day.'" name="volunteer['.$items1.'][end_day]" placeholder="mm/dd/yyyy"> </div>
-                                </div>
+                        		<div class="form-group date-range">
+	                                <label for="work-start-date-'.$value["id"].'" class="col-sm-3 control-label">Start Date:</label>
+	                                <div class="col-sm-9">
+	                        			'.genera_calendar("volunteer[$items1][start_day]", "auto new", $value["start_day"]).'
+	                                </div>
+	                            </div>
+	                        	<div class="form-group date-range">
+	                                <label for="work-end-date-'.$value["id"].'" class="col-sm-3 control-label">End Date:</label>
+	                                <div class="col-sm-9" id="box-endday">
+	                        			'.genera_calendar("volunteer[$items1][end_day]", "auto new", $value["end_day"]).'
+	                                </div>
+	                            </div>
                                 <div class="form-group">
                                     <div class="col-sm-12 custom">
                                         <div class="checkbox check-yelow checkbox-circle"> <input '.$present.' class="is_present_check" type="checkbox" id="volunteer-present-'.$items1.'" name="volunteer['.$items1.'][present]" value="1"> <label for="volunteer-present-'.$items1.'">
@@ -5607,9 +5649,17 @@ class Profile extends MY_Controller {
                             <div class="form-group"> <label  class="col-sm-3 control-label"><small>Role:</small></label>
                                 <div class="col-sm-9"> <input type="text" value="" class="form-control" name="volunteer[0][role]" placeholder="What was your role..."> </div>
                             </div>
-                            <div class="form-group date-range"> <label for="volunteer-start-date-0" class="col-sm-3 control-label">Start Date:</label>
-                                <div class="col-sm-3"> <input type="text" id="volunteer-start-date-0" class="form-control start_day new" value="" name="volunteer[0][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="volunteer-end-date-0" class="col-sm-3 control-label text-center">End Date:</label>
-                                <div class="col-sm-3"> <input type="text" id="volunteer-end-date-0" class="form-control end_day new" value="" name="volunteer[0][end_day]" placeholder="mm/dd/yyyy"> </div>
+                            <div class="form-group date-range">
+                                <label for="work-start-date-0" class="col-sm-3 control-label">Start Date:</label>
+                                <div class="col-sm-9">
+                        			'.genera_calendar("education[0][start_day]", "auto new").'
+                                </div>
+                            </div>
+                        	<div class="form-group date-range">
+                                <label for="work-end-date-0" class="col-sm-3 control-label">End Date:</label>
+                                <div class="col-sm-9" id="box-endday">
+                        			'.genera_calendar("education[0][end_day]", "auto new").'
+                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-12 custom">
@@ -5647,12 +5697,13 @@ class Profile extends MY_Controller {
                     }
                 }
                 $logo = ($value["logo"] != null) ? base_url($value["logo"]) : skin_url("images/logo-company.png");
+                $value["company_name"] = $value["company_name"] != null ? " | ".$value["company_name"] : ""; 
                 $html .=  '
                 <div class="col-sm-12 item-experience">
                     <div class="row">
                     <div class="col-sm-2"><a class="text-white" href="#"><div class="img-circle" style="background-image:url('.$logo.')"></div></a></div>
                     <div class="col-sm-10">
-                        <p><b>'.$value["job_title"].' | '.$value["company_name"].'</b></p>
+                        <p><b>'.$value["job_title"].$value["company_name"].'</b></p>
                         <p>'.date('F Y', strtotime($value["start_day"])). ' - '.date('F Y', strtotime($value["end_day"])).get_diff_year($value["start_day"],$value["end_day"]).'</p>
                         <p class="text-comment">'.$description.'</p>
                     </div>
@@ -5734,6 +5785,7 @@ class Profile extends MY_Controller {
                 $html = "";
                 foreach ($results as $key => $value) {
                     $logo = ($value["avatar"] != null) ? base_url($value["avatar"]) : skin_url("images/avatar-full.png");
+                    $value["job_title"] = $value["job_title"] != null ? " | ".$value["job_title"] : "";
                     $html .= '
                         <div class="media">
                             <div class="media-left">
@@ -5742,13 +5794,13 @@ class Profile extends MY_Controller {
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-sm-7">
-                                        <h4 class="media-heading"><b>'.$value["first_name"].' '.$value["last_name"].'</b> | '.$value["job_title"].' <span></h4>
+                                        <h4 class="media-heading"><b>'.$value["first_name"].' '.$value["last_name"].'</b>'.$value["job_title"].' <span></h4>
                                         <p>'.$value["company_name"].' - <span class="day_time">'.date(DW_FORMAT_DATE, strtotime($value["at_day"])).'</span></p>
                                     </div>
                                     <div class="col-sm-5 text-right">
                                         <ul class="list-inline">
-                                            <li><a href=""><img src="'.skin_url("/icon/icon-user.png").'"></a></li>
-                                            <li><a href=""><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
+                                            <li><a href="#"><img src="'.skin_url("/icon/icon-user.png").'"></a></li>
+                                            <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" href="#"><img src="'.skin_url("/icon/icon-message.png").'"></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -5756,7 +5808,6 @@ class Profile extends MY_Controller {
                         </div>
                     ';
                 }
-
             }
             $data["response"] = $html;
             $data["status"]   = "success";
@@ -5803,6 +5854,7 @@ class Profile extends MY_Controller {
                 $query   = $this->db->get()->result_array();
                 $html    = "";
                 foreach ($query as $key => $value) {
+                    $value['job_title'] = $value['job_title'] != null ? " | ".$value['job_title'] : "";
                     $avatar = ( @$value['avatar'] != null ) ? base_url($value['avatar']) :  base_url("/skins/images/avatar-full.png");
                     $html .='<div class="media">
                         <div class="media-left">
@@ -5811,14 +5863,14 @@ class Profile extends MY_Controller {
                         <div class="media-body">
                             <div class="row">
                                 <div class="col-sm-7">
-                                    <h4 class="media-heading"><b>'.$value['first_name'].' '.$value['last_name'].'</b> | '.$value['job_title'].'</h4>
+                                    <h4 class="media-heading"><b>'.$value['first_name'].' '.$value['last_name'].'</b>'.$value['job_title'].'</h4>
                                     <p>'.$value['company_name'].' - <span class="day_time">'.date('F d\, Y \a\t g:ia', strtotime($value['created_at'])).'</span></p>
                                 </div>
                                 <div class="col-sm-5 text-right">
                                     <ul class="list-inline">
                                         <li><a data-id="'.$value['id'].'" href="javascript:;"><img width="40px" src="'.skin_url('/icon/icon-close.png').'"></a></li>
                                         <li><a data-id="'.$value['id'].'" href="javascript:;"><img width="55px" src="'.skin_url('/icon/icon-user.png').'"></a></li>
-                                        <li><a data-id="'.$value['id'].'" href="javascript:;"><img width="55px" src="'.skin_url('/icon/icon-message.png').'"></a></li>
+                                        <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" data-id="'.$value['id'].'" href="javascript:;"><img width="55px" src="'.skin_url('/icon/icon-message.png').'"></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -5828,8 +5880,7 @@ class Profile extends MY_Controller {
                 $data["number"] = $number;
                 $data["status"] = "success";
                 $data["response"] = $html;
-            }
-            
+            }           
         }
         die(json_encode($data));
     }
@@ -5839,7 +5890,7 @@ class Profile extends MY_Controller {
             $id = $this->input->post("id");
             $check = $this->Common_model->get_record("members",["id" => $id]);
             if($check != null){
-                $daybefore = date( 'Y-m-d', strtotime("-30 days") );
+                $daybefore = date( 'Y-m-d', strtotime("-90 days") );
                 $number    = $this->Common_model->count_table("common_follow",["member_id" => $id,"type_object" => "company"]);
                 $this->db->select("tbl2.*,tbl3.company_name,tbl1.created_at");
                 $this->db->from("common_follow AS tbl1");
@@ -5849,6 +5900,7 @@ class Profile extends MY_Controller {
                 $query   = $this->db->get()->result_array();
                 $html    = "";
                 foreach ($query as $key => $value) {
+                    $value['job_title'] = $value['job_title'] != null ? " | ".$value['job_title'] : "";
                     $avatar = ( @$value['avatar'] != null ) ? base_url($value['avatar']) :  base_url("/skins/images/avatar-full.png");
                     $html .='<div class="media">
                         <div class="media-left">
@@ -5857,14 +5909,14 @@ class Profile extends MY_Controller {
                         <div class="media-body">
                             <div class="row">
                                 <div class="col-sm-7">
-                                    <h4 class="media-heading"><b>'.$value['first_name'].' '.$value['last_name'].'</b> | '.$value['job_title'].'</h4>
+                                    <h4 class="media-heading"><b>'.$value['first_name'].' '.$value['last_name'].'</b>'.$value['job_title'].'</h4>
                                     <p>'.$value['company_name'].' - <span class="day_time">'.date(DW_FORMAT_DATE, strtotime($value['created_at'])).'</span></p>
                                 </div>
                                 <div class="col-sm-5 text-right">
                                     <ul class="list-inline">
                                         <li><a data-id="'.$value['id'].'" href="javascript:;"><img width="40px" src="'.skin_url('/icon/icon-close.png').'"></a></li>
                                         <li><a data-id="'.$value['id'].'" href="javascript:;"><img width="55px" src="'.skin_url('/icon/icon-user.png').'"></a></li>
-                                        <li><a data-id="'.$value['id'].'" href="javascript:;"><img width="55px" src="'.skin_url('/icon/icon-message.png').'"></a></li>
+                                        <li><a id="reports-email" data-name ="'.$value["first_name"].' '.$value["last_name"].'" data-email="'.$value["work_email"].'" data-id="'.$value['id'].'" href="javascript:;"><img width="55px" src="'.skin_url('/icon/icon-message.png').'"></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -5978,7 +6030,7 @@ class Profile extends MY_Controller {
         $this->session->set_userdata('user_info', $new_user_info);
         redirect (base_url("company/edit"));
     }
-    public function mysocail($id = null){
+    public function mysocial($id = null){
         $offset = 0;
         $limit  = 30;
         $page   = 0;
@@ -6130,6 +6182,190 @@ class Profile extends MY_Controller {
     }
     public function newimages($id){
     	if(!$this->is_login) redirect(base_url());
-        
+        $user_id = $this->user_id;
+        $offset = 0;
+        $limit  = 30;
+        $page   = 0;
+        $url    = base_url('profile/newimages/'.$id.'/');
+        $check  = $this->Common_model->get_record("members" , ["id" => $id]);
+        if($check == null) redirect(base_url());
+        if($this->input->get("page") && is_numeric($this->input->get("page")) && $this->input->get("page") > 1){
+            $page = $this->input->get("page");
+            $page = $page - 1;
+        }
+        $this->data["company_info"] = $this->Common_model->get_record("company", array('member_id' => $id));
+        $this->data["is_login"]     = $this->is_login;
+        $this->data['member_id']    = $id;
+        $this->data['activer_user'] = ($id ==  $this->user_id) ? false : true;
+        $this->data['owner'] = ($id ==  $this->user_id) ? true : false;
+        $this->data["title_page"]   = "My social post";
+        $record["is_favorite"]   =  ($this->Common_model->get_record("common_favorite",array("reference_id" => @$company_info["id"] ,"member_id" => $this->user_id,"type_object"   => "company")) != null);
+        $record["is_follow"]     =  ($this->Common_model->get_record("common_follow",array("reference_id" => @ $this->data["company_info"]["id"] ,"member_id" => $this->user_id,"type_object"   => "company")) != null);
+        $record["company_id"]    = @$this->data["company_info"]["id"];
+        $record["company_name"]  = @$this->data["company_info"]["company_name"];
+        $record["business_type"] = @$this->data["company_info"]["business_type"];
+        $record["business_description"] = @$this->data["company_info"]["business_description"];
+        $record["logo"]       = @$this->data["company_info"]["logo"];
+        $record["banner"]     = @$this->data["company_info"]["banner"];
+        $this->data['member'] = $record;
+        $offset = $page * $limit;
+        $this->load->model("Photo_model");      
+        $this->data["results"] = $this->Photo_model->get_new_images($id,$user_id,$offset,$limit);
+        $total_rows = $this->Common_model->count_table("tracking_upload_by_member",["owner_id" => $id,"member_id" => $user_id,"status" => 0]);
+        $this->data["all_photo"] = $total_rows;
+        $this->load->library('pagination');
+        $config['base_url'] = $url;
+        $config['uri_segment'] = 3;
+        $config['num_links'] = 3;
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $limit; 
+        $config['full_tag_open'] = '<ul class="pagination">';
+        $config['full_tag_close'] = '</ul>';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['next_link'] = 'Next &rarr;';
+        $config['prev_link'] = '&larr; Previous';
+        $config['first_link'] = false;
+        $config['last_link'] = false;
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['enable_query_strings']  = true;
+        $config['page_query_string']  = true;
+        $config['query_string_segment'] = "page";
+        $config['use_page_numbers'] = TRUE;        
+        $this->pagination->initialize($config); 
+        $this->Common_model->update("tracking_upload_by_member",["status" => 1],["owner_id" => $id,"member_id" => $user_id]);
+        $this->load->view("block/header",$this->data);
+        $this->load->view("profile/new_images");
+        $this->load->view("block/footer",$this->data);  
+    }
+    public function catalog ($catalog,$catalog_name){
+        $url = current_url();
+        $this->data['action'] = "view";
+        if($this->is_login || $this->session->userdata('user_sr_info')){
+            $in_ = "this Catalog";
+            $current_url = $url;
+            $categories_id = null;
+            $keyword = null;
+            $catalog_name = $this->Common_model->get_record("manufacturers",["id" => $catalog]);
+            if($catalog_name != null){
+                $in_ = "this Catalog ". @$catalog_name["name"];
+            }
+            $segment = 4;
+            $owner = false;
+            $user_id = null;
+            if (@$this->user_id == $catalog_name["member_id"]) {
+                $user_id = $this->user_id;
+                $segment = 3;
+                if ($this->session->userdata('user_info') || $this->session->userdata('user_sr_info')) {
+                    $owner = true;
+                }
+            }
+            $this->data["view_profile"] = true;
+            $record = $this->Common_model->get_record("members", array('id' => $catalog_name["member_id"]));
+            if ($record == null) {
+                redirect(base_url());
+            }
+            $this->data["is_login"] = $this->is_login;
+            $this->data['member_id'] = $user_id;
+            $this->data['activer_user'] = ($user_id ==  $this->user_id) ? false : true;
+            $this->data["title_page"] = "My Photo";
+            $this->data["in_"] = $in_;
+            
+            $this->data["company_info"] = $this->Common_model->get_record("company", array(
+                'member_id' => $user_id
+            ));
+            $record["is_favorite"]  =  ($this->Common_model->get_record("common_favorite",array("reference_id" => @$company_info["id"] ,"member_id" => $this->user_id,"type_object"   => "company")) != null);
+            $record["is_follow"]  =  ($this->Common_model->get_record("common_follow",array("reference_id" => @ $this->data["company_info"]["id"] ,"member_id" => $this->user_id,"type_object"   => "company")) != null);
+            $record["company_id"] = @$this->data["company_info"]["id"];
+            $record["company_name"] = @$this->data["company_info"]["company_name"];
+            $record["business_type"] = @$this->data["company_info"]["business_type"];
+            $record["business_description"] = @$this->data["company_info"]["business_description"];
+            $record["logo"]       = @$this->data["company_info"]["logo"];
+            $record["banner"]     = @$this->data["company_info"]["banner"];
+            $this->data['member'] = $record;
+            $this->load->model('Photo_model');
+            $this->load->model('Comment_model');
+            $per_page = 30;
+            $total_rows =  $this->Photo_model->total_photo($user_id,$keyword,$categories_id,$catalog);
+            $this->data["random_project"] = $this->Photo_model->random_photo_project($user_id);
+            $this->data["current_url"] = $current_url;
+            $this->data["all_photo"] = $total_rows;
+            $this->load->library('pagination');
+            $config['base_url'] = $url;
+            $config['uri_segment'] = 3;
+            $config['num_links'] = 3;
+            $config['total_rows'] = $total_rows;
+            $config['per_page'] = $per_page; 
+            $config['full_tag_open'] = '<ul class="pagination">';
+            $config['full_tag_close'] = '</ul>';
+            $config['cur_tag_open'] = '<li class="active"><a>';
+            $config['cur_tag_close'] = '</a></li>';
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+            $config['next_link'] = 'Next &rarr;';
+            $config['prev_link'] = '&larr; Previous';
+            $config['first_link'] = false;
+            $config['last_link'] = false;
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+            $config['enable_query_strings']  = true;
+            $config['page_query_string']  = true;
+            $config['query_string_segment'] = "page";
+            $config['use_page_numbers'] = TRUE;        
+            $this->pagination->initialize($config); 
+            $page = 0;
+            if($this->input->get("page") && is_numeric($this->input->get("page")) && $this->input->get("page") > 1){
+                $page = $this->input->get("page");
+                $page = $page - 1;
+            }
+            $offset = $page * $per_page;
+            $result_photo = $this->Photo_model->seach_photo(NULL, $user_id, $keyword, $categories_id,NUll, $offset, $per_page, $catalog,$user_id,true);
+            $get_cat = $this->Common_model->get_result("categories");
+            $this->load->model("Category_model");
+            $cat_parent = $this->get_children_cat("9", $get_cat);
+            $all_photo_product =  $result_photo;
+            foreach ($all_photo_product as $key => $value) {
+                $all_id_photo[] = $value["photo_id"];
+            }
+            if(!empty($all_id_photo) && !empty($cat_parent)){
+                $this->data["all_product"] = $this->Category_model->get_cat_by_photo($all_id_photo,$cat_parent);
+            }   
+            $data_share = '<meta name="og:image" content="' . base_url($record['banner']) . '">
+            <meta property="og:title" content="' .  $this->data["company_info"]["company_name"] . '" />
+            <meta id ="titleshare" property="og:title" content="'. $this->data["company_info"]["company_name"].' just shared on @Dezignwall TAKE A LOOK" />
+            <meta property="og:description" content="' .  $this->data["company_info"]["business_description"] . '" />
+            <meta property="og:url" content="' . base_url("profile/index/" .  $this->data["company_info"]["member_id"]) . '" />
+            <meta property="og:image" content="' . base_url($record['banner']) . '" />';
+            $this->data["data_share"] = $data_share;
+            $this->data['results'] = $result_photo;
+            $this->data['owner'] = $owner;
+            $this->data['action'] = "view";
+            $this->data['url'] = $url;
+            $this->load->view('block/header', $this->data);
+            $this->load->view('profile/catalog', $this->data);
+            $this->load->view('block/footer', $this->data);
+
+        }else{ 
+            $CI =& get_instance();
+            $url = $CI->config->site_url($CI->uri->uri_string());
+            $current_url =   $_SERVER['QUERY_STRING'] ? $url.'?'.$_SERVER['QUERY_STRING'] : $url;
+            $current_url = str_replace("&","[]", $current_url);
+            redirect(base_url("?action=signin&url=".$current_url));
+        }
     }
 }

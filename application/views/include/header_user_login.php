@@ -24,15 +24,18 @@
 				<li class="highlight"><a href="'.base_url("company/view").'">View company public profile </a></li>
 				<li class="highlight"><a class="article-add-link" href="'.base_url("profile/addphotos/").'">Upload new image</a></li>
 				<li class="highlight"><a href="'.base_url("profile/myphoto/").'">View uploaded images</a></li>
+				<li class="highlight"><a class="upgrade-account-link" href="'.base_url("company/reports").'">Your company reports</a></li>
+				<li class="highlight"><hr style="border-top:1px solid #999;" /></li>
+				<li class="highlight"><a class="upgrade-account-link" href="'.base_url("profile/edit?share").'">Send digital card </a></li>
 				<li class="highlight"><a href="'.base_url("designwalls/").'">Your walls</a></li>
 				<li class="highlight"><a href="'.base_url("profile/edit/").'">Edit personal profile </a></li>
 				<li class="highlight"><a href="'.base_url("profile/view/").'">View personal public profile </a></li>
-				<li class="highlight"><a class="upgrade-account-link" href="'.base_url("profile/edit?share").'">Send digital card </a></li>
 				<li class="highlight"><a href="'.base_url("profile/conversations").'">View conversations</a></li>
-				<li class="highlight"><a class="upgrade-account-link" href="'.base_url("company/reports").'">Your company reports</a></li>
 			    <li class="highlight"><a href="'.base_url("profile/reports").'">Your personal reports</a></li>
+			    <li class="highlight"><a href="'.base_url("profile/mysocial").'">Your social posts</a></li>
+			    <li class="highlight"><hr style="border-top:1px solid #999;" /></li>
 				<li class="highlight"><a href="'.base_url("profile/logout/").'">Logout</a></li>';
-		}else{
+		}else{ 
 			echo '<li class="highlight"><a href="'.base_url("profile/edit/").'">Edit profile </a></li>
 			<li class="highlight"><a class="article-add-link" href="'.base_url("designwalls/").'">Your walls</a></li>
 			<li class="highlight"><a href="'.base_url("profile/view/").'">View public profile </a></li>

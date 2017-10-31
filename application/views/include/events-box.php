@@ -1,9 +1,5 @@
+<?php /*
 <style>
-   /*setting*/
-   #box-events .remove-margin{margin: 0!important}
-   #box-events .remove-padding{padding: 0!important}
-   #box-events h1,#box-events h2,#box-events h3,#box-events h4,#box-events h6,#box-events span,#box-events p, #box-events strong{color: #9E9E9E}
-   /*setting*/
    .dw-event{width: 400px;max-width: 100%;margin: 0 auto;float: none;box-shadow: -2px 5px 8px 1px #9E9E9E;border-radius: 5px;}
    .dw-event .dw-event-head{background-color: #339999;padding: 15px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
    #box-events #close-form{
@@ -35,7 +31,6 @@
    .button-dw-event .ignore, .button-dw-event .ignore:hover, .button-dw-event .ignore:focus{border: 1px solid #000;color: #000;background-color: #fff;outline: none;}
    .button-dw-event .maybe, .button-dw-event .maybe:hover, .button-dw-event .maybe:focus{border: 1px solid #ff9800;color:#ff9800;background-color: #fff;outline: none;}
    .button-dw-event .going, .button-dw-event .going:hover, .button-dw-event .going:focus{background-color: #339999;color: #fff;border-color: #339999;outline: none;}
-   /*style dw-image*/
    .dw-image{position: relative;width: 115px;height: 115px;text-align: center;margin-bottom: 3px;}
    .dw-image .image img{width: 100%;height: 100%;}
    .dw-image .child-dw-image p{text-align: center!important;color: #fff;padding-top: 22px;font-size: 17px;}
@@ -89,7 +84,6 @@
    opacity: 0;
    }
    }
-   /*event-near-you*/
    .event-near-you .col-left{padding: 0 0 0 15px;}
    .event-near-you .col-content{padding: 0 10px 0 10px;}
    .event-near-you .col-right{padding: 0 15px 0 0;}
@@ -499,3 +493,4 @@
    </div>
 </div>
 </div>
+*/ ?>

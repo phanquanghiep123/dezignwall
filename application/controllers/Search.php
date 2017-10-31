@@ -26,7 +26,7 @@ class Search extends CI_Controller {
         $this->data['keyword']        = $this->input->get("keyword");
         $this->data['catalog']        = $this->input->get("catalog");
         $this->data['all_category']   = $this->input->get("all_category");
-        $this->data['location_photo']       = $this->input->get("location");
+        $this->data['location_photo'] = $this->input->get("location");
         $this->data['photo_type']     = NULL;
         $this->data['category_slug']  = ($type != "projects" && $type != "products") ? $type : NULL;
         $this->data['current_page']   = 0;
@@ -77,7 +77,7 @@ class Search extends CI_Controller {
             $keyword = addslashes(trim($this->data['keyword']));
         // !keyword not emty.
         $catalog = NULL;
-        if($this->data['catalog'] != NULL && is_numeric($this->data['catalog'])) 
+        if($this->data['catalog'] != NULL) 
             $catalog = $this->data['catalog'];
         if($all_category != NULL){
             $all_category = implode(",", $all_category);
@@ -107,8 +107,8 @@ class Search extends CI_Controller {
         $social_post = $n_recorder = array();
         $member_id = $this->user_id == null ? 0 : $this->user_id; 
         if($type != "projects" && $type != "products"){
-            if($this->data['keyword'] == null)
-                $social_post = $this->Article_model->social_post(0,3,$not_show,null,$member_id);  
+            if($this->data['keyword'] == null && $this->data['catalog'] == null && $this->data['all_category'] == null && $this->data['photo_type'] == null && $this->data['offer_product'] == null)
+                $social_post = $this->Article_model->social_post(0,12,$not_show,null,$member_id);  
         }
         try {
             if($social_post != null || $photo != null)
@@ -136,6 +136,7 @@ class Search extends CI_Controller {
         $this->load->view('block/header', $this->data);
         $this->load->view('block/wrapper', $this->data);
         $this->load->view('block/footer', $this->data);
+        
     }
     private $children_cat = "";
     private function get_children_cat($cat_id, $arg_full) {

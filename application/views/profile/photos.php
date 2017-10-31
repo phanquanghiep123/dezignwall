@@ -22,7 +22,6 @@ if( isset($random_project) && is_array($random_project) ){
         } 
         $project .= "<p><a href='".base_url("photos/" . $value['photo_id'] . "/" . gen_slug($value["name"]))."'>".$echo_name."</a></p>";
     }
-    
 }
 ?>
 <section class="section box-wapper-show-image my_photo" id="wrapper">

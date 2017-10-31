@@ -145,28 +145,37 @@
                                                 </li>
                                             </ul>
                                             <script type="text/javascript">
-                                                var height_header = $("body #header").outerHeight();
-                                                $(".menu-destop-new #show-notification").click(function(){
-                                                    if($(this).hasClass("open-box") == true){      
-                                                        $("#header #notifications").animate({
-                                                            opacity:0
-                                                        },500,function(){
-                                                            $("#header #notifications").hide();  
-                                                        }); 
-                                                        $(this).removeClass("open-box");
-                                                    }else{
-                                                        $("#header #notifications").show();
-                                                        $("#header #notifications").animate({
-                                                            opacity:1
-                                                        },500);      
-                                                        $(this).addClass("open-box");
-                                                        $.get(base_url+"photos/view_notifications");
-                                                        $("#header #show-notification .number").remove();
-                                                    } 
-                                                    return false; 
-                                                });
+                                                var height_header = $("body #header").outerHeight();                        
                                                 $(document).ready(function(){
-                                                    $("#header #notifications #close-form").click(function(e){
+                                                    $(".menu-destop-new #show-notification").click(function(){
+                                                        if($(this).hasClass("open-box") == true){      
+                                                            $("#header #notifications").animate({
+                                                                opacity:0
+                                                            },500,function(){
+                                                                $("#header #notifications").hide();  
+                                                            }); 
+                                                            $(this).removeClass("open-box");
+                                                        }else{
+                                                            $("#header #notifications").show();
+                                                            $("#header #notifications").animate({
+                                                                opacity:1
+                                                            },500);      
+                                                            $(this).addClass("open-box");
+                                                            $.get(base_url+"photos/view_notifications");
+                                                            $("#header #show-notification .number").remove();
+                                                        } 
+                                                        return false; 
+                                                    });
+                                                    $(".menu-mobile-new #show-notification").click(function(){
+                                                        $.get(base_url+"photos/view_notifications");
+                                                        $("body #modal-notification").modal();
+                                                        return false;
+                                                    });
+                                                    $("#modal-notification #close-form").click(function(e){
+                                                       $("body #modal-notification").modal("hide");
+                                                       $("#show-notification").removeClass("open-box");
+                                                   });
+                                                    $(".menu-destop-new #notifications #close-form").click(function(e){
                                                         $("#header #notifications").animate({
                                                             opacity:0
                                                         },500,function(){
@@ -220,13 +229,14 @@
                                                         success : function(res){
                                                             console.log(res);
                                                             if(res["status"] == "success")
-                                                                _this.attr("disabled","true");
+                                                            	_this.closest(".media").remove();
+                                                                //_this.attr("disabled","true");
                                                             else 
                                                                 alert("Error!"); 
                                                         },error:function(){
                                                             alert("Error!"); 
                                                         }
-                                                    })
+                                                    }) 
                                                 });
                                                 $(document).on("click","#notifications #delete-follow",function(){
                                                     var id = $(this).attr("data-id");
@@ -300,7 +310,6 @@
                                                 <li>
                                                     <?php $notification = get_notifications($user["id"])?>
                                                     <a id="show-notification" class="btn-upload <?php echo $not_login;?>" href="#"><img src="<?php echo skin_url("images/bell.png"); ?>"><?php if($notification > 0):?><span class="number"><?php echo $notification;?></span><?php endif;?></a>
-                                                    <?php $this->load->view("include/notification",$user)?>
                                                 </li>
                                                 <?php } ?>
                                                 <li>
@@ -351,6 +360,13 @@
             <!--header box-favorite-bar-->
             <!--!header box-favorite-bar-->
         </div>
+        <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <?php $this->load->view("include/notification",$user)?>
+                </div>
+            </div>
+        </div>
         <?php if (isset($is_login) && $is_login == true) {?>
         <div class="boxshow-destop">
             <?php $this->load->view("include/events-box");?>
@@ -395,7 +411,7 @@
                 });
             </script>
         </div>
-        <div class="boxshow-mobile">
+        <div class="boxshow-mobile">          
             <div class="modal fade" id="modal-events" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -426,7 +442,7 @@
         <?php } ?>
         <div id="wrapper2" class="structural-block <?php echo @$class_page;?>">
             <?php if(@$is_home == true && isset($is_login) && $is_login == true):?>
-            <?php $data_record = get_company_top_follow(@$user["id"])?>
+            <?php $data_record = get_company_top_follow(@$user["id"]);?>
             <div class="box-favorite-bar">
                 <div class="container-fluid">
                     <div class="row">
@@ -439,21 +455,25 @@
                                     <?php 
                                         $avatar = isset($value["logo"]) && $value["logo"]!= "" ? base_url(@$value["logo"]) : skin_url("images/logo-company.png");
                                     ?>
-                                    <li>
-                                        <a href="<?php echo base_url("company/view/".$value["member_id"])?>">
+                                    <li> 
+                                        <a href="<?php echo base_url("profile/newimages/".$value["member_id"])?>">
                                             <img class="img-circle" src="<?php echo base_url($avatar)?>">
                                         </a>
-                                        <span class="counter"><?php echo ($value["number_follow"]/1000 >= 1) ? "+".($value["number_follow"]/1000 )."k" : "+".$value["number_follow"]?></span>
+                                        <?php if( $value["number_follow"] != null && $value["number_follow"] > 0 ):?>
+                                        <a href="<?php echo base_url("profile/newimages/".$value["member_id"])?>"><span class="counter"><?php echo ($value["number_follow"]/1000 >= 1) ? "+".($value["number_follow"]/1000 )."k" : "+".$value["number_follow"]?></span>
+                                        <?php endif;?></a>
                                     </li>     
                                 <?php } ?>   
                             </ul>
+                            <?php else :?>
+                                <h5 class="btn-up-comment">Select the <img src="<?php echo skin_url("images/follow-activer.png")?>"> icon to get updates from companies you are interested in... </h5>
                             <?php endif;?>
                         </div>
                         <div class="col-md-6 border-left column-right box-favorite">
                             <p class="remove-bottom-10">Share socially...</p>
                             <div class="media remove-margin">
                                 <div class="media-left">
-                                    <img class="img-circle media-object" src="<?php echo isset($user["avatar"])&& $user["avatar"]!="" ? base_url($user["avatar"]) : skin_url("images/avatar-full.png"); ?>" width="50px">
+                                    <a href="<?php echo base_url("profile/view")?>"><img class="img-circle media-object" src="<?php echo isset($user["avatar"])&& $user["avatar"]!="" ? base_url($user["avatar"]) : skin_url("images/avatar-full.png"); ?>" width="50px"></a>
                                 </div>
                                 <div class="media-body">
                                     <a id="btn-add-social" class="btn-up-comment" href="#">Hi <?php echo @$user["first_name"];?>! What’s on your mind?</a>

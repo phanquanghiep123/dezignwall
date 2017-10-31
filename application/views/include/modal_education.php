@@ -78,6 +78,15 @@
 	    background-repeat: no-repeat;
     }
     #work-education .media{margin-top: 0;}
+    #work-education .form-control[disabled], #work-education .form-control[readonly], #work-education fieldset[disabled] .form-control {
+        border-color: #000;
+        box-shadow: none;
+        border-radius: 0;
+        height: 36px;
+        font-size: 18px;
+        background: #ccc;
+        padding: 6px 12px;
+    }
 </style>
 <script type="text/javascript">
     $("#get_education").click(function(){
@@ -92,27 +101,20 @@
             		$("#work-education #volunteer-education-show").html(res["reponse"]["volunteer"]);
 	                if(res["show"]  == true) $("#more-work-experience").show();
 	                else $("#more-work-experience").hide();
+                    $.each($("#work-education .is_present_check"),function(){
+                        if($(this).is(':checked') == true){
+                            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                                $(this).attr("disabled",true);
+                                $(this).get(0).selectedIndex = 0;
+                            });     
+                        }else{
+                            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                                $(this).attr("disabled",false);
+                            });
+                        }
+                    });
 	                $("#work-education").modal();
-	                $.each($("#work-education .start_day.new"),function(){
-	                    $(this).datetimepicker({
-	                        format :"MM/DD/Y",
-	                        widgetPositioning:{
-	                            horizontal: 'right',
-	                            vertical: 'bottom'
-	                        }
-	                    });
-	                    $(this).removeClass("new");
-	                });
-	                $.each($("#work-education .end_day.new"),function(){
-	                    $(this).datetimepicker({
-	                        format :"MM/DD/Y",
-	                         widgetPositioning:{
-	                            horizontal: 'right',
-	                            vertical: 'bottom'
-	                        }
-	                    });
-	                    $(this).removeClass("new");
-	                });	
+	                 
             	}else{
             		alert("error");
             	}
@@ -161,62 +163,36 @@
     $(document).on("click","#save_education #add-education",function(){
     	var logo = "<?php echo base_url("skins/images/logo-company.png");?>";
     	var length_box = $(this).parents(".modal-body").find(".box-content .work-item.media").length;
-    	var box_appen = '<div class="work-item media"><hr><div class="remove-items" data-id="0" data-type="education">×</div> <div class="media-left"> <div class="relative"> <div class="box-logo-education"> <div class="click-logo"><a href="javascript:;">+</a></div> </div> <div class="img-circle" style="background-image:url('+logo+')"></div> <input accept="image/*" type="file" class="add-logo none" id="educationlogo-'+length_box+'" name="educationlogo-'+length_box+'"> </div> </div> <div class="media-body"> <div class="form-group"> <label for="work-company" class="col-sm-3 control-label"><small>School Name:</small></label> <div class="col-sm-9"> <input type="text" class="form-control" value="" name="education['+length_box+'][school_name]" placeholder="What was the name of your school..."> </div> </div> <div class="form-group"> <label for="major_degeer" class="col-sm-3 control-label"><small>Major Degeer:</small></label> <div class="col-sm-9"> <input type="text" value="" class="form-control" name="education['+length_box+'][major_degeer]" placeholder="What was your major/degree..."> </div> </div> <div class="form-group date-range"> <label for="work-start-date-'+length_box+'" class="col-sm-3 control-label">Start Date:</label> <div class="col-sm-3"> <input type="text" id="work-start-date-'+length_box+'" class="form-control start_day new" value="" name="education['+length_box+'][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="work-end-date-'+length_box+'" class="col-sm-3 control-label">End Date:</label> <div class="col-sm-3"> <input type="text" id="work-end-date-'+length_box+'" class="form-control end_day new" value="" name="education['+length_box+'][end_day]" placeholder="mm/dd/yyyy"> </div> </div> <div class="form-group"> <div class="col-sm-12 custom"> <div class="checkbox check-yelow checkbox-circle"> <input class="is_present_check" type="checkbox" id="education-present-'+length_box+'" name="education['+length_box+'][present]" value="1"> <label for="education-present-'+length_box+'"> Present </label> </div> </div> </div> </div> <input type="hidden" name="education['+length_box+'][id]" value="0"> </div>';
+    	var start_day = '<?php echo genera_calendar("education[0][start_day]", "auto"); ?>';
+        start_day = start_day.replace('[0]', '['+length_box+']');
+        var end_day = '<?php echo genera_calendar("education[0][end_day]", "auto"); ?>';
+        end_day = end_day.replace('[0]', '['+length_box+']');
+    	var box_appen = '<div class="work-item media"><hr><div class="remove-items" data-id="0" data-type="education">×</div> <div class="media-left"> <div class="relative"> <div class="box-logo-education"> <div class="click-logo"><a href="javascript:;">+</a></div> </div> <div class="img-circle" style="background-image:url('+logo+')"></div> <input accept="image/*" type="file" class="add-logo none" id="educationlogo-'+length_box+'" name="educationlogo-'+length_box+'"> </div> </div> <div class="media-body"> <div class="form-group"> <label for="work-company" class="col-sm-3 control-label"><small>School Name:</small></label> <div class="col-sm-9"> <input type="text" class="form-control" value="" name="education['+length_box+'][school_name]" placeholder="What was the name of your school..."> </div> </div> <div class="form-group"> <label for="major_degeer" class="col-sm-3 control-label"><small>Major Degeer:</small></label> <div class="col-sm-9"> <input type="text" value="" class="form-control" name="education['+length_box+'][major_degeer]" placeholder="What was your major/degree..."> </div> </div> <div class="form-group date-range"> <label for="work-start-date-'+length_box+'" class="col-sm-3 control-label">Start Date:</label> <div class="col-sm-9"> ' + start_day + ' </div></div> <div class="form-group date-range"> <label for="work-end-date-'+length_box+'" class="col-sm-3 control-label">End Date:</label> <div class="col-sm-9" id="box-endday"> ' + end_day + ' </div> </div> <div class="form-group"> <div class="col-sm-12 custom"> <div class="checkbox check-yelow checkbox-circle"> <input class="is_present_check" type="checkbox" id="education-present-'+length_box+'" name="education['+length_box+'][present]" value="1"> <label for="education-present-'+length_box+'"> Present </label> </div> </div> </div> </div> <input type="hidden" name="education['+length_box+'][id]" value="0"> </div>';
    		$(this).parents(".modal-body").find(".box-content").append(box_appen);
-   		$.each($("#work-education .start_day.new"),function(){
-            $(this).datetimepicker({
-                format :"MM/DD/Y",
-                widgetPositioning:{
-                    horizontal: 'right',
-                    vertical: 'bottom'
-                }
-            });
-            $(this).removeClass("new");
-        });
-        $.each($("#work-education .end_day.new"),function(){
-            $(this).datetimepicker({
-                format :"MM/DD/Y",
-                 widgetPositioning:{
-                    horizontal: 'right',
-                    vertical: 'bottom'
-                }
-            });
-            $(this).removeClass("new");
-        });	
    		return false;
     });
     $(document).on("click","#save_education #add-volunteer",function(){
     	var logo = "<?php echo base_url("skins/images/logo-company.png");?>";
     	var length_box = $(this).parents(".modal-body").find(".box-content .work-item.media").length;
-    	var box_appen = '<div class="work-item media"><hr><div class="remove-items" data-id="0" data-type="volunteer">×</div><div class="media-left"><div class="relative"><div class="box-logo-education"><div class="click-logo"><a href="javascript:;">+</a></div></div><div class="img-circle" style="background-image:url('+logo+')"></div><input accept="image/*" type="file" class="add-logo none" id="volunteerlogo-'+length_box+'" name="volunteerlogo-'+length_box+'"></div></div><div class="media-body"><div class="form-group"> <label class="col-sm-3 control-label"><small>Organization:</small></label><div class="col-sm-9"> <input type="text" class="form-control" value="" name="volunteer['+length_box+'][organization]" placeholder="What was the name of the organization..."> </div></div><div class="form-group"> <label class="col-sm-3 control-label"><small>Role:</small></label><div class="col-sm-9"> <input type="text" value="" class="form-control" name="volunteer['+length_box+'][role]" placeholder="What was your role..."> </div></div><div class="form-group date-range"> <label for="volunteer-start-date-'+length_box+'" class="col-sm-3 control-label">Start Date:</label><div class="col-sm-3"> <input type="text" id="volunteer-start-date-'+length_box+'" class="form-control start_day new" value="" name="volunteer['+length_box+'][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="volunteer-end-date-'+length_box+'" class="col-sm-3 control-label">End Date:</label><div class="col-sm-3"> <input type="text" id="volunteer-end-date-'+length_box+'" class="form-control end_day new" value="" name="volunteer['+length_box+'][end_day]" placeholder="mm/dd/yyyy"> </div></div><div class="form-group"><div class="col-sm-12 custom"><div class="checkbox check-yelow checkbox-circle"> <input class="is_present_check" type="checkbox" id="volunteer-present-'+length_box+'" name="volunteer['+length_box+'][present]" value="1"> <label for="volunteer-present-'+length_box+'">Present</label> </div></div></div></div><input type="hidden" name="volunteer['+length_box+'][id]" value="0"></div>';
+    	var start_day = '<?php echo genera_calendar("volunteer[0][start_day]", "auto"); ?>';
+        start_day = start_day.replace('[0]', '['+length_box+']');
+        var end_day = '<?php echo genera_calendar("volunteer[0][end_day]", "auto"); ?>';
+        end_day = end_day.replace('[0]', '['+length_box+']');
+    	var box_appen = '<div class="work-item media"><hr><div class="remove-items" data-id="0" data-type="volunteer">×</div><div class="media-left"><div class="relative"><div class="box-logo-education"><div class="click-logo"><a href="javascript:;">+</a></div></div><div class="img-circle" style="background-image:url('+logo+')"></div><input accept="image/*" type="file" class="add-logo none" id="volunteerlogo-'+length_box+'" name="volunteerlogo-'+length_box+'"></div></div><div class="media-body"><div class="form-group"> <label class="col-sm-3 control-label"><small>Organization:</small></label><div class="col-sm-9"> <input type="text" class="form-control" value="" name="volunteer['+length_box+'][organization]" placeholder="What was the name of the organization..."> </div></div><div class="form-group"> <label class="col-sm-3 control-label"><small>Role:</small></label><div class="col-sm-9"> <input type="text" value="" class="form-control" name="volunteer['+length_box+'][role]" placeholder="What was your role..."> </div></div><div class="form-group date-range"> <label for="volunteer-start-date-'+length_box+'" class="col-sm-3 control-label">Start Date:</label><div class="col-sm-9"> ' + start_day + ' </div></div><div class="form-group date-range"> <label for="volunteer-end-date-'+length_box+'" class="col-sm-3 control-label">End Date:</label><div class="col-sm-9" id="box-endday"> ' + end_day + ' </div></div><div class="form-group"><div class="col-sm-12 custom"><div class="checkbox check-yelow checkbox-circle"> <input class="is_present_check" type="checkbox" id="volunteer-present-'+length_box+'" name="volunteer['+length_box+'][present]" value="1"> <label for="volunteer-present-'+length_box+'">Present</label> </div></div></div></div><input type="hidden" name="volunteer['+length_box+'][id]" value="0"></div>';
    		$(this).parents(".modal-body").find(".box-content").append(box_appen);
-   		$.each($("#work-education .start_day.new"),function(){
-            $(this).datetimepicker({
-                format :"MM/DD/Y",
-                widgetPositioning:{
-                    horizontal: 'right',
-                    vertical: 'bottom'
-                }
-            });
-            $(this).removeClass("new");
-        });
-        $.each($("#work-education .end_day.new"),function(){
-            $(this).datetimepicker({
-                format :"MM/DD/Y",
-                 widgetPositioning:{
-                    horizontal: 'right',
-                    vertical: 'bottom'
-                }
-            });
-            $(this).removeClass("new");
-        });	
    		return false;
     });
     $(document).on("click","#save_education .is_present_check",function(){
-    	var box_parent = $(this).parents(".box-content");
-        $.each(box_parent.find(".is_present_check").not(this),function(){
-            $(this).prop("checked",false);
-        });
+    	if($(this).is(':checked') == true){
+            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                $(this).attr("disabled",true);
+                $(this).get(0).selectedIndex = 0;
+            });     
+        }else{
+            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                $(this).attr("disabled",false);
+            });
+        }
     });
   
 </script>

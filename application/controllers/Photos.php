@@ -8,7 +8,6 @@ class Photos extends CI_Controller {
     public $user_info = 0;
     public $user_id = 0;
     public $data;
-
     public function __construct() {
         parent::__construct();
         $this->data["type_member"] = 0;
@@ -21,7 +20,6 @@ class Photos extends CI_Controller {
 
         $this->data["is_login"] = $this->is_login;
     }
-
     public function index($photo_id) {
         if ($photo_id != "" && is_numeric($photo_id)) {
             $this->data["view_wrapper"] = "images/single-image";
@@ -43,10 +41,10 @@ class Photos extends CI_Controller {
             if (count($recorder_photo) > 0 && $recorder_photo != null) {
                 $recorder_user = $this->Members_model->get_information_user($recorder_photo["member_id"]);
                 $data_share = ' <meta name="og:image" content="' . base_url($recorder_photo['path_file']) . '">
-                            <meta id ="titleshare" property="og:title" content="'.$recorder_user["company_name"].' just shared '. $recorder_photo["name"] . ' on @Dezignwall TAKE A LOOK" />
-                            <meta property="og:description" content="' . $recorder_photo["description"] . '" />
-                            <meta property="og:url" content="' . base_url("photos/" . $recorder_photo["photo_id"] . "/" . gen_slug($recorder_photo["name"])) . '" />
-                            <meta property="og:image" content="' . base_url($recorder_photo['thumb']) . '" />';
+                <meta id ="titleshare" property="og:title" content="'.$recorder_user["company_name"].' just shared '. $recorder_photo["name"] . ' on @Dezignwall TAKE A LOOK" />
+                <meta property="og:description" content="' . $recorder_photo["description"] . '" />
+                <meta property="og:url" content="' . base_url("photos/" . $recorder_photo["photo_id"] . "/" . gen_slug($recorder_photo["name"])) . '" />
+                <meta property="og:image" content="' . base_url($recorder_photo['thumb']) . '" />';
                 $this->data["data_share"] = $data_share;
                 $this->data["description_page"] = $recorder_photo["description"];
                 // Get comment of this photo
@@ -245,6 +243,16 @@ class Photos extends CI_Controller {
         if ($this->input->is_ajax_request() && in_array($object, $object_arr)) {
             $photo_id = $this->input->post("photo_id");
             $object_id = $photo_id;
+            $rephoto = null;
+            if($object == "product"){
+                $rephoto = $this->Common_model->get_record("products",["product_id" => $photo_id]) ;
+            }
+            if($object == "photo"){
+                $rephoto = $this->Common_model->get_record("photos",["photo_id" => $photo_id]) ;
+            }
+            if($object == "social"){
+                $rephoto = $this->Common_model->get_record("social_posts",["id" => $photo_id]) ;
+            }
             if (isset($photo_id) && $photo_id != null && is_numeric($photo_id)) {
                 $recorder_like = $this->Common_model->get_record("common_like", array(
                     "reference_id" => $photo_id,
@@ -319,23 +327,17 @@ class Photos extends CI_Controller {
                     'reference_id' => $photo_id,
                     'type_object' => $object
                 ));
-                $common_nofication = $this->Common_model->get_record("notifications_common",["type" => "photo","type_object" => "like","reference_id" => $photo_id ,"member_owner" => $this->user_id]);
+                $common_nofication = $this->Common_model->get_record("notifications_common",["type" => $object,"type_object" => "like","reference_id" => $photo_id ,"member_owner" => $this->user_id]);
                 if($common_nofication == null){
-                        $rephoto  = null;
-                        if($object == "photo"){
-                            $rephoto = $this->Common_model->get_record("photos",["photo_id" => $photo_id]);
-                        }
-                        if($rephoto  !== null){
-                            $data_insert = array(
-                                "reference_id"  => $rephoto ["photo_id"],
-                                "member_owner"  => $this->user_id,
-                                "member_id"     => $rephoto["member_id"],
-                                "status"        => 0,
-                                "type"          => "photo",
-                                "type_object"   => "like"
-                            );
-                            $this->Common_model->add("notifications_common",$data_insert);
-                        }   
+                    $data_insert = array(
+                        "reference_id"  => $photo_id,
+                        "member_owner"  => $this->user_id,
+                        "member_id"     => $rephoto["member_id"],
+                        "status"        => 0,
+                        "type"          => $object,
+                        "type_object"   => "like"
+                    );
+                    $this->Common_model->add("notifications_common",$data_insert);  
                 }else{
                     $this->Common_model->delete("notifications_common",["id" => $common_nofication["id"]]);
                 }
@@ -827,10 +829,13 @@ class Photos extends CI_Controller {
             $member_id = $this->user_id == null ? 0 : $this->user_id; 
             $social_post = array();
             if($photo_type != "projects" && $photo_type != "products"){
-                if($this->data["is_login"] && $is_home == "true")
-                    $social_post = $this->Article_model->social_post(($offset * 2),2,null,null,$member_id);
-                else
-                    $social_post = $this->Article_model->social_post(($offset * 3),3,null,null,$member_id);
+                if($pkeyword == null && $pcatalog == null && $all_category == null && $photo_type == null && $offer_product == null){
+                    if($this->data["is_login"] && $is_home == "true")
+                        $social_post = $this->Article_model->social_post(($offset * 10),10,null,null,$member_id);
+                    else
+                        $social_post = $this->Article_model->social_post(($offset * 12),12,null,null,$member_id);
+                }
+               
                 // !get article.
             }
             $data["photo"] = [];
@@ -1752,7 +1757,7 @@ class Photos extends CI_Controller {
             $data           = array("status" => "success","message" => null,"response" => $cotent_comment);
             $sql = "SELECT (count(tbl1.id) - 1)  AS numberComment , tbl1.first_name,tbl1.last_name, tbl1.created_at 
             FROM  (SELECT mb.id, mb.first_name,mb.last_name, cm.created_at
-            FROM `common_comment` AS cm
+            FROM `common_like` AS cm
             JOIN members AS mb ON mb.id = cm.member_id
             WHERE cm.`reference_id` = $id
             AND cm.`type_object` = '$type'
@@ -1809,7 +1814,7 @@ class Photos extends CI_Controller {
                         $this->index_look ++;
                     }
                     $infor  = ($item_2["job_title"] != null) ? $item_2["job_title"] . " | " : "";
-                    $infor  = @$infor . @$item_2["company_name"];
+                    $infor  = @$infor . '<a href="'.base_url("company/view/".$item_2["member_id"]).'">'.@$item_2["company_name"]."</a>";
                     $avatar = isset($item_2["avatar"]) && $item_2["avatar"]!= "" ? base_url(@$item_2["avatar"]) : skin_url("images/avatar-full.png");
                     $comment = "";
                     if (strlen($item_2['comment']) <= 250) {
@@ -1832,16 +1837,18 @@ class Photos extends CI_Controller {
                     }
                     $class_member_follow = "not-follow";
                     $title_follow = "Follow comment";
+                    $title_follow_click = "Follow";
                     if(@$item_2["allowfollow"] != null){
                         $class_member_follow = "allow-follow";
                         $title_like = "Unfollow comment";
+                        $title_follow_click = "Unfollow";
                     }
                     $this->html_modules .= '<div class="media remove-padding '.$none.'">
                         <div class="media-left">
-                            <a href=""><img class="img-circle media-object" src="'.$avatar.'" width="40px"></a>
+                            <a href="'.base_url("profile/view/".$item_2["member_id"]).'"><img class="img-circle media-object" src="'.$avatar.'" width="40px"></a>
                         </div>';
                         $this->html_modules .='<div class="media-body">
-                            <a href="#" class="media-heading">'.$item_2["first_name"].' '.$item_2["last_name"].'  <span><i class="fa fa-circle icon-xs"></i> <span id="order_post">'.$stOrder.'</span></span></a>
+                            <a href="'.base_url("profile/view/".$item_2["member_id"]).'" class="media-heading">'.$item_2["first_name"].' '.$item_2["last_name"].'  <span><i class="fa fa-circle icon-xs"></i> <span id="order_post">'.$stOrder.'</span></span></a>
                             <p>'.$infor.'</p>';
                             if($item_2["media"] != null && trim($item_2["media"]) != "")
                                 $this->html_modules .= '<p><img src="'.base_url($item_2["media"]).'" alt="image"></p>';
@@ -1851,7 +1858,7 @@ class Photos extends CI_Controller {
                                     <li><a href="#" class="Date_Time_Posted">'.date(DW_FORMAT_DATETIME, strtotime($item_2["created_at"])).'</a></li>
                                     <li><a data-id="'.$item_2["id"].'" id ="like-comment-now" class="'.$class_member_like.'" href="#" title="'.$title_like.'"><i class="fa fa-circle icon-xs"></i> '.$item_2["numlive"].' Like</a></li>
                                     <li><a href="#" class="btn-write-comment"><i class="fa fa-circle icon-xs"></i> Reply</a></li>
-                                    <li><a data-id="'.$item_2["id"].'" id ="like-follow-now"  href="#" title="'.$title_follow.'" class="'.$class_member_follow.'"><i class="fa fa-circle icon-xs"></i> Follow</a></li>
+                                    <li><a data-id="'.$item_2["id"].'" id ="like-follow-now"  href="#" title="'.$title_follow.'" class="'.$class_member_follow.'"><i class="fa fa-circle icon-xs"></i> '.$title_follow_click.'</a></li>
                                 </ul> 
                                 <form class="form-comment" action="'.base_url("photos/postcomment").'" method="post" id="post_comment">
                                     <div class="media remove-padding">
@@ -1897,6 +1904,9 @@ class Photos extends CI_Controller {
             }
             if($type == "blog"){
                 $record = $this->Common_model->get_record("article",["id" => $id]);
+            }
+            if($type == "product"){
+                $record = $this->Common_model->get_record("products",["product_id" => $id]);
             }
             if($record != null && $this->input->post("comment") != null){
                 $data_insert = array(
@@ -2100,7 +2110,7 @@ class Photos extends CI_Controller {
         $data = array("status" => "error","message" => null,"response" => null);
         if($this->is_login && $this->input->is_ajax_request()){
             $id = $this->input->post("id");
-            $record = $this->Common_model->get_record("comment",["id" => $id]);
+            $record = $this->Common_model->get_record("common_comment",["id" => $id]);
             if($record != null){
                 $rclike = $this->Common_model->get_record("common_follow",["reference_id" => $record["id"],"type_object" => "comment","member_id" => $this->user_id]);
                 $status = 0;
@@ -2108,7 +2118,7 @@ class Photos extends CI_Controller {
                     $data_insert = array(
                         "member_id"    => $this->user_id,
                         "reference_id" => $record["id"],
-                        "status"       => 1,
+                        "status"       => 1, 
                         "type_object"  => "comment",
                         "owner_id"     => $record["memner_owner_id"]
                     ); 
@@ -2132,7 +2142,7 @@ class Photos extends CI_Controller {
                 $data_update = array(
                     "numfollow" => $numfollow
                 );
-                $this->Common_model->update("comment",$data_update,["id" => $record["id"]]);
+                $this->Common_model->update("common_comment",$data_update,["id" => $record["id"]]);
 
                 $check_record = $this->Common_model->get_record("notifications_common",["reference_id" => $record["id"],"type_object" => "comment","type" => "follow" ,"member_owner" => $this->user_id]);
                 if($check_record == null){
@@ -2172,11 +2182,14 @@ class Photos extends CI_Controller {
                 $html_data = "";
                 if($get_next != null){
                     foreach ($get_next as $key => $value) {
+                        if($value["typeSuccess"] == "company")
+                            $avatar = (isset($value["avatar"]) && $value["avatar"]!= "") ? base_url(@$value["avatar"]) : skin_url("images/avatar-full.png");
+                        if($value["typeSuccess"] == "photo")
+                            $avatar = (isset($value["thumb"]) && $value["thumb"]!= "") ? base_url(@$value["thumb"]) : base_url(@$value["path_file"]);
                         $job_title = $value["job_title"];
                         if($value["company_name"] != null)
                         $job_title .= $job_title != "" ? " | ". $value["company_name"] : $value["company_name"];
                         $created_at = date(DW_FORMAT_DATETIME, strtotime($value["created_at"]));
-                        $avatar = isset($value["avatar"]) && $value["avatar"]!= "" ? base_url(@$value["avatar"]) : skin_url("images/avatar-full.png");
                         $allow = $allow_2 = "disabled";
                         if($value["allow"] != 2){
                             $allow = "";
@@ -2185,7 +2198,7 @@ class Photos extends CI_Controller {
                             $allow_2 = "";
                         }
                         $html_data .= '<div class="media">
-                                <div class="media-left"> <img class="img-circle notification-avatar"  src="'.$avatar.'" > </div>
+                                <div class="media-left"> <img class="'.$value["typeSuccess"].' img-circle notification-avatar"  src="'.$avatar.'" > </div>
                                 <div class="media-body">
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -2212,7 +2225,7 @@ class Photos extends CI_Controller {
                 }
             }else{
                 $get_next = get_notifications_by_user($this->user_id,$object,$type,$offset);
-                $check_item_next = get_notifications_by_user($this->user_id,$object,$type,($offset + 6) , 1);
+                $check_item_next = get_notifications_by_user($this->user_id,$object,$type,($offset + 7) , 1);
                 $html_data = "";
                 if($get_next != null){
                     foreach ($get_next as $key => $value) {
@@ -2225,53 +2238,46 @@ class Photos extends CI_Controller {
                         $type         =  $value["type"];
                         $count_like   = "";
                         $list_record  = get_notifications_by_type($this->user_id,$value["reference_id"],$object,$type );
-                        if($list_record  != null){
-                            foreach ($list_record as $key => $value) {
-                               if($key  == 0) {
-                                    $job_title = $value["job_title"];
-                                    if($value["company_name"] != null)
-                                        $job_title .= $job_title != "" ? " | ". $value["company_name"] : $value["company_name"];
-                                    $created_at = date(DW_FORMAT_DATETIME, strtotime($value["created_at"]));
-                                    $avatar = isset($value["avatar"]) && $value["avatar"]!= "" ? base_url(@$value["avatar"]) : skin_url("images/avatar-full.png");
+                        if($list_record != null){
+                            foreach ($list_record as $key => $value_1) {
+                                if($key  == 0) {
+                                    $created_at = date(DW_FORMAT_DATETIME, strtotime($value_1["created_at"]));
+                                    if($value_1["typeSuccess"] == "company")
+                                        $avatar = (isset($value_1["avatar"]) && $value_1["avatar"]!= "") ? base_url(@$value_1["avatar"]) : skin_url("images/avatar-full.png");
+                                    if($value_1["typeSuccess"] == "photo" || $value_1["typeSuccess"] == "product"){
+                                        $value["name"] = $value_1["name"];
+                                        $avatar = (isset($value_1["thumb"]) && $value_1["thumb"]!= "") ? base_url(@$value_1["thumb"]) : base_url(@$value_1["path_file"]);
+                                    }   
+                                    if($value_1["typeSuccess"] == "social")
+                                        $avatar = (isset($value_1["thumb"]) && $value_1["thumb"]!= "") ? base_url(@$value_1["thumb"]) : base_url(@$value_1["path"]);
+                                    if($number_data > 2){
+                                        $count_like = "and ".($number_data - 2)." other ";
+                                    }
+                                    $value["typeSuccess"] = $value_1["typeSuccess"];
                                 }
-                                if($number_data > 2){
-                                    $count_like = "and ".($number_data - 2)." other ";
-                                }
-                                if($key  <= 1)
-                                    $tow_member [] = '<a href="'.base_url("profile/index/".$value["member_owner"]."").'">'.$value["first_name"]." " .$value["last_name"] ."</a>";
+                                $tow_member [] =  '<a href="'.base_url("profile/view/".$value_1["member_owner"]."").'">'.$value_1["first_name"]." " .$value_1["last_name"] ."</a>";
                             }
+                            $url = "";
+                            if($value["type"] == "social"){
+                                $url = base_url("socialposts/".$value["reference_id"]);
+                            }
+                            if($value["type"] == "photo" || $value["type"] == "product"){
+                                if($value["type"] == "product"){
+                                    $url = base_url("designwalls/view_photos/".$value["reference_id"]."").'/'.gen_slug($value["name"]);
+                                }else{
+                                    $url = base_url("photos/".$value["reference_id"]."").'/'.gen_slug($value["name"]);
+                                }     
+                            }
+                            $html_data .= '
+                            <div class="media">
+                                <div class="media-left"> <a href="'.$url.'"><img src="'.$avatar.'" class="'.$value["typeSuccess"].' img-circle notification-avatar"></a> </div>
+                                <div class="media-body">
+                                    <h5 class="media-heading remove-margin">'.implode(", ", $tow_member).'</h5>
+                                    <h5 class="remove-margin">'.$count_like.'people '.$value["type_object"].' <a href="'.$url.'">your '.$value["type"].'</a></h5> <span class="remove-margin color-blue">'.$created_at.'</span> 
+                                </div>
+                            </div>';
                         }
-                        switch ($object) {
-                            case 'comment':
-                                $html_data .= '
-                                <div class="row">
-                                    <div class="col-sm-9">
-                                        <div class="media">
-                                            <div class="media-left"> <img class="img-circle" src="'.$avatar.'" width="40px"> </div>
-                                            <div class="media-body">
-                                                <h5 class="media-heading remove-margin">'.implode(", ", $tow_member).' <span><i class="fa fa-circle icon-xs"></i> 2nd</span></h5>
-                                                <h5 class=" title">'.$job_title.'</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3 text-center">
-                                        <ul class="list-inline fix">
-                                            <li><a href="#"><img src="'.base_url("skins/icon/icon-user.png").'"></a></li>
-                                            <li><a href="#" data-type="'.$type.'" data-id="'.$reference_id.'" id="comment-view-and-show"><span class="glyphicon glyphicon-comment fa-3x"></span></a></li>
-                                        </ul>
-                                    </div>
-                                </div>';
-                                break;
-                            case 'like':
-                                $html_data .='<div class="media">
-                                    <div class="media-left"> <img src="'.$avatar.'" class="media-object" width="50px"> </div>
-                                    <div class="media-body">
-                                        <h5 class="media-heading remove-margin">'.implode(", ", $tow_member).'</h5>
-                                        <h5 class="remove-margin">'.$count_like.'people like your photo</h5> <span class="remove-margin color-blue">'.$created_at.'</span> 
-                                    </div>
-                                </div>';
-                                break;
-                        }
+                        
                     }
                     $data = array("status" => "success","message" => null,"response" => $html_data); 
                     if($check_item_next != null){
@@ -2285,7 +2291,7 @@ class Photos extends CI_Controller {
         $data["post"] = $this->input->post();
         die(json_encode($data));   
     }
-    public function confirm_follow(){
+    public function confirm_follow(){ 
         $data = array("status" => "error","message" => null,"response" => null);
         if($this->is_login && $this->input->is_ajax_request()){
             $id = $this->input->post("id");
@@ -2308,6 +2314,32 @@ class Photos extends CI_Controller {
                 $this->Common_model->delete("common_follow",["owner_id" => $this->user_id,"member_id" => $check["member_owner"],"type_object" => "company"]);
                 $data = array("status" => "success","message" => null,"response" => null);
             }
+        }
+        die(json_encode($data));
+    }
+    public function info (){
+        $data = array("status" => "error","message" => null,"response" => null,'post' => $this->input->post());
+        if($this->input->is_ajax_request()){
+            $id = $this->input->post("id");
+            $type_post = $this->input->post("type_post");
+            $r = null;
+            if ($type_post == "social") {
+                $r = $this->Common_model->get_record("social_posts",["id" => $id]);
+                if($r != null){
+                    $c = $this->Common_model->get_record("company",["member_id" => $r["member_id"]]);
+                    $r["url"] = base_url("/socialposts/$id");
+                    $r["content"] = $c["company_name"].' just shared social post on @Dezignwall TAKE A LOOK';                  
+                } 
+            } else if($type_post == "photo"){
+                $r = $this->Common_model->get_record("photos",["photo_id" => $id]);
+                if($r != null){
+                    $c = $this->Common_model->get_record("company",["member_id" => $r["member_id"]]);
+                    $r["url"] = base_url("photos/" . $r['photo_id'] . "/" . gen_slug($r["name"]));
+                    $r["content"] = $c["company_name"].' just shared '. $r["name"] . ' on @Dezignwall TAKE A LOOK';
+                } 
+            }      
+            $data["status"] =  "success";
+            $data["response"] = $r;        
         }
         die(json_encode($data));
     }

@@ -448,6 +448,7 @@
     .list-btn li:last-child{margin-right: 0px;}
     #datetimepicker1 .input-group-addon{border: none; padding: 0;}
     #datetimepicker1 .input-group-addon .input-group{display: block;}
+    #edit-social-popup-box .input-group{display: block;}
     #edit-social-popup-box .fa-globe{font-size: 38px;}
     #edit-social-popup-box .dropdown-menu{padding: 0 10px;}
     #edit-social-popup-box .dropdown-menu .checkbox{padding-left: 0;}

@@ -125,9 +125,10 @@ $(document).ready(function () {
     //Clear
     //------------------
     $(document).on('click', '.clear-button', function () {
-        $(this).parents('.panel').find('textarea').val('');
-        $(this).parents('.panel').find('input').val('');
-        return false;
+    	$(this).parents('.panel').find('.panel-action').trigger("click");
+        //$(this).parents('.panel').find('textarea').val('');
+        //$(this).parents('.panel').find('input').val('');
+        return false; 
     });
 
     //------------------

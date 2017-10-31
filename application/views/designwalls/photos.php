@@ -7,8 +7,7 @@ if ($allow_edit) {
         array('href' => '#', 'title' => 'Edit background', 'class' => 'edit_background'),
         array('href' => '#', 'title' => 'Hide background', 'class' => 'show_hide_background'),
         array('href' => '#', 'title' => 'Invite team members', 'class' => 'invite_member'),
-        array('href' => '#', 'title' => 'Delete your Wall', 'class' => 'delete_wall'),
-        array('href' => base_url('/profile/upgrade/'), 'title' => 'Upgrade Account', 'class' => '')
+        array('href' => '#', 'title' => 'Delete your Wall', 'class' => 'delete_wall')
     );
 } else {
     $data['menu_banner'] = array(
@@ -77,9 +76,7 @@ $this->load->view("include/banner-wall", $data);
                                                         <?php else : ?>
                                                             <li><a href="#"  data-category="<?php echo @$category_id; ?>"  data-id="<?php echo @$photo['photo_id']; ?>" class="edit-product">Edit Photo</a></li>
                                                         <?php endif; ?>
-                                                        <li><a href="<?php echo base_url(); ?>designwalls/delete_photo/<?php echo $project_id; ?>/<?php echo $category_id; ?>/<?php echo $photo['photo_id']; ?>/" class="delete-photo" onclick="deletepoppup(this.href);return false;">Delete photo</a></li>
-                                                        <!--<li><a href="#" data-toggle="modal" data-id="<?php echo $photo['photo_id']; ?>" data-title="<?php echo $photo['name']; ?>" data-path-file="<?php echo $photo["path_file"]; ?>" data-target="#send_mail_dialog" class="send-photo" title="Sent email...">Send Email</a></li>-->
-                                                        <li><a href="<?php echo base_url(); ?>payment/upgrade">Upgrade Account</a></li>
+                                                        <li><a href="<?php echo base_url(); ?>designwalls/delete_photo/<?php echo $project_id; ?>/<?php echo $category_id; ?>/<?php echo $photo['photo_id']; ?>/" class="delete-photo" onclick="deletepoppup(this.href);return false;">Delete photo</a></li>                                                     
                                                     </ul>
                                                 </div>
                                             </div>
@@ -112,71 +109,21 @@ $this->load->view("include/banner-wall", $data);
                                     }
                                     ?>
                                     <div class="box-top">
-                                        <div class="col-xs-3 col-md-2 text-center"><div class="likes"><p><span id="number-like"><?php echo ($photo["qty_like"] != "") ? $photo["qty_like"] : "0"; ?></span> Likes</p></div></div>
-                                        <div class="col-xs-2 col-md-2 text-center remove-l-padding"></div>
-                                        <div class="col-xs-7 col-md-8 remove-l-padding"><p><span id="num-comment"><?php echo ($photo['qty_comment'] != "") ? $photo['qty_comment'] : "0"; ?></span> Comments</p></div>
-                                    </div>
-                                    <div class="conment-show <?php echo ($photo["qty_comment"] > 0) ? "block" : ""; ?>">
-                                        <div class="col-xs-12">
-                                            <?php if (isset($photo['qty_comment']) && $photo['qty_comment'] > 3): ?>
-                                                <p class="view-more-comment" id="view-more" data-type="product"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> View older comments…</p>
-                                            <?php endif; ?>
-                                            <div class="uesr-box-impromation" id="scrollbars-dw">
-                                                <div class="avatar">
-                                                    <?php if (isset($photo['qty_comment']) && $photo['qty_comment'] > 0) { ?>
-                                                        <?php
-                                                        $value_comment = $photo['photo_comment'];
-                                                        $total_comment = count($photo['photo_comment']);
-                                                        for ($i = $total_comment; $i > 0; $i--) {
-                                                            $logo_user = ( $value_comment[($i - 1)]['avatar'] != "" && file_exists(FCPATH . $value_comment[($i - 1)]['avatar']) ) ? base_url($value_comment[($i - 1)]['avatar']) : base_url("skins/images/signup.png");
-                                                            ?>
-                                                            <div class="row comment-items offset_default">
-                                                                <div class="col-xs-2 remove-padding"><img src="<?php echo $logo_user; ?>" class="left"></div>
-                                                                <div class="col-xs-10 box-impromation">
-                                                                    <?php
-                                                                    $company_name = "";
-                                                                    if ($value_comment[($i - 1)]['company_name'] != null && $value_comment[($i - 1)]['company_name'] != "") {
-                                                                        $company_name = " | " . $value_comment[($i - 1)]['company_name'];
-                                                                    }
-                                                                    ?>
-                                                                    <p><a href="<?php echo base_url("profile/index/" . $value_comment[($i - 1)]["member_id"]); ?>"><strong><?php echo $value_comment[($i - 1)]['first_name'] . " " . $value_comment[($i - 1)]['last_name']; ?><?php echo $company_name; ?></strong></a></p>
-                                                                    <div>
-                                                                        <p class="text-comment" data-id="<?php echo @$value_comment[($i - 1)]['id']; ?>">
-                                                                            <?php
-                                                                            if (strlen($value_comment[($i - 1)]['comment']) <= 79) {
-                                                                                echo "<span>" . $value_comment[($i - 1)]['comment'] . "</span>";
-                                                                            } else {
-                                                                                echo "<span class='comment-item-text default-show block'>" . substr($value_comment[($i - 1)]['comment'], 0, 71) . "<span class='more' id='more-comment'> MORE...</span></span>";
-                                                                                echo "<span class='comment-item-text default-hie'>" . $value_comment[($i - 1)]['comment'] . "<span class='more' id='more-comment'> LESS</span></span>";
-                                                                            }
-                                                                            ?>
-                                                                        </p>
-                                                                        <?php if ($user_id == $value_comment[($i - 1)]['member_id']) : ?>
-                                                                            <span class="action-comment">
-                                                                                <a data-id="<?php echo @$value_comment[($i - 1)]['id']; ?>" class="edit-comment" href="#"><i class="fa fa-pencil"></i></a>
-                                                                                <a data-id="<?php echo @$value_comment[($i - 1)]['id']; ?>" class="delete-comment" href="#"><i class="fa fa-times"></i></a>
-                                                                            </span>
-                                                                        <?php endif; ?>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        <?php } ?>
-                                                    <?php } ?>  
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="col-xs-4 col-md-4 text-center"><div class="likes"><p class="text-center"><span id="number-like"><?php echo ($photo["qty_like"] != "") ? $photo["qty_like"] . " Likes" : ""; ?></span> </p></div></div>
+                                        <div class="col-xs-4 col-md-4 text-center remove-l-padding"></div>
+                                        <div class="col-xs-4 col-md-4 remove-l-padding"><p class="text-center"><span id="num-comment"><?php echo ($photo['qty_comment'] != "") ? $photo['qty_comment'] ." Comments" : ""; ?></span></p></div>
                                     </div>
                                     <div class="box-bottom">
-                                        <div class="col-xs-3 col-md-2 text-center"><div class="likes"><h3 id="like-photo" data-object="product" data-id ="<?php echo $photo['product_id']; ?>"><i class="fa fa-heart <?php echo $images_like; ?>" title="<?php echo $title_like; ?>"></i></h3></div></div>
-                                        <div class="col-xs-2 col-md-2 text-center remove-l-padding"><div class="microsite">
+                                        <div class="col-xs-4 col-md-4 text-center"><div class="likes"><h3 id="like-photo" data-object="product" data-id ="<?php echo $photo['product_id']; ?>"><i class="fa fa-heart <?php echo $images_like; ?>" title="<?php echo $title_like; ?>"></i></h3></div></div>
+                                        <div class="col-xs-4 col-md-4 text-center remove-l-padding"><div class="microsite">
                                                 <h3>
                                                     <a href="<?php echo base_url("profile/index/" . $photo["member_id"]); ?>" title="Go to microsite."><i class="fa fa-microsite"></i> </a>
                                                 </h3>
                                             </div>
                                         </div>
-                                        <div class="col-xs-7 col-md-8 remove-l-padding">
+                                        <div class="col-xs-4 col-md-4 remove-l-padding">
                                             <div class="comment">
-                                                <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span> <input type="text" name="add-commemt-input" id="add-commemt-input" disabled ></h3>
+                                                <h3 id="comment-show"><span class="glyphicon glyphicon-comment" aria-hidden="true" title="Click here to comment."></span></h3>
                                             </div>
                                         </div>
                                     </div>

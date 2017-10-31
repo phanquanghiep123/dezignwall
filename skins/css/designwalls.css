@@ -38,7 +38,7 @@
 .box-item-designwalls .footer-add-new{margin-top: -2px;}
 .box-item-designwalls,.box-add-new{margin-bottom: 20px; }
 .box-item-designwalls .footer-add-new .item-footer{margin-top: 20px;}
-.box-add-new .box-footer-and-more{height: 257px;}
+.box-add-new .box-footer-and-more{height: 253px;}
 .box-footer-and-more{
 	height: 260px;
 	background-color: #fff; 
@@ -71,3 +71,5 @@
 }
 .upload-img-designwalls .jcrop-holder,.image-cropper{margin: 0 auto;}
 .upload-img-designwalls .image-cropper{height: auto !important; width: auto !important; }
+
+.content_designwalls .box-footer-and-more  strong{color: #122121;}

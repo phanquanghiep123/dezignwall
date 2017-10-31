@@ -242,7 +242,9 @@
             width: 100%;
             float: right;
         }
+        
     }
+    body #modal_add_catalog .modal-dialog {width: 700px;}
 </style>
 <script type="text/javascript" src="<?php echo skin_url("tinyColorPicker/jqColorPicker.min.js")?>"></script>
 <script src="<?php echo skin_url("htmlcanvas/promise.js");?>"></script>

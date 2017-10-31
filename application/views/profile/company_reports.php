@@ -151,7 +151,7 @@
                                                 <div class="row items">
                                                     <div class="col-xs-5">
                                                         <div class="row">
-                                                        	<div id="reports-email" data-email ="<?php echo $value["work_email"];?>">
+                                                        	<div id="reports-email" data-name="<?php echo $value["first_name"]. " ".$value["last_name"] ;?>" data-email ="<?php echo $value["work_email"];?>">
                                                             	<div class="col-lg-2 text-center"><div class="logo-user"><img src="<?php echo $logo;?>"></div></div>
                                                             	<div class="col-lg-6">
                                                                     <p><?php echo $value["first_name"]. " ".$value["last_name"] ;?> | <?php echo $value["company_name"] ;?></p>
@@ -267,7 +267,7 @@
                                             <div class="row items">
                                                 <div class="col-xs-5 col-md-5">
                                                     <div class="row">
-                                                        <div id="reports-email" data-email ="<?php echo $value["work_email"];?>">
+                                                        <div id="reports-email" data-name="<?php echo $value["first_name"]. " ".$value["last_name"] ;?>" data-email ="<?php echo $value["work_email"];?>">
                                                             <div class="col-xs-2 text-center"><div class="logo-user"><img src="<?php echo $logo;?>"></div></div>
                                                             <div class="col-xs-6"><p><?php echo $value["first_name"]. " ".$value["last_name"] ;?> | <?php echo $value["company_name"] ;?></p> <p> <?php echo  date('F j \a\t h:i A', $timestamp);?></p></div>
                                                             <div class="col-xs-4">
@@ -482,7 +482,7 @@
                                                     <div class="row items">
                                                         <div class="col-xs-5">
                                                             <div class="row">
-                                                            	<div id="reports-email" data-email ="<?php echo $value_items["work_email"];?>">
+                                                            	<div id="reports-email" data-name="<?php echo $value_items["first_name"]. " ".$value_items["last_name"] ;?>" data-email ="<?php echo $value_items["work_email"];?>">
                                                                 	<div class="col-xs-2 text-center"><div class="logo-user"><img src="<?php echo $logo;?>"></div></div>
                                                                 	<div class="col-xs-6">
                                                                         <p><?php echo $value_items["first_name"]. " ".$value_items["last_name"] ;?> | <?php echo $value_items["company_name"] ;?></p> 
@@ -564,7 +564,8 @@
         <h3 class="title_box">Send a Message</h3>
         <div>
           <p class="title-input">To (enter recipient emails, separated by commas):</p>
-          <p><input type="email" name ="email" id="email" class="form-control" data-valid="true"/></p>
+          <input type="hidden" name ="email" id="email" class="form-control" data-valid="true"/>
+          <p><input type="email" name ="name" id="name" class="form-control" data-valid="true"/></p>
           <p  class="title-input">Subject:</p>
           <p><input type="text" name="subject" id="subject" class="form-control" data-valid="true"/></p>
           <p>Message:</p>
@@ -582,8 +583,10 @@
 <script>
     var reports_total = "<?php echo $total_photo;?>";
     $(document).on("click","#list-items #reports-email",function(){
-        var email = $(this).data("email");
+        var email = $(this).attr("data-email");
+        var name = $(this).attr("data-name");
         $("#sent_image_reports #email").val(email);
+        $("#sent_image_reports #name").val(name);
         $('#sent_image_reports').modal();
         return false;
     });

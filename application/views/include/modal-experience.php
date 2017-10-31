@@ -60,12 +60,14 @@
                                 </div>
                                 <div class="form-group date-range">
                                     <label for="work-start-date" class="col-sm-3 control-label">Start Date:</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control start_day" value="" name="Experience[0][start_day]" placeholder="mm/dd/yyyy">
+                                    <div class="col-sm-9">
+    									<?php echo genera_calendar("Experience[0][start_day]", "auto"); ?>
                                     </div>
+                                </div>
+    							<div class="form-group date-range">
                                     <label for="work-end-date" class="col-sm-3 control-label">End Date:</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control end_day" value="" name="Experience[0][end_day]" placeholder="mm/dd/yyyy">
+                                    <div class="col-sm-9" id="box-endday">
+    									<?php echo genera_calendar("Experience[0][end_day]", "auto"); ?>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -113,6 +115,8 @@
     </div>
 </div>
 </div>
+
+
 <script type="text/javascript" src="<?php echo skin_url('datetimepicker/js/moment.js');?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo skin_url('datetimepicker/css/bootstrap-datetimepicker.min.css')?>">
 <script type="text/javascript" src="<?php echo skin_url('datetimepicker/js/bootstrap-datetimepicker.min.js')?>"></script>
@@ -126,16 +130,19 @@
         float: left;
         width: 87%;
     }
-    #box-experience-common .modal-dialog {
-        width: 750px;
+    @media screen and (min-width: 767px){
+        #box-experience-common .modal-dialog {
+            width: 750px;
+        }
     }
+   
     body #work-experience-saved .modal-header{background-color: #37a7a7;}
     body #work-experience-saved .modal-title{font-size: 24px; color: #fff;}
     #box-experience-common .media, #box-experience-common .media-body{
         overflow: inherit;
     }
     #box-experience-common .work-add{
-    	font-size: 50px;
+    	font-size: 22px;
     	color: #37a9a9;
     }
     #save_experience .loadding{position: absolute; width: 100%;cursor: wait;right: 0;top: 0;bottom: 0; text-align: center;}
@@ -161,7 +168,20 @@
 	    background-position: center;
 	    background-repeat: no-repeat;
     }
-    
+    .date-range .auto {
+	    width: auto;
+	    display: inline-block;
+	    margin-right: 10px;
+    }
+    #save_experience .form-control[disabled], #save_experience .form-control[readonly], #save_experience fieldset[disabled] .form-control {
+        border-color: #000;
+        box-shadow: none;
+        border-radius: 0;
+        height: 36px;
+        font-size: 18px;
+        background: #ccc;
+        padding: 6px 12px;
+    }
 </style>
 <script type="text/javascript">
     $("#more-work-experience").click(function(){
@@ -177,26 +197,6 @@
 	                if(res["show"]  == true) $("#more-work-experience").show();
 	                else $("#more-work-experience").hide();
 	                $("#work-experience").modal();
-	                $.each($("#work-experience #save_experience .start_day.new"),function(){
-	                    $(this).datetimepicker({
-	                        format :"MM/DD/Y",
-	                        widgetPositioning:{
-	                            horizontal: 'right',
-	                            vertical: 'bottom'
-	                        }
-	                    });
-	                    $(this).removeClass("new");
-	                });
-	                $.each($("#work-experience #save_experience .end_day.new"),function(){
-	                    $(this).datetimepicker({
-	                        format :"MM/DD/Y",
-	                         widgetPositioning:{
-	                            horizontal: 'right',
-	                            vertical: 'bottom'
-	                        }
-	                    });
-	                    $(this).removeClass("new");
-	                });	
             	}else{
             		alert("error");
             	}
@@ -216,25 +216,20 @@
             		$("#work-experience #save_experience .box-content").html(res["reponse"]);
 	                if(res["show"]  == true) $("#more-work-experience").show();
 	                else $("#more-work-experience").hide();
+                    $.each($("#save_experience .is_present_check"),function(){
+                        if($(this).is(':checked') == true){
+                            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                                $(this).attr("disabled",true);
+                                $(this).get(0).selectedIndex = 0;
+                            });     
+                        }else{
+                            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                                $(this).attr("disabled",false);
+                            });
+                        }
+                    });
 	                $("#work-experience").modal();
-	                $.each($("#work-experience #save_experience .start_day"),function(){
-	                    $(this).datetimepicker({
-	                        format :"MM/DD/Y",
-	                        widgetPositioning:{
-	                            horizontal: 'right',
-	                            vertical: 'bottom'
-	                        }
-	                    });
-	                });
-	                $.each($("#work-experience #save_experience .end_day"),function(){
-	                    $(this).datetimepicker({
-	                        format :"MM/DD/Y",
-	                         widgetPositioning:{
-	                            horizontal: 'right',
-	                            vertical: 'bottom'
-	                        }
-	                    });
-	                });	
+	                 
             	}else{
             		alert("error");
             	}
@@ -268,6 +263,7 @@
                     _this.find("button[type='submit']").append('<div class="loadding"><img src="<?php echo skin_url("images/loading.gif");?>"></div>');
                 },
                 success:function(res){
+                	console.log(res);
                     _this.find("button[type='submit'] .loadding").remove();
                     location.reload();
                 },
@@ -281,14 +277,22 @@
         }) ;  
         
     });
+
     $(document).on("click","#save_experience .is_present_check",function(){
-        $.each($("#work-experience #save_experience .is_present_check").not(this),function(){
-            $(this).val("0");
-            $(this).prop("checked",false);
-        });
-        $(this).val("1");
+        if($(this).is(':checked') == true){
+            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                $(this).attr("disabled",true);
+                $(this).get(0).selectedIndex = 0;
+            });     
+        }else{
+            $.each ($(this).closest(".media-body").find("#box-endday select"),function(){
+                $(this).attr("disabled",false);
+            });
+        }
     });
+
     $(document).on("click","#save_experience .is_admin_check",function(){
+
         if($(this).is(':checked') == true){
             $(this).val("1");
         }else{
@@ -301,28 +305,18 @@
         return false;
     });
     $(document).on("click","#work-experience-saved #add-item-more",function(){
+    	var length_item = $("#work-experience-saved .box-content .work-item").length;
+        var start_day = '<?php echo genera_calendar("Experience[0][start_day]", "auto"); ?>';
+        start_day = start_day.replace('[0]', '['+length_item+']');
+        var end_day = '<?php echo genera_calendar("Experience[0][end_day]", "auto"); ?>';
+        end_day = end_day.replace('[0]', '['+length_item+']');
         
-        var length_item = $("#work-experience-saved .box-content .work-item").length;
-        var item ='<div class="work-item media new"> <div class="media-left"> <div class="relative"> <div class="box-logo-experience"> <div class="click-logo"><a href="javascript:;">+</a></div> </div> <div class="img-circle" style="background-image:url(<?php echo skin_url("images/logo-company.png");?>)"></div> <input accept="image/*" type="file" class="add-logo none" id="logo-'+length_item+'" name=Logo-'+length_item+'> </div> </div><div class="media-body"> <div class="form-group"> <label for="job_title" class="col-sm-3 control-label"><small>Job Title:</small></label> <div class="col-sm-9"> <input type="text" value="" class="form-control" name="Experience['+length_item+'][job_title]" placeholder="What was your job title..."> </div> </div> <div class="form-group"> <label for="work-company" class="col-sm-3 control-label"><small>Company Name:</small></label> <div class="col-sm-9"> <input type="text" class="form-control" value="" name="Experience['+length_item+'][company_name]" placeholder="What was your company’s name..."> </div> </div> <div class="form-group date-range"> <label for="work-start-date" class="col-sm-3 control-label">Start Date:</label> <div class="col-sm-3"> <input type="tex" class="form-control start_day" value="" name="Experience['+length_item+'][start_day]" placeholder="mm/dd/yyyy"> </div> <label for="work-end-date" class="col-sm-3 control-label">End Date:</label> <div class="col-sm-3"> <input type="tex" class="end_day form-control" value="" name="Experience['+length_item+'][end_day]" placeholder="mm/dd/yyyy"> </div> </div> <div class="form-group"> <div class="col-sm-12 custom"> <div class="checkbox check-yelow checkbox-circle"> <input class="is_present_check" type="checkbox" id="work-present-0" name="Experience['+length_item+'][present]"> <label for="work-present-0"> Present </label> </div> </div> </div> <div class="form-group"> <div class="col-sm-12"> <label for="work-description"><small>Job Description:</small></label> <textarea class="form-control" name="Experience['+length_item+'][description]" placeholder="Describe your role and accomplishments..."></textarea> </div> </div>';
+        var item ='<div class="work-item media new"> <div class="media-left"> <div class="relative"> <div class="box-logo-experience"> <div class="click-logo"><a href="javascript:;">+</a></div> </div> <div class="img-circle" style="background-image:url(<?php echo skin_url("images/logo-company.png");?>)"></div> <input accept="image/*" type="file" class="add-logo none" id="logo-'+length_item+'" name=Logo-'+length_item+'> </div> </div><div class="media-body"> <div class="form-group"> <label for="job_title" class="col-sm-3 control-label"><small>Job Title:</small></label> <div class="col-sm-9"> <input type="text" value="" class="form-control" name="Experience['+length_item+'][job_title]" placeholder="What was your job title..."> </div> </div> <div class="form-group"> <label for="work-company" class="col-sm-3 control-label"><small>Company Name:</small></label> <div class="col-sm-9"> <input type="text" class="form-control" value="" name="Experience['+length_item+'][company_name]" placeholder="What was your company’s name..."> </div> </div> <div class="form-group date-range"> <label for="work-start-date" class="col-sm-3 control-label">Start Date:</label> <div class="col-sm-9">' + start_day + ' </div></div> <div class="form-group date-range"><label for="work-end-date" class="col-sm-3 control-label">End Date:</label> <div class="col-sm-9" id="box-endday"> ' + end_day + ' </div> </div> <div class="form-group"> <div class="col-sm-12 custom"> <div class="checkbox check-yelow checkbox-circle"> <input class="is_present_check" type="checkbox" id="work-present-0" name="Experience['+length_item+'][present]" value="1"> <label for="work-present-0"> Present </label> </div> </div> </div> <div class="form-group"> <div class="col-sm-12"> <label for="work-description"><small>Job Description:</small></label> <textarea class="form-control" name="Experience['+length_item+'][description]" placeholder="Describe your role and accomplishments..."></textarea> </div> </div>';
             if(length_item < 1){
                 item += '<p class="help-block">Are you the admin for this companies profile? As an admin you have the ability to post on behalf of the company, build Digital Product Catalogs and manage your companies account activity. If so, lets start building your company profile!</p> <p class="help-block">By selecting the radial button you acknowledge that you have the right and authorization to post content on behalf of this company. After selecting “Save/Update”, you will be redirected to your company profile.</p> <div class="form-group"> <div class="col-sm-12 custom"> <div class="checkbox check-yelow checkbox-circle"> <input class="is_admin_check" value="" type="checkbox" id="work-who-0" name="Experience['+length_item+'][is_admin]"> <label for="work-who-0"> <small>I am the admin for this companies profile.</small> </label> </div> </div> </div>  ';
             }
             item += '<input type="hidden" name="Experience['+length_item+'][id]" value="0"></div><hr></div>';  
             $("#work-experience-saved .box-content").append(item);
-            $("#work-experience-saved .box-content .new .end_day").datetimepicker({
-                format :"MM/DD/Y",
-                widgetPositioning:{
-                    horizontal: 'right',
-                    vertical: 'bottom'
-                }
-            });    
-            $("#work-experience-saved .box-content .new .start_day").datetimepicker({
-                format :"MM/DD/Y",
-                widgetPositioning:{
-                    horizontal: 'right',
-                    vertical: 'bottom'
-                }
-            }); 
             $("#work-experience-saved .box-content .new").removeClass("new");    
             return false;
     });
